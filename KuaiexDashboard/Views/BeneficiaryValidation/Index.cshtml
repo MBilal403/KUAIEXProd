@@ -1,0 +1,476 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+}
+
+<div class="row ">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="ibox">
+            <div class="ibox-heading">
+                <div class="ibox-title">
+                    <h2><i class="fa fa-users"></i>&nbsp; Add/Edit Beneficiary Validation (Mobile App)</h2>
+                </div>
+            </div>
+            <div class="ibox ibox-content">
+                <form class="form-group frmAddBeneValidation">
+
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Remittance Type <span style="color:red">*</span></label>
+                                <select type="text" id="RemittanceTypeId" class="form-control" name="RemittanceTypeId">
+                                    <option>Select  Remittance Type</option>
+                                    <option value="1">Cash Pickup</option>
+                                    <option value="2">Deposit To Account</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <input type="text" id="UID0" class="form-control hidden" name="UID0">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId0" placeholder="Enter Field Id" class="form-control" name="FieldId0">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName0" placeholder="Enter Field Name" class="form-control" name="FieldName0">
+                            </div>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation0" required="required" name="FieldValidation0">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="UID1" class="form-control hidden" name="UID1">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId1" placeholder="Enter Field Id" class="form-control" name="FieldId1">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName1" placeholder="Enter Field Name" class="form-control" name="FieldName1">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation1" required="required" name="FieldValidation1">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="UID2" class="form-control hidden" name="UID2">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId2" placeholder="Enter Field Id" class="form-control" name="FieldId2">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName2" placeholder="Enter Field Name" class="form-control" name="FieldName2">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation2" required="required" name="FieldValidation2">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="UID3" class="form-control hidden" name="UID3">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId3" placeholder="Enter Field Id" class="form-control" name="FieldId3">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName3" placeholder="Enter Field Name" class="form-control" name="FieldName3">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation3" required="required" name="FieldValidation3">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="UID4" class="form-control hidden" name="UID4">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId4" placeholder="Enter Field Id" class="form-control" name="FieldId4">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName4" placeholder="Enter Field Name" class="form-control" name="FieldName4">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation4" required="required" name="FieldValidation4">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="UID5" class="form-control hidden" name="UID5">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId5" placeholder="Enter Field Id" class="form-control" name="FieldId5">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName5" placeholder="Enter Field Name" class="form-control" name="FieldName5">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation5" required="required" name="FieldValidation5">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="UID6" class="form-control hidden" name="UID6">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId6" placeholder="Enter Field Id" class="form-control" name="FieldId6">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName6" placeholder="Enter Field Name" class="form-control" name="FieldName6">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation6" required="required" name="FieldValidation6">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <input type="text" id="UID7" class="form-control hidden" name="UID7">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId7" placeholder="Enter Field Id" class="form-control" name="FieldId7">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName7" placeholder="Enter Field Name" class="form-control" name="FieldName7">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation7" required="required" name="FieldValidation7">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="UID8" class="form-control hidden" name="UID8">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId8" placeholder="Enter Field Id" class="form-control" name="FieldId8">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName8" placeholder="Enter Field Name" class="form-control" name="FieldName8">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation8" required="required" name="FieldValidation8">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="UID9" class="form-control hidden" name="UID9">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId9" placeholder="Enter Field Id" class="form-control" name="FieldId9">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName9" placeholder="Enter Field Name" class="form-control" name="FieldName9">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation9" required="required" name="FieldValidation9">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="UID10" class="form-control hidden" name="UID10">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId10" placeholder="Enter Field Id" class="form-control" name="FieldId10">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName10" placeholder="Enter Field Name" class="form-control" name="FieldName10">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation10" required="required" name="FieldValidation10">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="UID11" class="form-control hidden" name="UID11">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId11" placeholder="Enter Field Id" class="form-control" name="FieldId11">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName11" placeholder="Enter Field Name" class="form-control" name="FieldName11">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation11" required="required" name="FieldValidation11">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="UID12" class="form-control hidden" name="UID12">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId12" placeholder="Enter Field Id" class="form-control" name="FieldId12">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName12" placeholder="Enter Field Name" class="form-control" name="FieldName12">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation12" required="required" name="FieldValidation12">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    @*<div class="row">
+                        <input type="text" id="UID13" class="form-control hidden" name="UID13">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId13" placeholder="Enter Field Id" class="form-control" name="FieldId13">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName13" placeholder="Enter Field Name" class="form-control" name="FieldName13">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation13" required="required" name="FieldValidation13">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="text" id="UID15" class="form-control hidden" name="UID15">
+                        <div class="col-lg-2 col-md-2 col-sm-2 col-lg-offset-3 col-md-offset-3 col-sm-offset-3">
+                            <div class="form-group">
+                                <label>Field Id <span style="color:red">*</span></label>
+                                <input type="text" id="FieldId14" placeholder="Enter Field Id" class="form-control" name="FieldId14">
+                            </div>
+
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Field Name <span style="color:red;">*</span></label>
+                                <input type="text" id="FieldName14" placeholder="Enter Field Name" class="form-control" name="FieldName14">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-2 col-sm-2">
+                            <div class="form-group">
+                                <label>Validation Options <span style="color:red;">*</span></label>
+                                <select class="form-control chzn" id="FieldValidation14" required="required" name="FieldValidation14">
+                                    <option>Select  Option</option>
+                                    <option value="1">Mandatory</option>
+                                    <option value="2">Optional</option>
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>*@
+
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <a id="btn-save" name="btn-save" class="btn btn-primary pull-right"><i class="fa fa-save"></i>&nbsp; Save</a>
+                            <a id="btn-refresh" name="btn-refresh" class="btn btn-info pull-right" style="margin-right:5px;"><i class="fa fa-refresh"></i>&nbsp; Reset</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

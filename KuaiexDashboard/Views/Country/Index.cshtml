@@ -1,0 +1,143 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="ibox">
+            <div class="ibox-heading">
+                <div class="ibox-title">
+                    <h2><i class="fa fa-users"></i>&nbsp; Add/Edit Country</h2>
+                </div>
+            </div>
+            <div class="ibox ibox-content">
+                <form class="form-group frmAddUsers">
+                    <div class="row hidden">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>UID<span style="color:red;">*</span></label>
+                                <input type="text" id="UID" class="form-control" name="UID">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>Name<span style="color:red;">*</span></label>
+                                <input type="text" id="Name" placeholder="Enter Name" class="form-control" name="Name">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label> Nationality<span style="color:red">*</span></label>
+                                <input type="text" id="Nationality" placeholder="Enter Nationality" class="form-control" name="Nationality">
+                                @*<select class="form-control chzn" id="Nationality" required="required" name="Nationality"></select>*@
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>Alpha 2 Code<span style="color:red;">*</span></label>
+                                <input type="text" id="Alpha_2_Code" placeholder="Enter Alpha 2 Code" class="form-control" name="Alpha_2_Code">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>Alpha 3 Code</label>
+                                <input type="text" id="Alpha_3_Code" placeholder="Enter Alpha 3 Code" class="form-control" name="Alpha_3_Code">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>Country Capital</label>
+                                <select class="form-control chzn" id="City_Id"  name="City_Id"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>Country Dialing Code</label>
+                                <input type="text" id="Country_Dialing_Code" placeholder="Enter Country Dialing Code" class="form-control" name="Country_Dialing_Code">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-sm-6 col-sm-6">
+                            <div class="form-group">
+                                <label>Comission<span style="color:red;">*</span></label>
+                                <input type="text" id="Comission" placeholder="Enter Country Comission" class="form-control" name="Comission">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-sm-6 col-sm-6">
+                            <div class="form-group">
+                                <label style="margin-top:5px">Status</label>
+                                <div class="i-checks">
+                                    <label>
+                                        <input type="checkbox" class="icheckbox_square-green" id="Status" name="Status" />
+                                        <i></i>
+                                        Active
+                                    </label>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <a id="btn-save" name="btn-save" class="btn btn-primary pull-right"><i class="fa fa-save"></i>&nbsp; Save</a>
+                            <a id="btn-refresh" name="btn-refresh" class="btn btn-info pull-right" style="margin-right:5px;"><i class="fa fa-refresh"></i>&nbsp; Reset</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h2><i class="fa fa-users"></i>&nbsp;Country List </h2>
+
+            </div>
+            <div class="ibox ibox-content">
+
+                <table id="tblUsers" class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="hidden">UID</th>
+                            <th>Country Name</th>
+                            <th>Nationality</th>
+                            <th>Alpha 2 Code</th>
+                            @*<th>Alpha 3 Code </th>*@
+                            <th>Country Capital</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                            @*<th></th>*@
+                        </tr>
+                    </thead>
+                    <tbody id="tblbody"></tbody>
+                </table>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <a id="btn-sync" name="btn-sync" class="btn btn-primary pull-right"><i class="fa fa-reorder"></i>&nbsp; Synchronize Country Data</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/Assets/PagesJS/Country.js"></script>
+
+

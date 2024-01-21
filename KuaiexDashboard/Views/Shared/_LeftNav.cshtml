@@ -1,0 +1,44 @@
+﻿@*@using KuaiexDashboard.Helpers*@
+
+
+
+<nav class="navbar-default navbar-static-side" role="navigation">
+    <div class="sidebar-collapse">
+        <ul class="nav metismenu" id="side-menu">
+            <li class="nav-header">
+                <div class="dropdown profile-element">
+                    <span class="block m-t-xs">
+                        @*<strong class="font-bold" style="color: #fff;font-size: x-large;">Point Of Sale</strong>*@
+                        <img class="img-responsive" src="~/Images/logo-96-96.png"  style=" width: auto; padding-left:35px ;  height:auto" />
+                    </span>
+                </div>
+                <div class="logo-element">
+                    KUAIEX
+                </div>
+            </li>
+
+            <li>
+                <a href="@Url.Action("Index", "Dashboard")"><i class="fa fa-dashboard"></i><span class="nav-label">Dashboard</span></a>
+                <a href="@Url.Action("Index", "country")"><i class="fa fa-flag "></i><span class="nav-label">Country </span></a>
+                <a href="@Url.Action("Index", "City")"><i class="fa fa-building"></i><span class="nav-label"> City</span></a>
+                <a href="@Url.Action("Index", "UserManagement")"><i class="fa fa-user "></i><span class="nav-label"> Users Registration </span></a>
+                <a href="@Url.Action("Index", "Banks")"><i class="fa fa-bank"></i><span class="nav-label">Banks </span></a>
+                <a href="@Url.Action("Index", "Branches")"><i class="fa fa-building-o"></i><span class="nav-label">Bank Branches </span></a>
+                <a href="@Url.Action("Index", "AgencyBranches")"><i class="fa fa-building-o"></i><span class="nav-label"> Agency Branches </span></a>
+                <a href="@Url.Action("Index", "SecurityQuestions")"><i class="fa fa-quora"></i><span class="nav-label">Security Questions</span></a>
+                <a href="@Url.Action("Index", "Remitter")"><i class="fa fa-dashboard"></i><span class="nav-label">Add Remitter</span></a>
+                <a href="@Url.Action("Index", "Beneficiary")"><i class="fa fa-dashboard"></i><span class="nav-label">Add Beneficiary</span></a>
+                <a href="@Url.Action("Chat", "Chat")"><i class="fa fa-comment"></i><span class="nav-label">Chat</span></a>
+                <a href="@Url.Action("FAQS", "GeneralSettings")"><i class="fa fa-question-circle"></i><span class="nav-label"> FAQs</span></a>
+                <a href="@Url.Action("ContactUs", "GeneralSettings")"><i class="fa fa-id-card-o"></i><span class="nav-label"> Contact Us</span></a>
+
+                <a href="@Url.Action("CustomerQuries", "GeneralSettings")"><i class="fa fa-users"></i><span class="nav-label"> Customer Quries </span></a>
+                <a href="@Url.Action("TermsConditions", "GeneralSettings")"><i class="fa fa-file-text-o"></i><span class="nav-label">Terms And Conditions</span></a>
+                <a href="@Url.Action("PrivacyPolicy", "GeneralSettings")"><i class="fa fa-file-text-o"></i><span class="nav-label">Privacy Policy</span></a>
+
+            </li>
+
+        </ul>
+
+    </div>
+</nav>

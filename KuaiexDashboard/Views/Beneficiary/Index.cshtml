@@ -1,0 +1,213 @@
+﻿
+@{
+    /**/
+
+    ViewBag.Title = "Index";
+}
+
+
+<div class="row ">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="ibox">
+            <div class="ibox-heading">
+                <div class="ibox-title">
+                    <h2><i class="fa fa-users"></i>&nbsp; Add/Edit Beneficiary</h2>
+                </div>
+            </div>
+            <div class="ibox ibox-content">
+                <form class="form-group frmAddUsers">
+                    <div class="row hidden">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>CUID<span style="color:red;">*</span></label>
+                                <input type="text" id="CUID" class="form-control" name="CUID">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row hidden">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>UID<span style="color:red;">*</span></label>
+                                <input type="text" id="UID" class="form-control" name="UID">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label>Name</label>
+                                <input type="text" id="FullName" placeholder="Enter Beneficiary Name" class="form-control" name="FullName">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label>Country</label>
+                                <select class="form-control chzn" id="Country_Id" name="Country_Id"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label>Currency</label>
+                                <select class="form-control chzn" id="Currency_Id" name="Currency_Id"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label>Nationality</label>
+                                <select class="form-control chzn" id="Nationality_Id" name="Nationality_Id"></select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>Remittance Purpose</label>
+                                <select id="Remittance_Purpose" name="Remittance_Purpose[]" multiple="multiple"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 dvRemittance_Purpose_Detail">
+                            <div class="form-group">
+                                <label>Remittance Purpose Detail</label>
+                                <input type="text" id="Remittance_Purpose_Detail" placeholder="In Case Of Other" class="form-control" name="Remittance_Purpose_Detail" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>Source Of Income</label>
+                                <select id="Source_Of_Income" name="Source_Of_Income[]" multiple="multiple"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 dvSource_Of_Income_Detail">
+                            <div class="form-group">
+                                <label>Source Of Income Detail</label>
+                                <input type="text" id="Source_Of_Income_Detail" placeholder="In Case Of Other" class="form-control" name="Source_Of_Income_Detail" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>Remitter Relation</label>
+                                <select id="Remitter_Relation" name="Remitter_Relation[]" multiple="multiple"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6 dvRemitter_Relation_Detail">
+                            <div class="form-group">
+                                <label>Remitter Relation Detail</label>
+                                <input type="text" id="Remitter_Relation_Detail" placeholder="In Case Of Other" class="form-control" name="Remitter_Relation_Detail" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label>Remittance Type</label>
+                                <select class="form-control chzn" id="Remittance_Type_Id" name="Remittance_Type_Id"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label>Mobile No</label>
+                                <input type="text" id="Mobile_No" placeholder="Enter Mobile No" class="form-control" name="Mobile_No">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3">
+                            <div class="form-group">
+                                <label>Bank</label>
+                                <select class="form-control chzn" id="Bank_Id" name="Bank_Id"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 dvBank_Code">
+                            <div class="form-group">
+                                <label>Bank Code</label>
+                                <input type="text" id="Bank_Code" placeholder="Enter Bank Code" class="form-control" name="Bank_Code">
+
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 dvBranch_Id">
+                            <div class="form-group">
+                                <label> Branch</label>
+                                <select class="form-control chzn" id="Branch_Id" name="Branch_Id"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 dvBranch_Number">
+                            <div class="form-group">
+                                <label>Branch Code</label>
+                                <input type="text" id="Branch_Number" placeholder="Enter Branch Code" class="form-control" name="Branch_Number">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-md-3 col-sm-3 dvRemittance_Subtype_Id">
+                            <div class="form-group">
+                                <label>Remittance Subtype</label>
+                                <select class="form-control chzn" id="Remittance_Subtype_Id" name="Remittance_Subtype_Id"></select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-3 dvBank_Account_No">
+                            <div class="form-group">
+                                <label>Bank Account No</label>
+                                <input type="text" id="Bank_Account_No" placeholder="Enter Bank Account No" class="form-control" name="Bank_Account_No">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <a id="btn-save" name="btn-save" class="btn btn-primary pull-right"><i class="fa fa-save"></i>&nbsp; Save</a>
+                            <a id="btn-refresh" name="btn-refresh" class="btn btn-info pull-right" style="margin-right:5px;"><i class="fa fa-refresh"></i>&nbsp; Reset</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="ibox ">
+            <div class="ibox-title">
+                <h2><i class="fa fa-users"></i>&nbsp;Beneficiary List </h2>
+
+            </div>
+            <div class="ibox ibox-content">
+
+                <table id="tblUsers" class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th class="hidden">UID</th>
+                            <th>Full Name</th>
+                            <th>Customer Name</th>
+                            <th>Birth Date </th>
+                            <th>Address Line 3</th>
+                            <th>Branch Address Line3</th>
+                            <th>Country Name</th>
+                            <th>Currency</th>
+                            <th>Bank Name</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblbody"></tbody>
+                </table>
+
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <a id="btn-sync" name="btn-sync" class="btn btn-primary pull-right"><i class="fa fa-reorder"></i>&nbsp; Synchronize Beneficiary Data</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/Assets/PagesJS/Beneficiary.js"></script>
+
+
+
+
+

@@ -1,0 +1,71 @@
+﻿
+@{
+    ViewBag.Title = "ContactUs";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="ibox">
+            <div class="ibox-heading">
+                <div class="ibox-title">
+                    <h2><i class="fa fa-users"></i>&nbsp; Add Contact Us</h2>
+                </div>
+            </div>
+            <div class="ibox ibox-content">
+                <form class="form-group frmAddUsers">
+                    <div class="row hidden">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>ID<span style="color:red;">*</span></label>
+                                <input type="text" id="Id" class="form-control" name="Id">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>Contact No<span style="color:red;">*</span></label>
+                                <input type="text" id="ContactNo" placeholder="Enter Contact No" class="form-control" name="ContactNo">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>Email <span style="color:red;">*</span></label>
+                                <input type="text" id="Email" placeholder="Enter Email" class="form-control" name="Email">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>Address <span style="color:red;">*</span></label>
+                                <input type="text" id="Address" placeholder="Enter Address" class="form-control" name="Address">
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>CustomerService <span style="color:red;">*</span></label>
+                                <input type="text" id="CustomerService" placeholder="Enter Customer Service" class="form-control" name="CustomerService">
+                            </div>
+                        </div>
+                    </div>
+
+              
+
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <a id="btn-save" name="btn-save" class="btn btn-primary pull-right"><i class="fa fa-save"></i>&nbsp; Save</a>
+                            <a id="btn-refresh" name="btn-refresh" class="btn btn-info pull-right" style="margin-right:5px;"><i class="fa fa-refresh"></i>&nbsp; Reset</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Assets/PagesJS/ContactUs.js"></script>

@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B1179111-AF55-4518-A4F2-22385139F8DC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BusinessLogicLayer</RootNamespace>
+    <AssemblyName>BusinessLogicLayer</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DomainEntities\API_AuthenticateUser_Result.cs" />
+    <Compile Include="DomainEntities\API_CheckEmailExistance_Result.cs" />
+    <Compile Include="DomainEntities\API_CheckIdentificationNoExistance_Result.cs" />
+    <Compile Include="DomainEntities\API_CheckMobileNoExistance_Result.cs" />
+    <Compile Include="DomainEntities\API_CheckSecurityQA_Result.cs" />
+    <Compile Include="DomainEntities\API_CheckUserExistance_Result.cs" />
+    <Compile Include="DomainEntities\API_CustomerTokenVerification_Result.cs" />
+    <Compile Include="DomainEntities\API_GetBankAccount_Type_Result.cs" />
+    <Compile Include="DomainEntities\API_GetBankBranchesByBankId_Result.cs" />
+    <Compile Include="DomainEntities\API_GetBanksByCountryId_Result.cs" />
+    <Compile Include="DomainEntities\API_GetBank_MstByBank_Id_Result.cs" />
+    <Compile Include="DomainEntities\API_GetBank_MstByCountry_Id_Result.cs" />
+    <Compile Include="DomainEntities\API_GetBeneficiaryByUID_Result.cs" />
+    <Compile Include="DomainEntities\API_GetBeneficiaryList_Result.cs" />
+    <Compile Include="DomainEntities\API_GetBranchesInfo_Result.cs" />
+    <Compile Include="DomainEntities\API_GetCityByCountryId_Result.cs" />
+    <Compile Include="DomainEntities\API_GetContactUsDetails_Result.cs" />
+    <Compile Include="DomainEntities\API_GetCounties_Result.cs" />
+    <Compile Include="DomainEntities\API_GetCurrencyByCode_Result.cs" />
+    <Compile Include="DomainEntities\API_GetCurrencyCodeByCountryId_Result.cs" />
+    <Compile Include="DomainEntities\API_GetCurrencyCode_Result.cs" />
+    <Compile Include="DomainEntities\API_GetFAQs_Result.cs" />
+    <Compile Include="DomainEntities\API_GetIdentificationTypeByName_Result.cs" />
+    <Compile Include="DomainEntities\API_GetIdentificationTypes_Result.cs" />
+    <Compile Include="DomainEntities\API_GetPrivacyPolicy_Result.cs" />
+    <Compile Include="DomainEntities\API_GetRealationships_Result.cs" />
+    <Compile Include="DomainEntities\API_GetRemittance_SubTypeByRemittance_Type_Id_Result.cs" />
+    <Compile Include="DomainEntities\API_GetRemittance_Type_Result.cs" />
+    <Compile Include="DomainEntities\API_GetRemitterData_Result.cs" />
+    <Compile Include="DomainEntities\API_GetResidencyTypes_Result.cs" />
+    <Compile Include="DomainEntities\API_GetRoutingBankByCountryId_Result.cs" />
+    <Compile Include="DomainEntities\API_GetRoutingBanksByCountryId_Result.cs" />
+    <Compile Include="DomainEntities\API_GetRoutingBank_Branch_Result.cs" />
+    <Compile Include="DomainEntities\API_GetSecurityQuestionIdByName_Result.cs" />
+    <Compile Include="DomainEntities\API_GetSecurityQuestions_Result.cs" />
+    <Compile Include="DomainEntities\API_GetTermsAndConditions_Result.cs" />
+    <Compile Include="DomainEntities\API_GetTransactionCount_Result.cs" />
+    <Compile Include="DomainEntities\API_IsVerifiedStatus_Result.cs" />
+    <Compile Include="DomainEntities\API_ResetInvalidTryCount_Result.cs" />
+    <Compile Include="DomainEntities\API_SetInvalidTryCount_Result.cs" />
+    <Compile Include="DomainEntities\Bank_Account_Type.cs" />
+    <Compile Include="DomainEntities\Bank_Branch_Mst.cs" />
+    <Compile Include="DomainEntities\Bank_Mst.cs" />
+    <Compile Include="DomainEntities\Beneficiary.cs" />
+    <Compile Include="DomainEntities\BeneficiaryValidation.cs" />
+    <Compile Include="DomainEntities\BranchesInfo.cs" />
+    <Compile Include="DomainEntities\City.cs" />
+    <Compile Include="DomainEntities\ContactUs.cs" />
+    <Compile Include="DomainEntities\Country.cs" />
+    <Compile Include="DomainEntities\CountryCurrency.cs" />
+    <Compile Include="DomainEntities\Currency.cs" />
+    <Compile Include="DomainEntities\Currency_Result.cs" />
+    <Compile Include="DomainEntities\Customer.cs" />
+    <Compile Include="DomainEntities\CustomerChatDetail_Result.cs" />
+    <Compile Include="DomainEntities\CustomerChatMain_Result.cs" />
+    <Compile Include="DomainEntities\CustomerChatTitle_Result.cs" />
+    <Compile Include="DomainEntities\CustomerQueries.cs" />
+    <Compile Include="DomainEntities\Customer_Chat.cs" />
+    <Compile Include="DomainEntities\Customer_Mst.cs" />
+    <Compile Include="DomainEntities\Customer_Security_Questions.cs" />
+    <Compile Include="DomainEntities\EmailAlerts.cs" />
+    <Compile Include="DomainEntities\FAQs.cs" />
+    <Compile Include="DomainEntities\GetBanksListByCountry_Result.cs" />
+    <Compile Include="DomainEntities\GetBanksList_Result.cs" />
+    <Compile Include="DomainEntities\GetBeneficiaryList_Result.cs" />
+    <Compile Include="DomainEntities\GetBrancheskInfoList_Result.cs" />
+    <Compile Include="DomainEntities\GetBranchesList1_Result.cs" />
+    <Compile Include="DomainEntities\GetBranchesListbyCountryBank_Result.cs" />
+    <Compile Include="DomainEntities\GetBranchesList_Result.cs" />
+    <Compile Include="DomainEntities\GetCityList_Result.cs" />
+    <Compile Include="DomainEntities\GetContactUs_Result.cs" />
+    <Compile Include="DomainEntities\GetCountryList_Result.cs" />
+    <Compile Include="DomainEntities\GetCurrencyRate_Result.cs" />
+    <Compile Include="DomainEntities\GetCustomerQueries_Result.cs" />
+    <Compile Include="DomainEntities\GetFAQSList_Result.cs" />
+    <Compile Include="DomainEntities\GetPrivacyPolicy_Result.cs" />
+    <Compile Include="DomainEntities\GetQuestionsList_Result.cs" />
+    <Compile Include="DomainEntities\GetRemitterList_Result.cs" />
+    <Compile Include="DomainEntities\GetTermsConditions_Result.cs" />
+    <Compile Include="DomainEntities\GetUsersList_Result.cs" />
+    <Compile Include="DomainEntities\GetUserTypes_Result.cs" />
+    <Compile Include="DomainEntities\IdentificationTypeLookup.cs" />
+    <Compile Include="DomainEntities\Qustion_Lookup.cs" />
+    <Compile Include="DomainEntities\Relationship_Lookup.cs" />
+    <Compile Include="DomainEntities\Remittance_Purpose_Lookup.cs" />
+    <Compile Include="DomainEntities\Remittance_SubType_Mst.cs" />
+    <Compile Include="DomainEntities\Remittance_Trn.cs" />
+    <Compile Include="DomainEntities\Remittance_Type_Mst.cs" />
+    <Compile Include="DomainEntities\Residency_Type.cs" />
+    <Compile Include="DomainEntities\SecurityQuestions.cs" />
+    <Compile Include="DomainEntities\Source_Of_Income_Lookup.cs" />
+    <Compile Include="DomainEntities\Terms_and_Privacy.cs" />
+    <Compile Include="DomainEntities\Transaction_Count_Lookup.cs" />
+    <Compile Include="DomainEntities\Users.cs" />
+    <Compile Include="DomainEntities\UserType_Lookup.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
