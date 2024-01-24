@@ -122,13 +122,19 @@ namespace DataAccessLayer
 
                         using (SqlDataReader reader = command.ExecuteReader())
                         {
+                            // Get the ordinal positions of the columns for better performance
+                            int idOrdinal = reader.GetOrdinal("Id");
+                            int nameOrdinal = reader.GetOrdinal("Name");
+                            int statusOrdinal = reader.GetOrdinal("Status");
+
                             while (reader.Read())
                             {
                                 City item = new City
                                 {
-                                    Id = reader.GetInt32(reader.GetOrdinal("Id")),
-                                    Name = reader.GetString(reader.GetOrdinal("Name")),
-                                    Status = reader.IsDBNull(reader.GetOrdinal("Status")) ? null : (int?)reader.GetInt32(reader.GetOrdinal("Status"))
+                                    Id = reader.GetInt32(idOrdinal),
+                                    Name = reader.GetString(nameOrdinal),
+                                    // Check for DBNull using IsDBNull and use conditional operator for nullable int
+                                    Status = reader.IsDBNull(statusOrdinal) ? (int?)null : reader.GetInt32(statusOrdinal)
                                 };
 
                                 cityList.Add(item);
