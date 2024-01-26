@@ -44,7 +44,7 @@ namespace KuaiexDashboard.Controllers
             string status = "0:{choose}";
             try
             {
-                
+
                 List<Currency> lstCurrency = objBankDal.GetCurrency();
 
                 if (lstCurrency != null)
@@ -64,30 +64,30 @@ namespace KuaiexDashboard.Controllers
             return Content(status);
         }
         public ActionResult LoadGrid(int countryId)
-       {
-          string status = "0:{choose}";
-    
-       try
-       {
-                
+        {
+            string status = "0:{choose}";
+
+            try
+            {
+
                 List<GetBanksListByCountry_Result> banks = objBankDal.GetBanksListByCountry(countryId);
 
-           status = JsonConvert.SerializeObject(banks);
-       }
-       catch (Exception ex)
-       {
-        status = "error";
-       }
+                status = JsonConvert.SerializeObject(banks);
+            }
+            catch (Exception ex)
+            {
+                status = "error";
+            }
 
-    return Content(status);
-}
+            return Content(status);
+        }
         public ActionResult LoadGrid1()
         {
             string status = "0:{choose}";
 
             try
             {
-               
+
                 List<GetBanksList_Result> bankslist = objBankDal.GetBanksList();
 
                 status = JsonConvert.SerializeObject(bankslist);
@@ -141,7 +141,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                
+
                 Bank_Mst obj = objBankDal.GetBankByUID(UID);
 
                 if (obj != null)
@@ -165,13 +165,13 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                
-                
+
+
                 status = objBankDal.UpdateBank(objBank);
             }
             catch (Exception ex)
             {
-                status = "error";     
+                status = "error";
             }
 
             return Content(status);

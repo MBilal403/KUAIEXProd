@@ -241,15 +241,13 @@ var handleStaff = function () {
 }
 
 $(document).on('click', '.btnsearch', function () {
-   
-    var Country = $("#Country_Id").val();
-    //alert($("#Country_Id").val());
+    var CountryId = $("#Country_Id").val();
     $('#tblbank').DataTable().destroy();
     $("#tblbody").html('');
     $.ajax({
         type: "POST",
         cache: false,
-        url: "../Banks/LoadGrid?Country=" + Country,
+        url: "../Banks/LoadGrid?countryId=" + CountryId,
         processData: false,
         contentType: false,
         success: function (data) {

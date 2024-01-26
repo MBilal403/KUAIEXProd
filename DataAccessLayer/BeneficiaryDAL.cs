@@ -318,6 +318,7 @@ namespace KuaiexDashboard
                     {
                         GetCountryList_Result country = new GetCountryList_Result
                         {
+                            Id = row.Field<int>("Id"),
                             UID = row.Field<Guid?>("UID"),
                             Name = row.Field<string>("Name"),
                             Nationality = row.Field<string>("Nationality"),

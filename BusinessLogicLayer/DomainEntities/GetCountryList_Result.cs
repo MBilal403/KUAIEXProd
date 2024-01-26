@@ -15,6 +15,7 @@ namespace KuaiexDashboard
     {
         public Nullable<System.Guid> UID { get; set; }
         public string Name { get; set; }
+        public int Id { get; set; }
         public string Nationality { get; set; }
         public string Alpha_2_Code { get; set; }
         public string Alpha_3_Code { get; set; }
