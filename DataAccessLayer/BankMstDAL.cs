@@ -37,7 +37,7 @@ namespace KuaiexDashboard.DAL
                                 Name = row["Name"].ToString(),
                                 Code = row["Code"].ToString(),
                                 DD_Rate = Convert.ToDecimal(row["DD_Rate"]),
-                                
+
                             };
 
                             currencies.Add(currency);
@@ -76,14 +76,14 @@ namespace KuaiexDashboard.DAL
                         {
                             GetBanksListByCountry_Result bank = new GetBanksListByCountry_Result
                             {
-                                UID = row["UID"] as Guid?,
+                                Bank_Id = Convert.ToInt32(row["Bank_Id"].ToString()),
                                 English_Name = row["English_Name"].ToString(),
                                 Address_Line1 = row["Address_Line1"].ToString(),
                                 Address_Line2 = row["Address_Line2"].ToString(),
                                 Address_Line3 = row["Address_Line3"].ToString(),
                                 Country_Name = row["Country_Name"].ToString(),
                                 Currency = row["Currency"].ToString(),
-                               
+
                             };
 
                             banks.Add(bank);
@@ -100,47 +100,47 @@ namespace KuaiexDashboard.DAL
         }
         public List<GetBanksList_Result> GetBanksList()
         {
-              try
-              {
-                    List<GetBanksList_Result> banks = new List<GetBanksList_Result>();
+            try
+            {
+                List<GetBanksList_Result> banks = new List<GetBanksList_Result>();
 
-                    using (SqlConnection connection = new SqlConnection(connectionString))
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand("GetBanksList", connection))
                     {
-                        connection.Open();
+                        command.CommandType = CommandType.StoredProcedure;
 
-                        using (SqlCommand command = new SqlCommand("GetBanksList", connection))
+                        SqlDataAdapter adapter = new SqlDataAdapter(command);
+                        DataSet dataSet = new DataSet();
+
+                        adapter.Fill(dataSet, "Bank_Mst");
+
+                        foreach (DataRow row in dataSet.Tables["Bank_Mst"].Rows)
                         {
-                            command.CommandType = CommandType.StoredProcedure;
-
-                            SqlDataAdapter adapter = new SqlDataAdapter(command);
-                            DataSet dataSet = new DataSet();
-
-                            adapter.Fill(dataSet, "Bank_Mst");
-
-                            foreach (DataRow row in dataSet.Tables["Bank_Mst"].Rows)
+                            GetBanksList_Result banklist = new GetBanksList_Result
                             {
-                                GetBanksList_Result banklist = new GetBanksList_Result
-                                {
-                                    UID = row["UID"] as Guid?,
-                                    English_Name = row["English_Name"].ToString(),
-                                    Address_Line1 = row["Address_Line1"].ToString(),
-                                    Address_Line2 = row["Address_Line2"].ToString(),
-                                    Address_Line3 = row["Address_Line3"].ToString(),
-                                    Country_Name = row["Country_Name"].ToString(),
-                                    Currency = row["Currency"].ToString(),
-                                };
+                                UID = row["UID"] as Guid?,
+                                English_Name = row["English_Name"].ToString(),
+                                Address_Line1 = row["Address_Line1"].ToString(),
+                                Address_Line2 = row["Address_Line2"].ToString(),
+                                Address_Line3 = row["Address_Line3"].ToString(),
+                                Country_Name = row["Country_Name"].ToString(),
+                                Currency = row["Currency"].ToString(),
+                            };
 
-                                banks.Add(banklist);
-                            }
+                            banks.Add(banklist);
                         }
                     }
+                }
 
-                    return banks;
-                }
-                catch (Exception)
-                {
-                    return null;
-                }
+                return banks;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
         public Bank_Mst GetBankByUID(Guid UID)
         {
@@ -242,7 +242,7 @@ namespace KuaiexDashboard.DAL
             }
             catch (Exception ex)
             {
-                
+
                 throw new Exception("Failed to update bank", ex);
             }
         }

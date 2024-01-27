@@ -156,7 +156,7 @@ var handleStaff = function () {
             $('#btn-save').attr('disabled', 'true');
             $(".frmAddbank :disabled").removeAttr('disabled');
             if (!IsEditMode) {
-               // alert($(".frmAddbank").serialize());
+                // alert($(".frmAddbank").serialize());
                 $.post(
                     "../Banks/AddBank",
                     $(".frmAddbank").serialize(),
@@ -245,6 +245,7 @@ $(document).on('click', '.btnsearch', function () {
 
     var Country = $("#Country_Id").val();
     var Bank = $("#Bank_Id").val();
+
     //alert($("#Country_Id").val());
     $('#tblbank').DataTable().destroy();
     $("#tblbody").html('');
@@ -348,6 +349,7 @@ $(document).on('click', '.btnsearch', function () {
 
 $("#Country_Id").on('change', function () {
     var CountryId = this.value;
+    console.log(CountryId);
     LoadBanks(CountryId);
 });
 
@@ -365,8 +367,6 @@ var LoadGridData = function () {
             var html = '';
             for (var i = 0; i < data.length; i++) {
                 var obj = data[i];
-
-
 
                 html += '<tr>';
 
@@ -391,7 +391,7 @@ var LoadGridData = function () {
                 else {
                     html += '<td>-</td>';
                 }
-               
+
 
                 if (obj.Country_Name != null) {
                     html += '<td>' + obj.Country_Name + '</td>';
@@ -514,11 +514,11 @@ var LoadBanks = function (Country_Id) {
     $.ajax({
         type: "POST",
         cache: false,
-        url: "../Branches/LoadBanks?Country_Id=" + Country_Id,
+        url: "../Branches/LoadBanks?countryId=" + Country_Id,
         processData: false,
         contentType: false,
         success: function (data) {
-           // alert(data);
+            // alert(data);
             var sch = JSON.parse(data);
 
             var $el = $('#Bank_Id');

@@ -10,15 +10,12 @@ namespace KuaiexDashboard.Controllers
 {
     public class BranchesController : Controller
     {
-        
+
         // GET: Branches
         public ActionResult Index()
         {
             return View();
         }
-
-
-
 
         public ActionResult LoadCountry()
         {
@@ -87,8 +84,8 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                BranchesDAL cityDAL = new BranchesDAL(); 
-                List<GetCityList_Result> lstCity = cityDAL.GetCityList(); 
+                BranchesDAL cityDAL = new BranchesDAL();
+                List<GetCityList_Result> lstCity = cityDAL.GetCityList();
 
                 status = JsonConvert.SerializeObject(lstCity);
             }

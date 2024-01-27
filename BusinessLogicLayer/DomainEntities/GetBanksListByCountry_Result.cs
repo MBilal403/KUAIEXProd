@@ -13,7 +13,7 @@ namespace KuaiexDashboard
     
     public partial class GetBanksListByCountry_Result
     {
-        public Nullable<System.Guid> UID { get; set; }
+        public int Bank_Id { get; set; }
         public string English_Name { get; set; }
         public string Address_Line1 { get; set; }
         public string Address_Line2 { get; set; }
