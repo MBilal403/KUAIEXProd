@@ -106,12 +106,7 @@ var handleStaff = function () {
                 required: true,
                 maxlength: 50
             },
-            Status: {
-                required: true,
-                maxlength: 1
-            },
-
-
+          
         },
 
         invalidHandler: function (event, validator) { //display error alert on form submit

@@ -107,7 +107,7 @@ var handleStaff = function () {
                 required: true,
                 maxlength: 50
             },
-            Country: {
+            Answer: {
                 required: true,
                 maxlength: 20
             },
