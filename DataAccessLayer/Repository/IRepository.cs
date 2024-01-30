@@ -14,6 +14,7 @@ namespace KuaiexDashboard.Repository
         void Insert(T entity);
         void Update(T entity);
         void Delete(object id);
+        PagedResult<T> GetPagedDataFromSP<T>(string storedProcedureName, int page = 1, int pageSize = 10) where T : class;
         PagedResult<T> GetPagedData(int page, int pageSize);
     }
 }

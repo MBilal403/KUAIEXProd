@@ -1,4 +1,6 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Repository.Impl;
+using KuaiexDashboard.Repository.Impl;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -10,6 +12,11 @@ namespace KuaiexDashboard.Controllers
 {
     public class CityController : Controller
     {
+        private readonly GenericRepository<City> cityRepository;
+        public CityController()
+        {
+            cityRepository = new GenericRepository<City>();
+        }
         CityDAL objCityDal = new CityDAL();
         // GET: City
         public ActionResult Index()
@@ -80,8 +87,11 @@ namespace KuaiexDashboard.Controllers
         {
             string status = "error";
             //if (IsAdminUser)
-            //{
-            List<GetCityList_Result> list = objCityDal.GetActiveCities();
+            //{v
+
+           PagedResult<GetCityList_Result> list = cityRepository.GetPagedDataFromSP<GetCityList_Result>("GetCitiesWithPagination", 1, 10);
+
+          //  List<GetCityList_Result> list = objCityDal.GetActiveCities();
             status = Newtonsoft.Json.JsonConvert.SerializeObject(list);
             //}
             return Content(status);

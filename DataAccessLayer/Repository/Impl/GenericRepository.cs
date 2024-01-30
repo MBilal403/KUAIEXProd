@@ -48,7 +48,6 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
-
         public PagedResult<T> GetPagedData(int page, int pageSize)
         {
             using (var connection = connectionHandler.OpenConnection())
@@ -58,7 +57,7 @@ namespace KuaiexDashboard.Repository.Impl
                     var tableName = typeof(T).Name;
 
                     // Calculate the starting row for the current page
-                    var startRow = (page - 1) * pageSize + 1;
+                    var startRow = Math.Max((page - 1) * pageSize + 1, 0);
                     var endRow = startRow + pageSize - 1;
 
                     // Retrieve total record count
@@ -211,7 +210,85 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
+        public PagedResult<T> GetPagedDataFromSP<T>(string storedProcedureName, int page = 1 , int pageSize = 10) where T : class
+        {
+            using (var connection = connectionHandler.OpenConnection())
+            {
+                try
+                {
+                    var tableName = typeof(T).Name;
+
+                    // Calculate the starting row for the current page
+                    var startRow = (page - 1) * pageSize + 1;
+                    var endRow = startRow + pageSize - 1;
+
+                    // Call the stored procedure for paginated data
+                    using (var command = new SqlCommand(storedProcedureName, connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+
+                        // Add parameters for pagination
+                        command.Parameters.AddWithValue("@StartRow", startRow);
+                        command.Parameters.AddWithValue("@EndRow", endRow);
+
+                        // Add output parameter for total record count
+                        var totalRecordsParameter = new SqlParameter
+                        {
+                            ParameterName = "@TotalCount",
+                            SqlDbType = SqlDbType.Int,
+                            Direction = ParameterDirection.Output
+                        };
+                        command.Parameters.Add(totalRecordsParameter);
+
+                        using (var adapter = new SqlDataAdapter(command))
+                        {
+                            var dataTable = new DataTable();
+                            adapter.Fill(dataTable);
+
+                            var entities = MapDataTableToEntities<T>(dataTable);
+
+                            // Retrieve total record count from output parameter
+                            var totalRecords = (int)totalRecordsParameter.Value;
+
+                            // Create and return PagedResult object
+                            var result = new PagedResult<T>
+                            {
+                                CurrentPage = page,
+                                PageSize = pageSize,
+                                TotalSize = totalRecords,
+                                Data = entities.ToList()
+                            };
+
+                            return result;
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle the exception (log, rethrow, etc.)
+                    throw;
+                }
+            }
+        }
         private IEnumerable<T> MapDataTableToEntities(DataTable dataTable)
+        {
+            List<T> result = new List<T>();
+            foreach (DataRow row in dataTable.Rows)
+            {
+                T item = Activator.CreateInstance<T>();
+
+                foreach (var property in typeof(T).GetProperties())
+                {
+                    if (dataTable.Columns.Contains(property.Name) && !object.Equals(row[property.Name], DBNull.Value))
+                    {
+                        property.SetValue(item, row[property.Name], null);
+                    }
+                }
+                result.Add(item);
+            }
+            return result;
+        }
+        private List<T> MapDataTableToEntities<T>(DataTable dataTable) where T : class
         {
             List<T> result = new List<T>();
             foreach (DataRow row in dataTable.Rows)
