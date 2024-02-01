@@ -3,6 +3,7 @@
 $(document).ready(function () {
     $('#tblUsers').DataTable({ responsive: true });
     handleStaff();
+    KYCCheckBoxes();
     LoadGridData();
     LoadIdentificationType();
     LoadResidencyType();
@@ -29,6 +30,22 @@ $(document).ready(function () {
         $("#wait").css("display", "none");
     });
 });
+
+function KYCCheckBoxes() {
+    // Hide additional checkboxes initially
+    $("#additionalCheckboxes").hide();
+
+    // Show additional checkboxes when any of the first three checkboxes is checked
+    $("[id^='pepCheckbox']").change(function () {
+        if ($(this).prop("checked")) {
+            $("#additionalCheckboxes").show();
+        } else {
+            $("#additionalCheckboxes").hide();
+        }
+    });
+}
+
+
 
 $(".DigitOnly").keypress(function (e) {
     e = e || window.event;
@@ -179,6 +196,10 @@ var handleStaff = function () {
         focusInvalid: false, // do not focus the last invalid input
         ignore: "",
         rules: {
+            other_Detail: {
+                required: true,
+                maxlength: 50
+            },
             Name: {
                 required: true,
                 maxlength: 50
@@ -339,8 +360,6 @@ var LoadGridData = function () {
             var html = '';
             for (var i = 0; i < data.length; i++) {
                 var obj = data[i];
-
-
 
                 html += '<tr>';
 
