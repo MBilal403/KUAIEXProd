@@ -36,7 +36,7 @@ function KYCCheckBoxes() {
     $("#additionalCheckboxes").hide();
 
     // Show additional checkboxes when any of the first three checkboxes is checked
-    $("[id^='pepCheckbox']").change(function () {
+    $("[id^='pepcheckbox']").change(function () {
         if ($(this).prop("checked")) {
             $("#additionalCheckboxes").show();
         } else {

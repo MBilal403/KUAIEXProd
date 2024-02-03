@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace KuaiexDashboard.Repository
 {
-    interface IRepository<T> where T : class
+   public interface IRepository<T> where T : class
     {
         IEnumerable<T> GetAll(Func<T, bool> condition = null);
         T GetById(object id);

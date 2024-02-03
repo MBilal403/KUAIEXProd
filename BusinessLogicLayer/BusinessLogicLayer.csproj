@@ -84,6 +84,7 @@
     <Compile Include="DomainEntities\Bank_Account_Type.cs" />
     <Compile Include="DomainEntities\Bank_Branch_Mst.cs" />
     <Compile Include="DomainEntities\Bank_Mst.cs" />
+    <Compile Include="DomainEntities\BaseEntity.cs" />
     <Compile Include="DomainEntities\Beneficiary.cs" />
     <Compile Include="DomainEntities\BeneficiaryValidation.cs" />
     <Compile Include="DomainEntities\BranchesInfo.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="DomainEntities\GetUsersList_Result.cs" />
     <Compile Include="DomainEntities\GetUserTypes_Result.cs" />
     <Compile Include="DomainEntities\IdentificationTypeLookup.cs" />
+    <Compile Include="DomainEntities\Individual_KYC.cs" />
     <Compile Include="DomainEntities\Qustion_Lookup.cs" />
     <Compile Include="DomainEntities\Relationship_Lookup.cs" />
     <Compile Include="DomainEntities\Remittance_Purpose_Lookup.cs" />

@@ -770,6 +770,7 @@
     <Compile Include="Controllers\RoutingBankSettingsController.cs" />
     <Compile Include="Controllers\SecurityQuestionsController.cs" />
     <Compile Include="Controllers\UserManagementController.cs" />
+    <Compile Include="DTO\Customer\AddCustomerDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

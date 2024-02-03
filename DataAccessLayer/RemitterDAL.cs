@@ -4,50 +4,53 @@ using System.Data;
 using System.Data.SqlClient;
 using KuaiexDashboard;
 using System.Configuration;
+using BusinessLogicLayer.DomainEntities;
+using DataAccessLayer.Entities;
+
 namespace DataAccessLayer
 {
     public class RemitterDAL
     {
         private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXProdEntities"].ConnectionString;
-        
+
         public List<Customer> GetRemitterList()
         {
-                List<Customer> remitterList = new List<Customer>();
+            List<Customer> remitterList = new List<Customer>();
 
-                using (SqlConnection connection = new SqlConnection(connectionString))
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand("GetRemitterList", connection))
                 {
-                    using (SqlCommand command = new SqlCommand("GetRemitterList", connection))
+                    command.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(command))
                     {
-                        command.CommandType = CommandType.StoredProcedure;
-                        connection.Open();
+                        DataTable dataTable = new DataTable();
+                        adapter.Fill(dataTable);
 
-                        using (SqlDataAdapter adapter = new SqlDataAdapter(command))
+                        foreach (DataRow row in dataTable.Rows)
                         {
-                            DataTable dataTable = new DataTable();
-                            adapter.Fill(dataTable);
-
-                            foreach (DataRow row in dataTable.Rows)
+                            Customer remitter = new Customer
                             {
-                                Customer remitter = new Customer
-                                {
-                                    UID = row["UID"] as Guid? ?? default(Guid),
-                                    Name = row["Name"].ToString(),
-                                    Identification_Number = row["Identification_Number"].ToString(),
-                                    Email_Address = row["Email_Address"].ToString(),
-                                    Occupation = row["Occupation"].ToString(),
-                                    Identification_Expiry_Date = row["Identification_Expiry_Date"] as DateTime? ?? default(DateTime),
-                                    IsReviwed = Convert.ToBoolean(row["IsReviwed"]),
-                                    Identification_Type_Description = row["Description"].ToString(),
-                                    IsBlocked = Convert.ToInt32(row["IsBlocked"])
-                                };
+                                UID = row["UID"] as Guid? ?? default(Guid),
+                                Name = row["Name"].ToString(),
+                                Identification_Number = row["Identification_Number"].ToString(),
+                                Email_Address = row["Email_Address"].ToString(),
+                                Occupation = row["Occupation"].ToString(),
+                                Identification_Expiry_Date = row["Identification_Expiry_Date"] as DateTime? ?? default(DateTime),
+                                IsReviwed = Convert.ToBoolean(row["IsReviwed"]),
+                                 = row["Description"].ToString(),
+                                IsBlocked = Convert.ToInt32(row["IsBlocked"])
+                            };
 
-                                remitterList.Add(remitter);
-                            }
+                            remitterList.Add(remitter);
                         }
                     }
                 }
+            }
 
-                return remitterList;
+            return remitterList;
         }
         public List<Customer_Security_Questions> GetCustomerSecurityQuestions(int customerId)
         {
@@ -124,11 +127,11 @@ namespace DataAccessLayer
                             command.Parameters.AddWithValue("@Flat", customer.Flat);
                             command.Parameters.AddWithValue("@Login_Id", customer.Login_Id);
                             command.Parameters.AddWithValue("@Password", customer.Password);
-                            command.Parameters.AddWithValue("@Security_Question_Id_1", customer.Security_Question_Id_1);
+                            command.Parameters.AddWithValue("@Security_Question_Id_1", 1);
                             command.Parameters.AddWithValue("@Security_Answer_1", customer.Security_Answer_1);
-                            command.Parameters.AddWithValue("@Security_Question_Id_2", customer.Security_Question_Id_2);
+                            command.Parameters.AddWithValue("@Security_Question_Id_2", 2);
                             command.Parameters.AddWithValue("@Security_Answer_2", customer.Security_Answer_2);
-                            command.Parameters.AddWithValue("@Security_Question_Id_3", customer.Security_Question_Id_3);
+                            command.Parameters.AddWithValue("@Security_Question_Id_3", 3);
                             command.Parameters.AddWithValue("@Security_Answer_3", customer.Security_Answer_3);
                             command.Parameters.AddWithValue("@Device_Key", customer.Device_Key);
                             command.Parameters.AddWithValue("@UID", customer.UID);
@@ -197,26 +200,10 @@ namespace DataAccessLayer
                             {
                                 command.CommandType = CommandType.StoredProcedure;
 
-                                // Question 1
+                                // Questions
                                 command.Parameters.AddWithValue("@Customer_Id", question.Customer_Id);
                                 command.Parameters.AddWithValue("@Security_Question_Id_1", question.Question_Id);
                                 command.Parameters.AddWithValue("@Security_Answer_1", question.Answer);
-
-                                command.ExecuteNonQuery();
-
-                                // Question 2
-                                command.Parameters.Clear();
-                                command.Parameters.AddWithValue("@Customer_Id", question.Customer_Id);
-                                command.Parameters.AddWithValue("@Security_Question_Id_2", question.Question_Id);
-                                command.Parameters.AddWithValue("@Security_Answer_2", question.Answer);
-
-                                command.ExecuteNonQuery();
-
-                                // Question 3
-                                command.Parameters.Clear();
-                                command.Parameters.AddWithValue("@Customer_Id", question.Customer_Id);
-                                command.Parameters.AddWithValue("@Security_Question_Id_3", question.Question_Id);
-                                command.Parameters.AddWithValue("@Security_Answer_3", question.Answer);
 
                                 command.ExecuteNonQuery();
                             }
@@ -883,6 +870,46 @@ namespace DataAccessLayer
             }
 
             return identificationType;
+        }
+        public void AddCustomerKYC(List<Individual_KYC> individualKYCs)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        int count = 0;
+                        foreach (var kyc in individualKYCs)
+                        {
+                            using (SqlCommand command = new SqlCommand("usp_InsertKYC", connection, transaction))
+                            {
+                                command.CommandType = CommandType.StoredProcedure;
+                                command.Parameters.AddWithValue("@Question_Id", count);
+                                command.Parameters.AddWithValue("@Answer", kyc.Answer);
+                                command.Parameters.AddWithValue("@UID", Guid.NewGuid());
+                                command.Parameters.AddWithValue("@CreatedBy", 123);
+                                command.Parameters.AddWithValue("@CreatedOn", DateTime.Now);
+                                command.Parameters.AddWithValue("@UpdateBy", 456);
+                                command.Parameters.AddWithValue("@UpdatedOn", DateTime.Now);
+                                command.Parameters.AddWithValue("@Customer_Id", kyc.Customer_Id);
+                                command.Parameters.AddWithValue("@Details", "Hello");
+                                command.ExecuteNonQuery();
+                                count++;
+                            }
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback();
+                        throw ex;
+                    }
+                }
+            }
         }
     }
 }

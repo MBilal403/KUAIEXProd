@@ -1,4 +1,8 @@
-﻿using DataAccessLayer;
+﻿using BusinessLogicLayer.DomainEntities;
+using DataAccessLayer;
+using DataAccessLayer.Services.RemitterService;
+using DataAccessLayer.Services.RemitterServices.Impl;
+using KuaiexDashboard.DTO.Customer;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,7 +15,11 @@ namespace KuaiexDashboard.Controllers
 {
     public class RemitterController : Controller
     {
-
+        IRemitterService _remitterService;
+        public RemitterController()
+        {
+            _remitterService = new RemitterService();
+        }
         // GET: Remittance
         public ActionResult Index()
         {
@@ -80,8 +88,6 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-
-
                 RemitterDAL objRemitterDal = new RemitterDAL();
 
                 List<City> lstCities = objRemitterDal.GetActiveCities();
@@ -172,15 +178,18 @@ namespace KuaiexDashboard.Controllers
             return Content(status);
         }
         [HttpPost]
-        public ActionResult AddCustomer(Customer objcustomer)
+        public ActionResult AddCustomer(AddCustomerDTO addCustomerDto)
         {
             string status = "error";
-
             try
             {
                 RemitterDAL objRemitterDal = new RemitterDAL();
+                Customer customer = new Customer();
+                List<Customer_Security_Questions> securityQuestions;
+                List<Individual_KYC> individual_KYC;
 
-                Customer existingCustomer = objRemitterDal.GetCustomerByIdentificationAndName(objcustomer.Identification_Number, objcustomer.Name);
+                
+                Customer existingCustomer = objRemitterDal.GetCustomerByIdentificationAndName(addCustomerDto.Identification_Number, addCustomerDto.Name);
 
                 if (existingCustomer != null)
                 {
@@ -188,52 +197,108 @@ namespace KuaiexDashboard.Controllers
                 }
                 else
                 {
-                    objcustomer.IsReviwed = objcustomer.IsReviwed ?? false;
-                    objcustomer.IsVerified = objcustomer.IsVerified ?? 0;
-                    objcustomer.Occupation = "XYZ";
-                    objcustomer.Login_Id = "33784939944";
-                    objcustomer.Agency_Id = 2;
-                    objcustomer.Agency_Branch_Id = 7;
-                    objcustomer.UID_Token = Guid.NewGuid();
-                    objcustomer.Device_Key = "e537487483sj";
-                    objcustomer.CreatedBy = 1;
-                    objcustomer.UID = Guid.NewGuid();
                     Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                    objcustomer.Prod_Remitter_Id = objKuaiex_Prod.GetRemittanceIdByIdentificationNumber(objcustomer.Identification_Number);
-                    //objcustomer.Security_Answer_1 = Answer1;
-                    //objcustomer.Security_Answer_2 = Answer2;
-                    //objcustomer.Security_Answer_3 = Answer3;
-                    objcustomer.Identification_Expiry_Date = DateTime.Today;
-                    objcustomer.CreatedOn = DateTime.Now;
-                    objcustomer.CreatedIp = "127.0.0.1";
-                    objcustomer.UpdatedBy = 1;
-                    objcustomer.UpdatedOn = DateTime.Now;
-                    objcustomer.UpdatedIp = "127.0.0.1";
-                    objcustomer.IsBlocked = 0;
-                    objcustomer.Block_Count = 0;
-                    objcustomer.InvalidTryCount = 0;
-                    objcustomer.Civil_Id_Front = "";
-                    objcustomer.Civil_Id_Back = "";
-                    objcustomer.Pep_Status = false;
-                    objcustomer.Pep_Description = "";
-                    objcustomer.Date_Of_Birth = DateTime.Now;
-                    objcustomer.Birth_Country = 2; // this field need to mapped from front                    
-                    objcustomer.Employer = ""; // Employer
-                    objcustomer.Is_Profile_Completed = 0; // Completed Paramter
-                    objcustomer.Compliance_Limit_Expiry = DateTime.Now;
-                    objcustomer.Identification_Additional_Detail = "";
 
-                    objRemitterDal.AddCustomer(objcustomer);
+                    customer.Agency_Id = 1;
+                    customer.Agency_Branch_Id = 2;
+                    customer.Name = addCustomerDto.Name;
+                    customer.Gender = 0; // Mand
+                    customer.Identification_Type = addCustomerDto.Identification_Type;
+                    customer.Identification_Number = addCustomerDto.Identification_Number;
+                    customer.Identification_Expiry_Date = addCustomerDto.Identification_Expiry_Date;
+                    customer.Date_Of_Birth = addCustomerDto.Date_Of_Birth;
+                    customer.Occupation = addCustomerDto.Occupation;
+                    customer.Nationality = addCustomerDto.Nationality;
+                    customer.Mobile_No = addCustomerDto.Mobile_No;
+                    customer.Email_Address = "";// optional
+                    customer.Area = addCustomerDto.Area;
+                    customer.Block = addCustomerDto.Block;
+                    customer.Street = addCustomerDto.Street;
+                    customer.Building = addCustomerDto.Building;
+                    customer.Floor = addCustomerDto.Floor;
+                    customer.Flat = addCustomerDto.Flat;
+                    customer.Login_Id = "33784939944";
+                    customer.Password = addCustomerDto.Password;
+                    customer.Device_Key = "e537487483sj";
+                    customer.UID = Guid.NewGuid();
+                    customer.CreatedBy = 1;
+                    customer.UID_Token = Guid.NewGuid();
+                    customer.CreatedOn = DateTime.Now;
+                    customer.CreatedIp = "127.0.0.1";
+                    customer.UpdatedBy = 1;
+                    customer.UpdatedOn = DateTime.Now;
+                    customer.UpdatedIp = "127.0.0.1";
+                    customer.IsBlocked = 0;
+                    customer.Block_Count = 0;
+                    customer.InvalidTryCount = 0;
+                    customer.Civil_Id_Front = "";
+                    customer.Civil_Id_Back = "";
+                    customer.Pep_Status = false;
+                    customer.Pep_Description = "";// missing 
+                    customer.Identification_Additional_Detail = addCustomerDto.Identification_Additional_Detail;
+                    customer.Residence_Type = addCustomerDto.Residence_Type;
+                    customer.Telephone_No = addCustomerDto.Telephone_No;
+                    customer.Birth_Place = addCustomerDto.Birth_Place;
+                    customer.Birth_Country = addCustomerDto.Birth_Country;
+                    customer.Monthly_Income = addCustomerDto.Monthly_Income;
+                    customer.Expected_Monthly_Trans_Count = addCustomerDto.Expected_Monthly_Trans_Count;
+                    customer.Other_Income = addCustomerDto.Other_Income;
+                    customer.Other_Income_Detail = addCustomerDto.Other_Income_Detail;
+                    customer.Monthly_Trans_Limit = addCustomerDto.Monthly_Trans_Limit;
+                    customer.Yearly_Trans_Limit = addCustomerDto.Yearly_Trans_Limit;
+                    customer.Compliance_Limit = addCustomerDto.Compliance_Limit;
+                    customer.Compliance_Trans_Count = addCustomerDto.Compliance_Trans_Count;
+                    customer.Compliance_Limit_Expiry = addCustomerDto.Compliance_Limit_Expiry;
+                    customer.Compliance_Comments = addCustomerDto.Compliance_Comments;
+                    customer.IsVerified = 1; // missing
+                    customer.IsReviwed = false; // missing
+                    customer.Prod_Remitter_Id = 100;
+                    customer.Employer = ""; // Employer
+                    customer.Is_Profile_Completed = 0; // Missing in Both 
 
-                    List<Customer_Security_Questions> securityQuestions = new List<Customer_Security_Questions>
+                    status = _remitterService.CreateRemitter(customer);
+
+                   //customer.Prod_Remitter_Id = objKuaiex_Prod.GetRemittanceIdByIdentificationNumber(addCustomerDto.Identification_Number);
+
+                    customer.Security_Answer_1 = "";
+                    customer.Security_Answer_2 = "";
+                    customer.Security_Answer_3 = "";
+       
+                  //  objRemitterDal.AddCustomer(customer);
+
+                    securityQuestions = new List<Customer_Security_Questions>
                     {
-                        new Customer_Security_Questions { Customer_Id = objcustomer.Customer_Id, Question_Id =objcustomer.Security_Question_Id_1, Answer =objcustomer.Security_Answer_1 },
-                        new Customer_Security_Questions { Customer_Id = objcustomer.Customer_Id, Question_Id = objcustomer.Security_Question_Id_2, Answer = objcustomer.Security_Answer_2 },
-                        new Customer_Security_Questions { Customer_Id = objcustomer.Customer_Id, Question_Id = objcustomer.Security_Question_Id_3, Answer = objcustomer.Security_Answer_3 }
+                        new Customer_Security_Questions { Customer_Id = addCustomerDto.Customer_Id, Question_Id =addCustomerDto.Security_Question_Id_1, Answer =addCustomerDto.Security_Answer_1 },
+                        new Customer_Security_Questions { Customer_Id = addCustomerDto.Customer_Id, Question_Id = addCustomerDto.Security_Question_Id_2, Answer = addCustomerDto.Security_Answer_2 },
+                        new Customer_Security_Questions { Customer_Id = addCustomerDto.Customer_Id, Question_Id = addCustomerDto.Security_Question_Id_3, Answer = addCustomerDto.Security_Answer_3 }
                     };
 
                     objRemitterDal.AddCustomerSecurityQuestions(securityQuestions);
 
+                    string check = "on";
+
+                    individual_KYC = new List<Individual_KYC>()
+                    {
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 1, Answer = addCustomerDto.checkbox1 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 2, Answer = addCustomerDto.checkbox2 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 3, Answer = addCustomerDto.checkbox3 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 4, Answer = addCustomerDto.checkbox4 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 5, Answer = addCustomerDto.checkbox5 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 6, Answer = addCustomerDto.checkbox6 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 7, Answer = addCustomerDto.checkbox7 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 8, Answer = addCustomerDto.checkbox8 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 9, Answer = addCustomerDto.checkbox9 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 10, Answer = addCustomerDto.checkbox10 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 11, Answer = addCustomerDto.checkbox11 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 12, Answer = addCustomerDto.checkbox12 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 13, Answer = addCustomerDto.checkbox13 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 14, Answer = addCustomerDto.checkbox14 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 15, Answer = addCustomerDto.pepcheckbox15 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 16, Answer = addCustomerDto.pepcheckbox16 == check },
+                        new Individual_KYC {Customer_Id = addCustomerDto.Customer_Id, Question_Id = 17, Answer = addCustomerDto.pepcheckbox17 == check }
+                    };
+
+                    objRemitterDal.AddCustomerKYC(individual_KYC);
 
                     status = "success";
                 }
@@ -410,4 +475,5 @@ namespace KuaiexDashboard.Controllers
         }
 
     }
+
 }
