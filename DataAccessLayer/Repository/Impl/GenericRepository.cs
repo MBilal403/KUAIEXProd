@@ -1,10 +1,12 @@
-﻿using DataAccessLayer.Repository.Impl;
+﻿using DataAccessLayer.Helpers;
+using DataAccessLayer.Repository.Impl;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 
 namespace KuaiexDashboard.Repository.Impl
@@ -12,10 +14,13 @@ namespace KuaiexDashboard.Repository.Impl
     public class GenericRepository<T> : IRepository<T> where T : class
     {
         private readonly SqlConnectionHandler connectionHandler;
+        private readonly ConditionToWhereClauseConverter<T> Converter;
+
 
         public GenericRepository()
         {
             connectionHandler = new SqlConnectionHandler();
+            Converter = new ConditionToWhereClauseConverter<T>();
         }
 
         public IEnumerable<T> GetAll(Func<T, bool> condition = null)
@@ -42,6 +47,38 @@ namespace KuaiexDashboard.Repository.Impl
 
                         return entities.ToList();
                     }
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+            }
+        }
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>> condition = null, params string[] columns)
+        {
+            using (var connection = connectionHandler.OpenConnection())
+            {
+                try
+                {
+                    var tableName = typeof(T).Name;
+                    var columnList = columns != null && columns.Any() ? string.Join(", ", columns) : "*";
+                    var query = $"SELECT {columnList} FROM {tableName}";
+
+                    // Add WHERE clause if condition is provided
+                    if (condition != null)
+                    {
+                        var whereClause = Converter.ConvertToWhereClause(condition);
+                        query += $" WHERE {whereClause}";
+                    }
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(query, connection))
+                    {
+                        DataTable dataTable = new DataTable();
+                        adapter.Fill(dataTable);
+
+                        return MapDataTableToEntities(dataTable);
+                    }
+                    connection.Dispose();
                 }
                 catch (Exception ex)
                 {
@@ -150,9 +187,9 @@ namespace KuaiexDashboard.Repository.Impl
                     // Skip Primary Key of Table
                     var properties = typeof(T).GetProperties().Where(p => !Attribute.IsDefined(p, typeof(KeyAttribute)));
 
-                  //  var properties = typeof(T).GetProperties().Skip(1);
+                    //  var properties = typeof(T).GetProperties().Skip(1);
                     // Neglect the Null Values
-                    var columns = string.Join(", ", properties.Where(p=> p.GetValue(entity) != null).Select(p => p.Name));
+                    var columns = string.Join(", ", properties.Where(p => p.GetValue(entity) != null).Select(p => p.Name));
                     var parameters = string.Join(", ", properties.Where(p => p.GetValue(entity) != null).Select(p => $"@{p.Name}"));
 
                     var query = $"INSERT INTO {tableName} ({columns}) VALUES ({parameters})";
@@ -216,7 +253,7 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
-        public PagedResult<T> GetPagedDataFromSP<T>(string storedProcedureName, int page = 1 , int pageSize = 10) where T : class
+        public PagedResult<T> GetPagedDataFromSP<T>(string storedProcedureName, int page = 1, int pageSize = 10) where T : class
         {
             using (var connection = connectionHandler.OpenConnection())
             {
@@ -276,6 +313,7 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
+
         private IEnumerable<T> MapDataTableToEntities(DataTable dataTable)
         {
             List<T> result = new List<T>();
@@ -313,6 +351,6 @@ namespace KuaiexDashboard.Repository.Impl
             return result;
         }
 
-
     }
+
 }

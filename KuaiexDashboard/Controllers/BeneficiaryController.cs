@@ -1,5 +1,9 @@
 ﻿using BusinessLogicLayer.DomainEntities;
 using DataAccessLayer;
+using DataAccessLayer.Entities;
+using KuaiexDashboard.DTO.Beneficiary;
+using KuaiexDashboard.Services.BeneficiaryServices;
+using KuaiexDashboard.Services.BeneficiaryServices.Impl;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,7 +15,13 @@ namespace KuaiexDashboard.Controllers
 {
     public class BeneficiaryController : Controller
     {
+        IBeneficiaryService _beneficiaryService;
         BeneficiaryDAL objBeneficiaryDAL = new BeneficiaryDAL();
+
+        public BeneficiaryController()
+        {
+            _beneficiaryService = new BeneficiaryService();
+        }
         public ActionResult Index()
         {
             return View();
@@ -23,7 +33,6 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-               
                 List<GetCountryList_Result> lstCountries = objBeneficiaryDAL.GetCountryList();
                 status = JsonConvert.SerializeObject(lstCountries);
             }
@@ -39,12 +48,12 @@ namespace KuaiexDashboard.Controllers
             string status = "0:{choose}";
 
             try
-            { 
+            {
                 List<Currency_Result> lstcurrency = objBeneficiaryDAL.GetCurrencyByCountry(CountryId);
                 status = JsonConvert.SerializeObject(lstcurrency);
             }
             catch (Exception ex)
-            {           
+            {
                 status = "error";
             }
 
@@ -74,7 +83,7 @@ namespace KuaiexDashboard.Controllers
             string status = "0:{choose}";
 
             try
-            { 
+            {
                 BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL();
                 List<Remittance_Purpose_Lookup> lstRemittancePurpose = objBeneficiaryDal.GetRemittancePurposeList();
                 status = JsonConvert.SerializeObject(lstRemittancePurpose);
@@ -178,9 +187,10 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL(); 
-                List<Remittance_SubType_Mst> lstRemittanceSubtypes = objBeneficiaryDal.GetRemittanceSubtypes(Remittance_Type_Id, Bank_Id);
-                status = JsonConvert.SerializeObject(lstRemittanceSubtypes);
+                var data = _beneficiaryService.GetRemittanceSubtypes(Remittance_Type_Id, Bank_Id);
+                /* BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL(); 
+                 List<Remittance_SubType_Mst> lstRemittanceSubtypes = objBeneficiaryDal.GetRemittanceSubtypes(Remittance_Type_Id, Bank_Id);*/
+                status = JsonConvert.SerializeObject(data);
             }
             catch (Exception ex)
             {
@@ -194,7 +204,7 @@ namespace KuaiexDashboard.Controllers
             string status = "0:{choose}";
             try
             {
-                BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL(); 
+                BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL();
                 List<IdentificationTypeLookup> lstIdentificationTypes = objBeneficiaryDal.GetIdentificationTypes();
                 status = JsonConvert.SerializeObject(lstIdentificationTypes);
             }
@@ -211,7 +221,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL(); 
+                BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL();
                 List<City> lstBranchCities = objBeneficiaryDal.GetBranchCities();
                 status = JsonConvert.SerializeObject(lstBranchCities);
             }
@@ -227,9 +237,12 @@ namespace KuaiexDashboard.Controllers
             string status = "0:{choose}";
             try
             {
-                BeneficiaryDAL objBeneficiary = new BeneficiaryDAL();
-                List<Bank_Branch_Mst> lstBankBranches = objBeneficiary.GetBankBranches(bankId);
-                status = JsonConvert.SerializeObject(lstBankBranches);
+                var data = _beneficiaryService.GetGetBankBranches(bankId);
+
+
+                //BeneficiaryDAL objBeneficiary = new BeneficiaryDAL();
+                //List<Bank_Branch_Mst> lstBankBranches = objBeneficiary.GetBankBranches(bankId);
+                status = JsonConvert.SerializeObject(data);
             }
             catch (Exception ex)
             {
@@ -254,7 +267,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                BeneficiaryDAL objBeneficiaryDAL = new BeneficiaryDAL(); 
+                BeneficiaryDAL objBeneficiaryDAL = new BeneficiaryDAL();
                 List<API_GetBank_MstByCountry_Id_Result> lstBanks = objBeneficiaryDAL.GetBanksByCountryId(countryId);
                 status = JsonConvert.SerializeObject(lstBanks);
             }
@@ -270,7 +283,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL(); 
+                BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL();
                 List<API_GetRoutingBank_Branch_Result> lstBankBranches = objBeneficiaryDal.GetBankBranchesByBankId(bankId);
                 status = JsonConvert.SerializeObject(lstBankBranches);
             }
@@ -280,30 +293,13 @@ namespace KuaiexDashboard.Controllers
             }
             return Content(status);
         }
-        public ActionResult AddBeneficiary(Beneficiary objBeneficiary)
+        public ActionResult AddBeneficiary(BeneficiaryDTO objBeneficiary)
         {
             string status = "error";
 
             try
             {
-                BeneficiaryDAL objBeneficiaryDAL = new BeneficiaryDAL();
-                int existenceStatus = objBeneficiaryDAL.CheckBeneficiaryExistence(objBeneficiary.FullName);
-                if (existenceStatus == 1)
-                {
-                    status = "exist";
-                }
-                else
-                {
-                    objBeneficiary.UID = Guid.NewGuid();
-                    Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                    objBeneficiary.Prod_Beneficiary_Id = objKuaiex_Prod.GetBeneficiaryIdByIdentificationNumber(objBeneficiary.Identification_No);
-                    int beneficiaryId = objBeneficiaryDAL.AddBeneficiary(objBeneficiary);
-
-                    if (beneficiaryId > 0)
-                    {
-                        status = "success";
-                    }
-                }
+            
             }
             catch (Exception ex)
             {
@@ -370,7 +366,7 @@ namespace KuaiexDashboard.Controllers
                 obj.Branch_Phone_Number = objBeneficiary.Branch_Phone_Number;
                 obj.Branch_Fax_Number = objBeneficiary.Branch_Fax_Number;
                 obj.Destination_Country_Id = objBeneficiary.Destination_Country_Id;
-                obj.Remitter_Relation_Id = objBeneficiary.Remitter_Relation_Id;
+                // obj.Remitter_Relation_Id = objBeneficiary.Remitter_Relation_Id;
                 obj.DD_Beneficiary_Name = objBeneficiary.DD_Beneficiary_Name;
                 obj.Bank_Account_type = objBeneficiary.Bank_Account_type;
                 obj.Remittance_Remarks = objBeneficiary.Remittance_Remarks;

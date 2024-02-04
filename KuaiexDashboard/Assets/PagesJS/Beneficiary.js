@@ -101,7 +101,7 @@ var LoadCountry = function () {
             if (sch.length > 0) {
                 $el1.append('<option value="">' + "Select Country" + '</option>');
                 $.each(sch, function (idx, obj) {
-                    $el1.append('<option value="' + obj.Country_Id + '">' + obj.Country_Name + '</option>');
+                    $el1.append('<option value="' + obj.Id + '">' + obj.Name + '</option>');
                 });
             }
             else {
@@ -140,7 +140,7 @@ var LoadCurrency = function (Id) {
             if (sch.length > 0) {
                 $el.append('<option value="">' + "Select Currency" + '</option>');
                 $.each(sch, function (idx, obj) {
-                    $el.append('<option value="' + obj.Id + '">' + obj.Name + ' ' + obj.Code + '</option>');
+                    $el.append('<option value="' + obj.Id + '">' + obj.CurrencyName + ' ' + obj.CurrencyCode + '</option>');
                 });
             }
             else {
@@ -427,11 +427,12 @@ $('#Branch_Id').on('change', function () {
 });
 
 var LoadRemintanceSubType = function (Remittance_Type_Id, Bank_Id) {
+    debugger;
     $("#wait").css("display", "block");
     $.ajax({
-        type: "POST",
+        type: "Get",
         cache: false,
-        url: "../Beneficiary/LoadRemintanceSubType?Remittance_Type_Id=" + Remittance_Type_Id + "&Bank_Id=" + Bank_Id,
+        url: "../Beneficiary/LoadRemittanceSubType?Remittance_Type_Id=" + Remittance_Type_Id + "&Bank_Id=" + Bank_Id,
         processData: false,
         contentType: false,
         async: false,

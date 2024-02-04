@@ -770,11 +770,15 @@
     <Compile Include="Controllers\RoutingBankSettingsController.cs" />
     <Compile Include="Controllers\SecurityQuestionsController.cs" />
     <Compile Include="Controllers\UserManagementController.cs" />
+    <Compile Include="DTO\Beneficiary\Bank_Branch_MstDTO.cs" />
+    <Compile Include="DTO\Beneficiary\BeneficiaryDTO.cs" />
     <Compile Include="DTO\Customer\CustomerDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\BeneficiaryServices\IBeneficiaryService.cs" />
+    <Compile Include="Services\BeneficiaryServices\Impl\BeneficiaryService.cs" />
     <Compile Include="Services\RemitterServices\Impl\RemitterService.cs" />
     <Compile Include="Services\RemitterServices\IRemitterService.cs" />
   </ItemGroup>

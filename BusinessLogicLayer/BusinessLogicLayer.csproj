@@ -85,7 +85,6 @@
     <Compile Include="DomainEntities\Bank_Branch_Mst.cs" />
     <Compile Include="DomainEntities\Bank_Mst.cs" />
     <Compile Include="DomainEntities\BaseEntity.cs" />
-    <Compile Include="DomainEntities\Beneficiary.cs" />
     <Compile Include="DomainEntities\BeneficiaryValidation.cs" />
     <Compile Include="DomainEntities\BranchesInfo.cs" />
     <Compile Include="DomainEntities\City.cs" />

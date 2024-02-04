@@ -1,4 +1,5 @@
 ﻿using BusinessLogicLayer.DomainEntities;
+using DataAccessLayer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -227,7 +228,7 @@ namespace KuaiexDashboard
                                 Branch_Fax_Number = reader.GetString(reader.GetOrdinal("Branch_Fax_Number")),
                                 Destination_Country_Id = reader.GetInt32(reader.GetOrdinal("Destination_Country_Id")),
                                 Destination_City_Id = reader.GetInt32(reader.GetOrdinal("Destination_City_Id")),
-                                Remitter_Relation_Id = reader.GetInt32(reader.GetOrdinal("Remitter_Relation_Id")),
+                              //  Remitter_Relation_Id = reader.GetInt32(reader.GetOrdinal("Remitter_Relation_Id")),
                                 DD_Beneficiary_Name = reader.GetString(reader.GetOrdinal("DD_Beneficiary_Name")),
                                 Bank_Account_type = reader.GetString(reader.GetOrdinal("Bank_Account_type")),
                                 Gender = reader.GetInt32(reader.GetOrdinal("Gender")),
@@ -952,7 +953,7 @@ namespace KuaiexDashboard
                         command.Parameters.AddWithValue("@Branch_Phone_Number", objBeneficiary.Branch_Phone_Number);
                         command.Parameters.AddWithValue("@Branch_Fax_Number", objBeneficiary.Branch_Fax_Number);
                         command.Parameters.AddWithValue("@Destination_Country_Id", objBeneficiary.Destination_Country_Id);
-                        command.Parameters.AddWithValue("@Remitter_Relation", objBeneficiary.Remitter_Relation_Id);
+                      //  command.Parameters.AddWithValue("@Remitter_Relation", objBeneficiary.Remitter_Relation_Id);
                         command.Parameters.AddWithValue("@DD_Beneficiary_Name", objBeneficiary.DD_Beneficiary_Name);
                         command.Parameters.AddWithValue("@Bank_Account_type", objBeneficiary.Bank_Account_type);
                         command.Parameters.AddWithValue("@Remittance_Remarks", objBeneficiary.Remittance_Remarks);
