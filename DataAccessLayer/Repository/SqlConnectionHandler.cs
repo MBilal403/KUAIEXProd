@@ -9,15 +9,11 @@ namespace KuaiexDashboard.Repository
 {
     public class SqlConnectionHandler
     {
-        private readonly SqlConnection connection;
-
-        public SqlConnectionHandler()
-        {
-            connection = new SqlConnection(ConfigurationManager.ConnectionStrings["KUAIEXProdEntities"].ConnectionString);
-        }
-
+        private SqlConnection connection;
+          
         public SqlConnection OpenConnection()
         {
+            connection = new SqlConnection(ConfigurationManager.ConnectionStrings["KUAIEXProdEntities"].ConnectionString);
             if (connection.State != System.Data.ConnectionState.Open)
             {
                 connection.Open();

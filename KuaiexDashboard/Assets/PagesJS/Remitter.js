@@ -251,7 +251,7 @@ var handleStaff = function () {
                     "../Remitter/AddCustomer?QId1=" + $('#Security_Question_Id_1').val() + "&QId2=" + $('#Security_Question_Id_2').val() + "&QId3=" + $('#Security_Question_Id_3').val() + "&Answer1=" + $('#Answer1').val() + "&Answer2=" + $('#Answer2').val() + "&Answer3=" + $('#Answer3').val(),
                     $(".frmAddUsers").serialize(),
                     function (value) {
-                        if (value == 'exist') {
+                        if (value == 'duplicate_value_exist') {
                             swal(
                                 'Warning',
                                 'Customer Name Already Exist!',

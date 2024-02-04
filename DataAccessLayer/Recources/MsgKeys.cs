@@ -333,6 +333,6 @@ namespace DataAccessLayer.Recources
         /// <summary>
         /// Get the NoFileExistInRequest
         /// </summary>
-      
+        public static string Error => "error";
     }
 }

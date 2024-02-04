@@ -8,11 +8,10 @@ namespace BusinessLogicLayer.DomainEntities
 {
    public  class BaseEntity
     {
-        public int Id { get; set; }
-        public Guid UID { get; set; }
-        public int CreatedBy { get; set; }
+        public Nullable<Guid> UID { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
         public DateTime CreatedOn { get; set; }
-        public int UpdateBy { get; set; }
-        public DateTime UpdatedOn { get; set; }
+        public Nullable<int> UpdateBy { get; set; }
+        public Nullable<DateTime> UpdatedOn { get; set; }
     }
 }

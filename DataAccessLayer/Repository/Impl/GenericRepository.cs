@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Repository.Impl;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -146,10 +147,13 @@ namespace KuaiexDashboard.Repository.Impl
                 try
                 {
                     var tableName = typeof(T).Name;
+                    // Skip Primary Key of Table
+                    var properties = typeof(T).GetProperties().Where(p => !Attribute.IsDefined(p, typeof(KeyAttribute)));
 
-                    var properties = typeof(T).GetProperties();
-                    var columns = string.Join(", ", properties.Select(p => p.Name));
-                    var parameters = string.Join(", ", properties.Select(p => $"@{p.Name}"));
+                  //  var properties = typeof(T).GetProperties().Skip(1);
+                    // Neglect the Null Values
+                    var columns = string.Join(", ", properties.Where(p=> p.GetValue(entity) != null).Select(p => p.Name));
+                    var parameters = string.Join(", ", properties.Where(p => p.GetValue(entity) != null).Select(p => $"@{p.Name}"));
 
                     var query = $"INSERT INTO {tableName} ({columns}) VALUES ({parameters})";
 
@@ -157,12 +161,14 @@ namespace KuaiexDashboard.Repository.Impl
                     {
                         foreach (var property in properties)
                         {
+                            var value = property.GetValue(entity);
                             // Add parameters dynamically based on entity properties
-                            command.Parameters.AddWithValue($"@{property.Name}", property.GetValue(entity) ?? DBNull.Value);
+                            command.Parameters.AddWithValue($"@{property.Name}", value ?? DBNull.Value);
                         }
 
                         command.ExecuteNonQuery();
                     }
+                    connectionHandler.Dispose();
                 }
                 catch (Exception ex)
                 {
