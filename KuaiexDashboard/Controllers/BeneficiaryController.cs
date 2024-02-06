@@ -299,7 +299,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-            
+                _beneficiaryService.AddBeneficiary(objBeneficiary);
             }
             catch (Exception ex)
             {

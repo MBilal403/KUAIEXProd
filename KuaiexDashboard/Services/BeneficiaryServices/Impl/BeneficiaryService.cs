@@ -37,10 +37,10 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             else
             {
                 beneficiaryDto.UID = Guid.NewGuid();
-
+               var Ben =  AutoMapper.Mapper.Map<Beneficiary>(beneficiaryDto);
                 Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
 
-                _beneficiaryRepository.Insert(beneficiary);
+                _beneficiaryRepository.Insert(Ben);
 
                 // objBeneficiary.Prod_Beneficiary_Id = objKuaiex_Prod.GetBeneficiaryIdByIdentificationNumber(objBeneficiary.Identification_No);
                 //  int beneficiaryId = objBeneficiaryDAL.AddBeneficiary(objBeneficiary);
