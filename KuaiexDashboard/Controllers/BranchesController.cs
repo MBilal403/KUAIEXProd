@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Entities;
 using KuaiexDashboard.DAL;
 using Newtonsoft.Json;
 using System;

@@ -1,4 +1,5 @@
-﻿using KuaiexDashboard;
+﻿using DataAccessLayer.Entities;
+using KuaiexDashboard;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

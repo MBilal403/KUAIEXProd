@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Entities;
 using KuaiexDashboard.DAL;
 using Newtonsoft.Json;
 using System;
@@ -165,8 +166,6 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-
-
                 status = objBankDal.UpdateBank(objBank);
             }
             catch (Exception ex)

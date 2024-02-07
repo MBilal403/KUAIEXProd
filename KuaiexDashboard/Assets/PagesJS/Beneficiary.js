@@ -62,7 +62,7 @@ $(document).ready(function () {
     $('#Remittance_Subtype_Id').chosen();
 
     handleStaff();
-    LoadGridData($('#CUID').val());
+    LoadGridData();
        
     //LoadRoutingBanksDefault();
     //LoadRoutingBankBranchesDefault();
@@ -321,7 +321,7 @@ var LoadRemittanceType = function () {
 };
 
 $('#Remittance_Type_Id').on('change', function () {
-    alert($('#Remittance_Type_Id').val());
+    //alert($('#Remittance_Type_Id').val());
     if ($('#Remittance_Type_Id').val() == 6) { // Cash Pickup
         $('.dvBank_Code').hide();
         $('.dvBranch_Id').hide();
@@ -427,7 +427,6 @@ $('#Branch_Id').on('change', function () {
 });
 
 var LoadRemintanceSubType = function (Remittance_Type_Id, Bank_Id) {
-    debugger;
     $("#wait").css("display", "block");
     $.ajax({
         type: "Get",
@@ -536,7 +535,7 @@ var handleStaff = function () {
                             Reset();
                             $('#btn-save').removeAttr('disabled');
                             $('#tblUsers').DataTable().clear().draw;
-                            LoadGridData($('#CUID').val());
+                            LoadGridData();
 
                         }
                         else {
@@ -570,7 +569,7 @@ var handleStaff = function () {
                             $('#btn-save').removeAttr('disabled');
 
                             $('#tblUsers').DataTable().clear().draw;
-                            LoadGridData($('#CUID').val());
+                            LoadGridData();
                         }
                         else {
                             swal("Error", "Data not updated!!", "error")
@@ -691,12 +690,12 @@ $(document).on('click', '.btn-edit', function () {
 });
 
 //load grid
-var LoadGridData = function (uid) {
+var LoadGridData = function () {
     //alert(uid);
     $.ajax({
         type: "GET",
         cache: false,
-        url: "../Beneficiary/LoadGrid?CUID=" + uid,
+        url: "../Beneficiary/LoadGrid",
         processData: false,
         contentType: false,
         success: function (data) {
@@ -705,8 +704,6 @@ var LoadGridData = function (uid) {
             var html = '';
             for (var i = 0; i < data.length; i++) {
                 var obj = data[i];
-
-
 
                 html += '<tr>';
 

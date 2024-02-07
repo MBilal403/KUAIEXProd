@@ -87,7 +87,6 @@
     <Compile Include="DomainEntities\API_SetInvalidTryCount_Result.cs" />
     <Compile Include="DomainEntities\Bank_Account_Type.cs" />
     <Compile Include="DomainEntities\Bank_Branch_Mst.cs" />
-    <Compile Include="DomainEntities\Bank_Mst.cs" />
     <Compile Include="DomainEntities\BaseEntity.cs" />
     <Compile Include="DomainEntities\BeneficiaryValidation.cs" />
     <Compile Include="DomainEntities\BranchesInfo.cs" />
@@ -127,14 +126,11 @@
     <Compile Include="DomainEntities\GetUserTypes_Result.cs" />
     <Compile Include="DomainEntities\IdentificationTypeLookup.cs" />
     <Compile Include="DomainEntities\Qustion_Lookup.cs" />
-    <Compile Include="DomainEntities\Relationship_Lookup.cs" />
     <Compile Include="DomainEntities\Remittance_Purpose_Lookup.cs" />
     <Compile Include="DomainEntities\Remittance_SubType_Mst.cs" />
-    <Compile Include="DomainEntities\Remittance_Trn.cs" />
     <Compile Include="DomainEntities\Remittance_Type_Mst.cs" />
     <Compile Include="DomainEntities\Residency_Type.cs" />
     <Compile Include="DomainEntities\SecurityQuestions.cs" />
-    <Compile Include="DomainEntities\Source_Of_Income_Lookup.cs" />
     <Compile Include="DomainEntities\Terms_and_Privacy.cs" />
     <Compile Include="DomainEntities\Transaction_Count_Lookup.cs" />
     <Compile Include="DomainEntities\Users.cs" />

@@ -125,6 +125,7 @@
     <Content Include="Assets\PagesJS\FAQS.js" />
     <Content Include="Assets\PagesJS\PrivacyPolicy.js" />
     <Content Include="Assets\PagesJS\Remitter.js" />
+    <Content Include="Assets\PagesJS\RemittanceTransaction.js" />
     <Content Include="Assets\PagesJS\SecurityQuestions.js" />
     <Content Include="Assets\PagesJS\TermsConditions.js" />
     <Content Include="Assets\PagesJS\User.js" />
@@ -770,12 +771,15 @@
     <Compile Include="Controllers\GeneralSettingsController.cs" />
     <Compile Include="Controllers\KUAIEX_PROD_Controller.cs" />
     <Compile Include="Controllers\RemitterController.cs" />
+    <Compile Include="Controllers\RemittanceTransactionController.cs" />
     <Compile Include="Controllers\RoutingBankSettingsController.cs" />
     <Compile Include="Controllers\SecurityQuestionsController.cs" />
     <Compile Include="Controllers\UserManagementController.cs" />
     <Compile Include="DTO\Beneficiary\Bank_Branch_MstDTO.cs" />
     <Compile Include="DTO\Beneficiary\BeneficiaryDTO.cs" />
     <Compile Include="DTO\Customer\CustomerDTO.cs" />
+    <Compile Include="DTO\Remittance_TrnDetailDTO.cs" />
+    <Compile Include="DTO\Remittance_TrnDTO.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -785,6 +789,8 @@
     <Compile Include="Services\BeneficiaryServices\Impl\BeneficiaryService.cs" />
     <Compile Include="Services\RemitterServices\Impl\RemitterService.cs" />
     <Compile Include="Services\RemitterServices\IRemitterService.cs" />
+    <Compile Include="Services\RemittanceTransactionService\Impl\RemittanceTransactionSerevice.cs" />
+    <Compile Include="Services\RemittanceTransactionService\IRemittanceTransactionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -852,6 +858,7 @@
     <Content Include="Views\GeneralSettings\ContactUs.cshtml" />
     <Content Include="Views\GeneralSettings\CustomerQuries.cshtml" />
     <Content Include="Views\BeneficiaryValidation\Index.cshtml" />
+    <Content Include="Views\RemittanceTransaction\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

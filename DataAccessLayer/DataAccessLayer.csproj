@@ -57,11 +57,15 @@
     <Compile Include="CountryDAL.cs" />
     <Compile Include="DashboardDAL.cs" />
     <Compile Include="Entities\Bank_Branch_Mst.cs" />
+    <Compile Include="Entities\Bank_Mst.cs" />
     <Compile Include="Entities\Beneficiary.cs" />
     <Compile Include="Entities\Customer.cs" />
     <Compile Include="Entities\Customer_Security_Questions.cs" />
     <Compile Include="Entities\Individual_KYC.cs" />
+    <Compile Include="Entities\Relationship_Lookup.cs" />
     <Compile Include="Entities\Remittance_SubType_Mst.cs" />
+    <Compile Include="Entities\Remittance_Trn.cs" />
+    <Compile Include="Entities\Source_Of_Income_Lookup.cs" />
     <Compile Include="GeneralSettingsDAL.cs" />
     <Compile Include="Helpers\ConditionToWhereClauseConverter.cs" />
     <Compile Include="Kuaiex_Prod.cs" />
@@ -71,6 +75,8 @@
     <Compile Include="Repository\Impl\GenericRepository.cs" />
     <Compile Include="Repository\Impl\PagedResult.cs" />
     <Compile Include="Repository\IRepository.cs" />
+    <Compile Include="Repository\JoinInfo.cs" />
+    <Compile Include="Repository\ObjectInspector.cs" />
     <Compile Include="Repository\SqlConnectionHandler.cs" />
     <Compile Include="SequrityQuesDAL.cs" />
     <Compile Include="UsersDAL.cs" />

@@ -101,8 +101,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL();
-                List<Relationship_Lookup> lstRelationshipLookup = objBeneficiaryDal.GetRelationshipLookupList();
+                IEnumerable<Relationship_Lookup> lstRelationshipLookup = _beneficiaryService.GetRelationshipLookupList();
 
                 status = JsonConvert.SerializeObject(lstRelationshipLookup);
             }
@@ -116,11 +115,9 @@ namespace KuaiexDashboard.Controllers
         public ActionResult LoadSourceOfIncome()
         {
             string status = "0:{choose}";
-
             try
             {
-                BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL();
-                List<Source_Of_Income_Lookup> lstSourceOfIncome = objBeneficiaryDal.GetSourceOfIncomeLookupList();
+                List<Source_Of_Income_Lookup> lstSourceOfIncome = _beneficiaryService.GetSourceOfIncomeLookupList();
 
                 status = JsonConvert.SerializeObject(lstSourceOfIncome);
             }
@@ -151,10 +148,9 @@ namespace KuaiexDashboard.Controllers
         public ActionResult LoadBank(int CountryId)
         {
             string status = "0:{choose}";
-
             try
             {
-                List<Bank_Mst> lstBanks = objBeneficiaryDAL.GetBanksByCountry(CountryId);
+                List<Bank_Mst> lstBanks = _beneficiaryService.GetBanksByCountry(CountryId);
                 status = JsonConvert.SerializeObject(lstBanks);
             }
             catch (Exception ex)
@@ -167,7 +163,6 @@ namespace KuaiexDashboard.Controllers
         public ActionResult LoadBankAcoountType()
         {
             string status = "0:{choose}";
-
             try
             {
                 BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL();
@@ -254,12 +249,9 @@ namespace KuaiexDashboard.Controllers
         public ActionResult LoadGrid(Guid CUID)
         {
             string status = "error";
-            //if (IsAdminUser)
-            //{
             BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL();
             var lstbeneficiary = objBeneficiaryDal.GetBeneficiaryByUID(CUID);
             status = Newtonsoft.Json.JsonConvert.SerializeObject(lstbeneficiary);
-            //}
             return Content(status);
         }
         public ActionResult LoadBanksByCountry(int countryId)
@@ -299,7 +291,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                _beneficiaryService.AddBeneficiary(objBeneficiary);
+                status = _beneficiaryService.AddBeneficiary(objBeneficiary);
             }
             catch (Exception ex)
             {

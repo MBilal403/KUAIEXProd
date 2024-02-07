@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Helpers;
+using DataAccessLayer.Repository;
 using DataAccessLayer.Repository.Impl;
 using System;
 using System.Collections.Generic;
@@ -23,25 +24,38 @@ namespace KuaiexDashboard.Repository.Impl
             Converter = new ConditionToWhereClauseConverter<T>();
         }
 
-        public IEnumerable<T> GetAll(Func<T, bool> condition = null)
+        public List<TResult> GetAllWithJoins<TResult>(List<JoinInfo> joins, Func<TResult, bool> condition = null, string columns = null) where TResult : class
         {
             using (var connection = connectionHandler.OpenConnection())
             {
                 try
                 {
-                    var tableName = typeof(T).Name;
-                    var query = $"SELECT * FROM {tableName}";
+                    string tableName = typeof(T).Name;
+
+                    var columnList = columns != null ? columns : "*";
+
+                    string query = $"SELECT {columnList} FROM {tableName}";
+
+                    // Add joins if join conditions are provided
+                    if (joins != null && joins.Any())
+                    {
+                        foreach (var join in joins)
+                        {
+                            query += $" {join.JoinType} JOIN {join.TargetTable} ON {join.JoinCondition}";
+                        }
+                    }
 
                     using (SqlDataAdapter adapter = new SqlDataAdapter(query, connection))
                     {
                         DataTable dataTable = new DataTable();
                         adapter.Fill(dataTable);
 
-                        var entities = MapDataTableToEntities(dataTable);
+                        var entities = MapDataTableToEntities<TResult>(dataTable);
 
                         // Apply the condition if provided
                         if (condition != null)
                         {
+
                             entities = entities.Where(condition);
                         }
 
@@ -52,16 +66,21 @@ namespace KuaiexDashboard.Repository.Impl
                 {
                     throw;
                 }
+                finally
+                {
+                    connection.Dispose(); // Ensure connection is always disposed
+                }
             }
         }
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>> condition = null, params string[] columns)
+        public List<T> GetAll(Expression<Func<T, bool>> condition = null, params Expression<Func<T, object>>[] columns)
         {
             using (var connection = connectionHandler.OpenConnection())
             {
                 try
                 {
                     var tableName = typeof(T).Name;
-                    var columnList = columns != null && columns.Any() ? string.Join(", ", columns) : "*";
+                    var columnList = columns != null && columns.Any() ? string.Join(", ", columns.Select(GetColumnName)) : "*";
+
                     var query = $"SELECT {columnList} FROM {tableName}";
 
                     // Add WHERE clause if condition is provided
@@ -76,13 +95,16 @@ namespace KuaiexDashboard.Repository.Impl
                         DataTable dataTable = new DataTable();
                         adapter.Fill(dataTable);
 
-                        return MapDataTableToEntities(dataTable);
+                        return MapDataTableToEntities(dataTable).ToList();
                     }
-                    connection.Dispose();
                 }
                 catch (Exception ex)
                 {
                     throw;
+                }
+                finally
+                {
+                    connection.Dispose(); // Ensure connection is always disposed
                 }
             }
         }
@@ -131,6 +153,10 @@ namespace KuaiexDashboard.Repository.Impl
                     // Handle the exception (log, rethrow, etc.)
                     throw;
                 }
+                finally
+                {
+                    connection.Dispose(); // Ensure connection is always disposed
+                }
             }
         }
         public T GetById(object id)
@@ -175,6 +201,10 @@ namespace KuaiexDashboard.Repository.Impl
                     // Handle the exception (log, rethrow, etc.)
                     throw;
                 }
+                finally
+                {
+                    connection.Dispose(); // Ensure connection is always disposed
+                }
             }
         }
         public void Insert(T entity)
@@ -187,7 +217,6 @@ namespace KuaiexDashboard.Repository.Impl
                     // Skip Primary Key of Table
                     var properties = typeof(T).GetProperties().Where(p => !Attribute.IsDefined(p, typeof(KeyAttribute)));
 
-                    //  var properties = typeof(T).GetProperties().Skip(1);
                     // Neglect the Null Values
                     var columns = string.Join(", ", properties.Where(p => p.GetValue(entity) != null).Select(p => p.Name));
                     var parameters = string.Join(", ", properties.Where(p => p.GetValue(entity) != null).Select(p => $"@{p.Name}"));
@@ -205,12 +234,15 @@ namespace KuaiexDashboard.Repository.Impl
 
                         command.ExecuteNonQuery();
                     }
-                    connectionHandler.Dispose();
                 }
                 catch (Exception ex)
                 {
                     // Handle the exception (log, rethrow, etc.)
                     throw;
+                }
+                finally
+                {
+                    connection.Dispose(); // Ensure connection is always disposed
                 }
             }
         }
@@ -229,6 +261,10 @@ namespace KuaiexDashboard.Repository.Impl
                     // Handle the exception (log, rethrow, etc.)
                     throw;
                 }
+                finally
+                {
+                    connection.Dispose(); // Ensure connection is always disposed
+                }
             }
         }
         public void Delete(object id)
@@ -237,7 +273,6 @@ namespace KuaiexDashboard.Repository.Impl
             {
                 try
                 {
-                    connection.Open();
                     var tableName = typeof(T).Name;
                     var query = $"DELETE FROM {tableName} WHERE Id = @Id";
                     using (SqlCommand command = new SqlCommand(query, connection))
@@ -250,6 +285,10 @@ namespace KuaiexDashboard.Repository.Impl
                 {
                     // Handle the exception (log, rethrow, etc.)
                     throw;
+                }
+                finally
+                {
+                    connection.Dispose(); // Ensure connection is always disposed
                 }
             }
         }
@@ -311,9 +350,45 @@ namespace KuaiexDashboard.Repository.Impl
                     // Handle the exception (log, rethrow, etc.)
                     throw;
                 }
+                finally
+                {
+                    connection.Dispose(); // Ensure connection is always disposed
+                }
             }
         }
+        public List<TResult> GetDataFromSP<TResult>(string storedProcedureName) where TResult : class
+        {
+            using (var connection = connectionHandler.OpenConnection())
+            {
+                try
+                {
+                    // Call the stored procedure for paginated data
+                    using (var command = new SqlCommand(storedProcedureName, connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
 
+                        using (var adapter = new SqlDataAdapter(command))
+                        {
+                            var dataTable = new DataTable();
+                            adapter.Fill(dataTable);
+
+                            var entities = MapDataTableToEntities<TResult>(dataTable);
+
+                            return entities.ToList();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle the exception (log, rethrow, etc.)
+                    throw;
+                }
+                finally
+                {
+                    connection.Dispose(); // Ensure connection is always disposed
+                }
+            }
+        }
         private IEnumerable<T> MapDataTableToEntities(DataTable dataTable)
         {
             List<T> result = new List<T>();
@@ -332,14 +407,14 @@ namespace KuaiexDashboard.Repository.Impl
             }
             return result;
         }
-        private List<T> MapDataTableToEntities<T>(DataTable dataTable) where T : class
+        private IEnumerable<TResult> MapDataTableToEntities<TResult>(DataTable dataTable) where TResult : class
         {
-            List<T> result = new List<T>();
+            List<TResult> result = new List<TResult>();
             foreach (DataRow row in dataTable.Rows)
             {
-                T item = Activator.CreateInstance<T>();
+                TResult item = Activator.CreateInstance<TResult>();
 
-                foreach (var property in typeof(T).GetProperties())
+                foreach (var property in typeof(TResult).GetProperties())
                 {
                     if (dataTable.Columns.Contains(property.Name) && !object.Equals(row[property.Name], DBNull.Value))
                     {
@@ -349,6 +424,25 @@ namespace KuaiexDashboard.Repository.Impl
                 result.Add(item);
             }
             return result;
+        }
+        private string GetColumnName(Expression<Func<T, object>> columnExpression)
+        {
+            // Check if the expression is a MemberExpression
+            if (columnExpression.Body is MemberExpression memberExpression)
+            {
+                // Get the name of the property
+                return memberExpression.Member.Name;
+            }
+            // Check if the expression is a UnaryExpression with an operand of MemberExpression
+            else if (columnExpression.Body is UnaryExpression unaryExpression && unaryExpression.Operand is MemberExpression unaryMemberExpression)
+            {
+                // Get the name of the property
+                return unaryMemberExpression.Member.Name;
+            }
+            else
+            {
+                throw new ArgumentException("Invalid expression. Expression must be a property access expression.");
+            }
         }
 
     }

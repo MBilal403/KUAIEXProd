@@ -9,17 +9,18 @@ namespace KuaiexDashboard.Profile
 {
     public class MapperProfile : AutoMapper.Profile
     {
+     
+        public MapperProfile()
+        {
+            CreateMap<BeneficiaryDTO, Beneficiary>().ReverseMap();
+        }
+
         public static void Run()
         {
-
             AutoMapper.Mapper.Initialize(a =>
             {
                 a.AddProfile<MapperProfile>();
             });
-        }
-        public MapperProfile()
-        {
-            CreateMap<BeneficiaryDTO, Beneficiary>().ReverseMap();
         }
     }
 }
