@@ -1,5 +1,6 @@
 ﻿
 using DataAccessLayer;
+using KuaiexDashboard.Filters;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Web.Mvc;
 
 namespace KuaiexDashboard.Controllers
 {
+    [AuthorizeFilter]
     public class GeneralSettingsController : Controller
     {
         GeneralSettingsDAL objGeneralSettingsDal = new GeneralSettingsDAL();
@@ -47,7 +49,8 @@ namespace KuaiexDashboard.Controllers
                 {
                     obj.Title = objterms.Title;
                     obj.Description = objterms.Description;
-                    objGeneralSettingsDal.UpdateTermsAndPrivacy(objterms);
+                    obj.Content_Type = 2;
+                    objGeneralSettingsDal.UpdateTermsAndPrivacy(obj);
                 }
             }
             catch (Exception ex)

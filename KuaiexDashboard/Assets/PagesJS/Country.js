@@ -142,17 +142,23 @@ var handleStaff = function () {
                     "../country/AddCountry",
                     $(".frmAddUsers").serialize(),
                     function (value) {
-                        if (value != 'error') {
+                      if (value == 'duplicate_value_exist') {
+                            swal("Error", "Country Already Exist", "error");
+                            $('#btn-save').removeAttr('disabled');
+                        }
+
+                        else if (value != 'error') {
                             swal(
                                 'Success',
-                                'User Saved Successfully!',
+                                'Country Saved Successfully!',
                                 'success'
                             );
                             Reset();
                             $('#btn-save').removeAttr('disabled');
                             $('#tblUsers').DataTable().clear().draw;
                             LoadGridData();
-                        } else {
+                        }
+                        else {
                             swal("Error", "Data Not Saved. Please Refresh & Try Again", "error");
                             $('#btn-save').removeAttr('disabled');
                         }

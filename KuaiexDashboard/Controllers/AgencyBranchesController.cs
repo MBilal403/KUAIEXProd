@@ -38,7 +38,6 @@ namespace KuaiexDashboard.Controllers
                         objBranchesinfo.Status = 0;
                    objAgencyBranchDal.AddBranchesInfo(objBranchesinfo);
 
-                   
                         status = "success";
                    
                 }

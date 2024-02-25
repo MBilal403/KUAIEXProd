@@ -16,9 +16,5 @@ namespace KuaiexDashboard.Services.BeneficiaryServices
         List<Relationship_Lookup> GetRelationshipLookupList();
         List<Source_Of_Income_Lookup> GetSourceOfIncomeLookupList();
         List<Bank_Mst> GetBanksByCountry(int CountryId);
-        List<BeneficiaryDTO> GetAllBeneficiary();
-
-
-
     }
 }

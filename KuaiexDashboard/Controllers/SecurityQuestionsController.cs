@@ -6,8 +6,10 @@ using System.Web;
 using System.Web.Mvc;
 using DataAccessLayer;
 using KuaiexDashboard.DAL;
+using KuaiexDashboard.Filters;
 namespace KuaiexDashboard.Controllers
 {
+    [AuthorizeFilter]
     public class SecurityQuestionsController : Controller
     {
         SequrityQuesDAL objsecDal = new SequrityQuesDAL();

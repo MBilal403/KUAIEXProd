@@ -10,7 +10,7 @@ namespace DataAccessLayer.Entities
     public class Customer
     {
         [Key]
-        public Nullable<int> Customer_Id { get; set; }
+        public int Customer_Id { get; set; }
         public Nullable<int> Agency_Id { get; set; }
         public Nullable<int> Agency_Branch_Id { get; set; }
         public string Name { get; set; }

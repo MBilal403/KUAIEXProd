@@ -90,6 +90,6 @@ namespace KuaiexDashboard.DTO.Customer
         public string checkbox13 { get; set; }
         public string checkbox14 { get; set; }
 
-        public string OtherDetail { get; set; }
+        public string other_Detail { get; set; }
     }
 }

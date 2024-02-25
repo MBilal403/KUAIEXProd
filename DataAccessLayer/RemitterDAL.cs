@@ -6,6 +6,7 @@ using KuaiexDashboard;
 using System.Configuration;
 using BusinessLogicLayer.DomainEntities;
 using DataAccessLayer.Entities;
+using DataAccessLayer.ProcedureResults;
 
 namespace DataAccessLayer
 {
@@ -52,9 +53,9 @@ namespace DataAccessLayer
 
             return remitterList;
         }
-        public List<KuaiexDashboard.Customer_Security_Questions> GetCustomerSecurityQuestions(int customerId)
+        public List<Customer_Security_Questions> GetCustomerSecurityQuestions(int customerId)
         {
-            List<KuaiexDashboard.Customer_Security_Questions> securityQuestions = new List<KuaiexDashboard.Customer_Security_Questions>();
+            List<Customer_Security_Questions> securityQuestions = new List<Customer_Security_Questions>();
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -71,7 +72,7 @@ namespace DataAccessLayer
                         {
                             while (reader.Read())
                             {
-                                KuaiexDashboard.Customer_Security_Questions question = new KuaiexDashboard.Customer_Security_Questions
+                                Customer_Security_Questions question = new Customer_Security_Questions
                                 {
                                     Id = Convert.ToInt32(reader["Id"]),
                                     Customer_Id = reader["Customer_Id"] != DBNull.Value ? Convert.ToInt32(reader["Customer_Id"]) : (int?)null,
@@ -184,7 +185,7 @@ namespace DataAccessLayer
         }
 
 
-        public void AddCustomerSecurityQuestions(List<KuaiexDashboard.Customer_Security_Questions> securityQuestions)
+        public void AddCustomerSecurityQuestions(List<Customer_Security_Questions> securityQuestions)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

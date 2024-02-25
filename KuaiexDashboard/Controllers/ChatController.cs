@@ -4,10 +4,12 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DataAccessLayer;
+using KuaiexDashboard.Filters;
 using Newtonsoft.Json;
 
 namespace KuaiexDashboard.Controllers
 {
+    [AuthorizeFilter]
     public class ChatController : Controller
     {
         ChatDAL objChatDal = new ChatDAL();

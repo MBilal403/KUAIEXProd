@@ -1,4 +1,5 @@
 ﻿using KuaiexDashboard.DAL;
+using KuaiexDashboard.Filters;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Web.Mvc;
 
 namespace KuaiexDashboard.Controllers
 {
+    [AuthorizeFilter]
     public class UserManagementController : Controller
     {
         private UsersDAL usersDAL = new UsersDAL(); 

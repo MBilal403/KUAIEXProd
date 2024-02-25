@@ -1,5 +1,6 @@
 ﻿using BusinessLogicLayer.DomainEntities;
 using DataAccessLayer.Entities;
+using DataAccessLayer.ProcedureResults;
 using System;
 using System.Collections.Generic;
 using System.Configuration;

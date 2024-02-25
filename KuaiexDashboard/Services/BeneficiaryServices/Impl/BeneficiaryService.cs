@@ -11,6 +11,7 @@ using System.Web;
 using DataAccessLayer;
 using DataAccessLayer.Repository;
 using System.Text;
+using System.Collections;
 
 namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
 {
@@ -44,18 +45,23 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             else
             {
                 beneficiaryDto.UID = Guid.NewGuid();
-                var Ben = AutoMapper.Mapper.Map<Beneficiary>(beneficiaryDto);
+                beneficiary = AutoMapper.Mapper.Map<Beneficiary>(beneficiaryDto);
+                beneficiary.Remittance_Purpose = string.Join(",", beneficiaryDto.Remittance_Purpose.Select(x => x.ToString()));
+                beneficiary.Source_Of_Income = string.Join(",", beneficiaryDto.Source_Of_Income.Select(x => x.ToString()));
+                beneficiary.Remitter_Relation = string.Join(",", beneficiaryDto.Remitter_Relation.Select(x => x.ToString()));
+
+
                 Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
 
-                _beneficiaryRepository.Insert(Ben);
 
-                //if (beneficiaryId > 0)
-                //{
-                //    status = "success";
-                //}*/
+                if (_beneficiaryRepository.Insert(beneficiary) > 0)
+                {
+                    return MsgKeys.CreatedSuccessfully;
+                }
+                return "error";
             }
 
-            return MsgKeys.CreatedSuccessfully;
+         
         }
         public List<Bank_Branch_Mst> GetGetBankBranches(int bankId)
         {
@@ -81,41 +87,7 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             return _bank_MstRepository.GetAll(x => x.Country_Id == CountryId && x.Record_Status == "A", x => x.Bank_Id, x => x.English_Name, x => x.Bank_Code);
         }
 
-        public List<BeneficiaryDTO> GetAllBeneficiary()
-        {
-            var joins = new List<JoinInfo>
-            {
-                 new JoinInfo { JoinType = "INNER", TargetTable = "Customer", JoinCondition = "Beneficiary.Customer_Id = Customer.Customer_Id" },
-                 new JoinInfo { JoinType = "INNER", TargetTable = "Country", JoinCondition = "Beneficiary.Country_Id = Country.Id" },
-                 new JoinInfo { JoinType = "INNER", TargetTable = "Currency", JoinCondition = "Beneficiary.Currency_Id = Country.Id" }
-            };
-            var columns = new StringBuilder();
-            columns.Append(new ObjectInspector<Beneficiary>().ObjectInspect(
-                x => x.UID,
-                x => x.Bank_Id,
-                x => x.FullName,
-                x => x.Birth_Date,
-                x => x.Address_Line3,
-                x => x.Branch_Address_Line3,
-                x => x.Bank_Name
-                ));
-            columns.Append(", ");
-            columns.Append(new ObjectInspector<Customer>().ObjectInspect(
-               x => x.Name
-               ));
-            columns.Append(", ");
-            columns.Append(new ObjectInspector<Country>().ObjectInspect(
-               x => x.Name
-              ));
-            columns.Append(", ");
-            columns.Append(new ObjectInspector<Currency>().ObjectInspect(
-               x => x.Name
-              ));
-
-
-
-            return _beneficiaryRepository.GetAllWithJoins<BeneficiaryDTO>(joins,null, columns.ToString());
-        }
+   
 
     }
 }

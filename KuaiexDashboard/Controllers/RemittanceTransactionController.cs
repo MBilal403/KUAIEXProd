@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Entities;
 using KuaiexDashboard.DTO;
+using KuaiexDashboard.Filters;
 using KuaiexDashboard.Repository;
 using KuaiexDashboard.Services.RemitterTransactionService;
 using KuaiexDashboard.Services.RemitterTransactionService.Impl;
@@ -12,6 +13,7 @@ using System.Web.Mvc;
 
 namespace KuaiexDashboard.Controllers
 {
+    [AuthorizeFilter]
     public class RemittanceTransactionController : Controller
     {
         IRemitterTransactionService _remitterTransactionService;

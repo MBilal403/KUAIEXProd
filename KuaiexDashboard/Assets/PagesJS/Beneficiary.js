@@ -62,7 +62,7 @@ $(document).ready(function () {
     $('#Remittance_Subtype_Id').chosen();
 
     handleStaff();
-    LoadGridData();
+    LoadGridData($('#CUID').val());
        
     //LoadRoutingBanksDefault();
     //LoadRoutingBankBranchesDefault();
@@ -508,10 +508,12 @@ var handleStaff = function () {
         submitHandler: function (form) {
             $('#btn-save').attr('disabled', 'true');            
             $(".frmAddUsers :disabled").removeAttr('disabled');
+
+            console.log($(".frmAddUsers").serialize());
             if (!IsEditMode) {                
                 $.post(
                     "../Beneficiary/AddBeneficiary",
-                    $(".frmAddUsers").serialize(),
+                    $(".frmAddUsers").serialize() ,
                     function (value) {
                         if (value === 'exist') {
                             swal(
@@ -535,7 +537,7 @@ var handleStaff = function () {
                             Reset();
                             $('#btn-save').removeAttr('disabled');
                             $('#tblUsers').DataTable().clear().draw;
-                            LoadGridData();
+                            LoadGridData($('#CUID').val());
 
                         }
                         else {
@@ -690,12 +692,12 @@ $(document).on('click', '.btn-edit', function () {
 });
 
 //load grid
-var LoadGridData = function () {
+var LoadGridData = function (uid) {
     //alert(uid);
     $.ajax({
         type: "GET",
         cache: false,
-        url: "../Beneficiary/LoadGrid",
+        url: "../Beneficiary/LoadGrid?CUID= "+ uid,
         processData: false,
         contentType: false,
         success: function (data) {

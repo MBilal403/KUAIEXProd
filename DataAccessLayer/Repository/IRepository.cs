@@ -11,10 +11,11 @@ namespace KuaiexDashboard.Repository
 {
     public interface IRepository<T> where T : class
     {
-        T GetById(object id);
+        T FindBy(Expression<Func<T, bool>> condition = null);
         List<T> GetAll(Expression<Func<T, bool>> condition = null, params Expression<Func<T, object>>[] columns);
-        void Insert(T entity);
-        void Update(T entity);
+        T GetbyId(int id, params Expression<Func<T, object>>[] columns);
+        int Insert(T entity);
+        void Update(T entity, string whereClause);
         void Delete(object id);
         PagedResult<T> GetPagedDataFromSP<T>(string storedProcedureName, int page = 1, int pageSize = 10) where T : class;
         PagedResult<T> GetPagedData(int page, int pageSize);

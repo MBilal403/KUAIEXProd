@@ -79,11 +79,13 @@ namespace KuaiexDashboard.Repository.Impl
                 try
                 {
                     var tableName = typeof(T).Name;
+
                     var columnList = columns != null && columns.Any() ? string.Join(", ", columns.Select(GetColumnName)) : "*";
 
                     var query = $"SELECT {columnList} FROM {tableName}";
 
                     // Add WHERE clause if condition is provided
+
                     if (condition != null)
                     {
                         var whereClause = Converter.ConvertToWhereClause(condition);
@@ -96,6 +98,36 @@ namespace KuaiexDashboard.Repository.Impl
                         adapter.Fill(dataTable);
 
                         return MapDataTableToEntities(dataTable).ToList();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+                finally
+                {
+                    connection.Dispose(); // Ensure connection is always disposed
+                }
+            }
+        }
+        public T GetbyId(int id, params Expression<Func<T, object>>[] columns)
+        {
+            using (var connection = connectionHandler.OpenConnection())
+            {
+                try
+                {
+                    var tableName = typeof(T).Name;
+
+                    var columnList = columns != null && columns.Any() ? string.Join(", ", columns.Select(GetColumnName)) : "*";
+
+                    var query = $"SELECT {columnList} FROM {tableName} where UID = '{id}'";
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(query, connection))
+                    {
+                        DataTable dataTable = new DataTable();
+                        adapter.Fill(dataTable);
+
+                        return MapDataTableToEntities(dataTable).ToList().FirstOrDefault();
                     }
                 }
                 catch (Exception ex)
@@ -159,7 +191,7 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
-        public T GetById(object id)
+        public T FindBy(Expression<Func<T, bool>> condition = null)
         {
             using (var connection = connectionHandler.OpenConnection())
             {
@@ -169,11 +201,13 @@ namespace KuaiexDashboard.Repository.Impl
                     var properties = typeof(T).GetProperties();
                     var primaryKey = properties.FirstOrDefault(p => p.Name.EndsWith("Id", StringComparison.OrdinalIgnoreCase));
 
-                    var query = $"SELECT * FROM {tableName} WHERE {primaryKey.Name} = @Id";
+                    var query = $"SELECT * FROM {tableName} ";
+
+                    var whereClause = Converter.ConvertToWhereClause(condition);
+                    query += $" WHERE {whereClause}";
 
                     using (var command = new SqlCommand(query, connection))
                     {
-                        command.Parameters.AddWithValue("@Id", id);
 
                         using (var reader = command.ExecuteReader())
                         {
@@ -207,13 +241,14 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
-        public void Insert(T entity)
+        public int Insert(T entity)
         {
             using (var connection = connectionHandler.OpenConnection())
             {
                 try
                 {
                     var tableName = typeof(T).Name;
+
                     // Skip Primary Key of Table
                     var properties = typeof(T).GetProperties().Where(p => !Attribute.IsDefined(p, typeof(KeyAttribute)));
 
@@ -221,7 +256,7 @@ namespace KuaiexDashboard.Repository.Impl
                     var columns = string.Join(", ", properties.Where(p => p.GetValue(entity) != null).Select(p => p.Name));
                     var parameters = string.Join(", ", properties.Where(p => p.GetValue(entity) != null).Select(p => $"@{p.Name}"));
 
-                    var query = $"INSERT INTO {tableName} ({columns}) VALUES ({parameters})";
+                    var query = $"INSERT INTO {tableName} ({columns}) VALUES ({parameters});  SELECT SCOPE_IDENTITY();";
 
                     using (var command = new SqlCommand(query, connection))
                     {
@@ -229,6 +264,46 @@ namespace KuaiexDashboard.Repository.Impl
                         {
                             var value = property.GetValue(entity);
                             // Add parameters dynamically based on entity properties
+                            command.Parameters.AddWithValue($"@{property.Name}", value ?? DBNull.Value);
+                        }
+
+                        int insertedId = Convert.ToInt32(command.ExecuteScalar());
+
+                        return insertedId;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle the exception (log, rethrow, etc.)
+                    throw;
+                }
+                finally
+                {
+                    connection.Dispose(); // Ensure connection is always disposed
+                }
+            }
+        }
+        public void Update(T entity,string whereClause)
+        {
+            using (var connection = connectionHandler.OpenConnection())
+            {
+                try
+                {
+                    var tableName = typeof(T).Name;
+                    var properties = typeof(T).GetProperties().Where(p => p.GetValue(entity) != null && !Attribute.IsDefined(p, typeof(KeyAttribute)));
+
+                    // Create SET clause for update
+                    var updateColumns = string.Join(", ", properties.Where(p => p.GetValue(entity) != null).Select(p => $"{p.Name} = @{p.Name}"));
+
+                    var query = $"UPDATE {tableName} SET {updateColumns} ";
+
+                    query += $" WHERE {whereClause}";
+
+                    using (var command = new SqlCommand(query, connection))
+                    {
+                        foreach (var property in properties)
+                        {
+                            var value = property.GetValue(entity);
                             command.Parameters.AddWithValue($"@{property.Name}", value ?? DBNull.Value);
                         }
 
@@ -246,27 +321,7 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
-        public void Update(T entity)
-        {
-            using (var connection = connectionHandler.OpenConnection())
-            {
-                try
-                {
-                    connection.Open();
-                    // Implement the logic to update an entity in the database
-                    // Example query: UPDATE TableName SET Column1 = @Value1, Column2 = @Value2 WHERE Id = @Id
-                }
-                catch (Exception ex)
-                {
-                    // Handle the exception (log, rethrow, etc.)
-                    throw;
-                }
-                finally
-                {
-                    connection.Dispose(); // Ensure connection is always disposed
-                }
-            }
-        }
+
         public void Delete(object id)
         {
             using (var connection = connectionHandler.OpenConnection())

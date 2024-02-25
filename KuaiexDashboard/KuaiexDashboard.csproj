@@ -778,8 +778,10 @@
     <Compile Include="DTO\Beneficiary\Bank_Branch_MstDTO.cs" />
     <Compile Include="DTO\Beneficiary\BeneficiaryDTO.cs" />
     <Compile Include="DTO\Customer\CustomerDTO.cs" />
+    <Compile Include="DTO\Customer\EditCustomerDTO.cs" />
     <Compile Include="DTO\Remittance_TrnDetailDTO.cs" />
     <Compile Include="DTO\Remittance_TrnDTO.cs" />
+    <Compile Include="Filters\AuthorizeFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -787,10 +789,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\BeneficiaryServices\IBeneficiaryService.cs" />
     <Compile Include="Services\BeneficiaryServices\Impl\BeneficiaryService.cs" />
+    <Compile Include="Services\CityServices\ICityService.cs" />
+    <Compile Include="Services\CityServices\Impl\CityService.cs" />
+    <Compile Include="Services\CountryServices\ICountryService.cs" />
+    <Compile Include="Services\CountryServices\Impl\CountryService.cs" />
     <Compile Include="Services\RemitterServices\Impl\RemitterService.cs" />
     <Compile Include="Services\RemitterServices\IRemitterService.cs" />
-    <Compile Include="Services\RemittanceTransactionService\Impl\RemittanceTransactionSerevice.cs" />
-    <Compile Include="Services\RemittanceTransactionService\IRemittanceTransactionService.cs" />
+    <Compile Include="Services\RemittanceTransactionServices\Impl\RemittanceTransactionSerevice.cs" />
+    <Compile Include="Services\RemittanceTransactionServices\IRemittanceTransactionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -869,6 +875,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Global\" />
     <Folder Include="Views\KUAIEX_PROD_\" />
     <Folder Include="Views\RoutingBankSettings\" />
   </ItemGroup>

@@ -19,7 +19,7 @@ namespace KuaiexDashboard.DTO.Beneficiary
         public Nullable<int> Country_Id { get; set; }
         public Nullable<int> Currency_Id { get; set; }
         public Nullable<System.DateTime> Birth_Date { get; set; }
-        public string Remittance_Purpose { get; set; }
+        public Nullable<int>[] Remittance_Purpose { get; set; }
         public Nullable<int> Remittance_Type_Id { get; set; }
         public string Remittance_Instruction { get; set; }
         public string Phone_No { get; set; }
@@ -47,7 +47,7 @@ namespace KuaiexDashboard.DTO.Beneficiary
         public string Branch_Fax_Number { get; set; }
         public Nullable<int> Destination_Country_Id { get; set; }
         public Nullable<int> Destination_City_Id { get; set; }
-        public Nullable<int> Remitter_Relation_Id { get; set; }
+        public int Remitter_Relation_Id { get; set; }
         public string DD_Beneficiary_Name { get; set; }
         public string Bank_Account_type { get; set; }
         public Nullable<int> Gender { get; set; }
@@ -70,9 +70,9 @@ namespace KuaiexDashboard.DTO.Beneficiary
         public string UpdatedIp { get; set; }
         public Nullable<int> Prod_Beneficiary_Id { get; set; }
         public string Remittance_Purpose_Detail { get; set; }
-        public string Remitter_Relation { get; set; }
+        public Nullable<int>[] Remitter_Relation { get; set; }
         public string Remitter_Relation_Detail { get; set; }
-        public string Source_Of_Income { get; set; }
+        public Nullable<int>[] Source_Of_Income { get; set; }
         public string Source_Of_Income_Detail { get; set; }
         public Nullable<int> Nationality_Id { get; set; }
         public string Bank_Account_Title { get; set; }

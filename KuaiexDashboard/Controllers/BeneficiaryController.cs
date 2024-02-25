@@ -1,7 +1,9 @@
 ﻿using BusinessLogicLayer.DomainEntities;
 using DataAccessLayer;
 using DataAccessLayer.Entities;
+using DataAccessLayer.ProcedureResults;
 using KuaiexDashboard.DTO.Beneficiary;
+using KuaiexDashboard.Filters;
 using KuaiexDashboard.Services.BeneficiaryServices;
 using KuaiexDashboard.Services.BeneficiaryServices.Impl;
 using Newtonsoft.Json;
@@ -13,6 +15,7 @@ using System.Web.Mvc;
 
 namespace KuaiexDashboard.Controllers
 {
+    [AuthorizeFilter]
     public class BeneficiaryController : Controller
     {
         IBeneficiaryService _beneficiaryService;

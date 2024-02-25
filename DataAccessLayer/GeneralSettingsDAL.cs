@@ -170,6 +170,7 @@ namespace DataAccessLayer
                         command.CommandType = CommandType.StoredProcedure;
                         command.Parameters.AddWithValue("@Id", obj.Id);
                         command.Parameters.AddWithValue("@Title", obj.Title);
+                        command.Parameters.AddWithValue("@Content_Type", 1);
                         command.Parameters.AddWithValue("@Description", obj.Description);
 
                         int rowsAffected = command.ExecuteNonQuery();

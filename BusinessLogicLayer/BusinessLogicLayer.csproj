@@ -90,9 +90,7 @@
     <Compile Include="DomainEntities\BaseEntity.cs" />
     <Compile Include="DomainEntities\BeneficiaryValidation.cs" />
     <Compile Include="DomainEntities\BranchesInfo.cs" />
-    <Compile Include="DomainEntities\City.cs" />
     <Compile Include="DomainEntities\ContactUs.cs" />
-    <Compile Include="DomainEntities\Country.cs" />
     <Compile Include="DomainEntities\CountryCurrency.cs" />
     <Compile Include="DomainEntities\Currency.cs" />
     <Compile Include="DomainEntities\Currency_Result.cs" />
@@ -102,7 +100,6 @@
     <Compile Include="DomainEntities\CustomerQueries.cs" />
     <Compile Include="DomainEntities\Customer_Chat.cs" />
     <Compile Include="DomainEntities\Customer_Mst.cs" />
-    <Compile Include="DomainEntities\Customer_Security_Questions.cs" />
     <Compile Include="DomainEntities\EmailAlerts.cs" />
     <Compile Include="DomainEntities\FAQs.cs" />
     <Compile Include="DomainEntities\GetBanksListByCountry_Result.cs" />
@@ -114,7 +111,6 @@
     <Compile Include="DomainEntities\GetBranchesList_Result.cs" />
     <Compile Include="DomainEntities\GetCityList_Result.cs" />
     <Compile Include="DomainEntities\GetContactUs_Result.cs" />
-    <Compile Include="DomainEntities\GetCountryList_Result.cs" />
     <Compile Include="DomainEntities\GetCurrencyRate_Result.cs" />
     <Compile Include="DomainEntities\GetCustomerQueries_Result.cs" />
     <Compile Include="DomainEntities\GetFAQSList_Result.cs" />

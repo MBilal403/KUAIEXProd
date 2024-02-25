@@ -1,4 +1,11 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Entities;
+using DataAccessLayer.ProcedureResults;
+using KuaiexDashboard.Filters;
+using KuaiexDashboard.Services.CityServices;
+using KuaiexDashboard.Services.CityServices.Impl;
+using KuaiexDashboard.Services.CountryServices;
+using KuaiexDashboard.Services.CountryServices.Impl;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,9 +15,19 @@ using System.Web.Mvc;
 
 namespace KuaiexDashboard.Controllers
 {
+    [AuthorizeFilter]
     public class CountryController : Controller
     {
         CountryDAL objCountryDal = new CountryDAL();
+        private readonly ICountryService _countryService;
+        private readonly ICityService _cityService;
+
+        public CountryController()
+        {
+            _countryService = new CountryService();
+            _cityService = new CityService();
+        }
+
         // GET: Country
         public ActionResult Index()
         {
@@ -21,33 +38,9 @@ namespace KuaiexDashboard.Controllers
         public ActionResult AddCountry(Country objCountry)
         {
             string status = "error";
-
             try
             {
-                Country existingCountry = objCountryDal.GetCountryByName(objCountry.Name);
-
-                if (existingCountry != null)
-                {
-                    status = "exist";
-                }
-                else
-                {
-                    if (objCountry.Status != null)
-                        objCountry.Status = "A";
-                    else
-                        objCountry.Status = "N";
-                    objCountry.Remittance_Status = "Y";
-                    objCountry.High_Risk_Status = "A";
-                    objCountry.CreatedIp = "127.0.0.1";
-                    objCountry.UpdatedIp = "127.0.0.1";
-                    objCountry.UID = Guid.NewGuid();
-                    Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                    objCountry.Prod_Country_Id = objKuaiex_Prod.GetCountryIdByCountryName(objCountry.Name);
-                    
-                    objCountryDal.AddCountry(objCountry);
-
-                    status = "success";
-                }
+                status = _countryService.AddCountry(objCountry);
             }
             catch (Exception ex)
             {
@@ -63,12 +56,11 @@ namespace KuaiexDashboard.Controllers
             string status = "0:{choose}";
             try
             {
-                List<City> lstCity = objCountryDal.GetActiveCities();
+                List<City> lstCity = _cityService.GetActiveCities();
                 status = JsonConvert.SerializeObject(lstCity);
             }
             catch (Exception ex)
             {
-
                 status = "error";
             }
             return Content(status);
@@ -77,11 +69,8 @@ namespace KuaiexDashboard.Controllers
         public ActionResult LoadGrid()
         {
             string status = "error";
-            //if (IsAdminUser)
-            //{
             List<GetCountryList_Result> list = objCountryDal.GetCountryList();
             status = Newtonsoft.Json.JsonConvert.SerializeObject(list);
-            //}
             return Content(status);
         }
 
@@ -168,7 +157,7 @@ namespace KuaiexDashboard.Controllers
                         }
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {

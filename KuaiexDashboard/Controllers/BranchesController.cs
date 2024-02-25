@@ -1,6 +1,8 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.Entities;
+using DataAccessLayer.ProcedureResults;
 using KuaiexDashboard.DAL;
+using KuaiexDashboard.Filters;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,6 +11,7 @@ using System.Web;
 using System.Web.Mvc;
 namespace KuaiexDashboard.Controllers
 {
+    [AuthorizeFilter]
     public class BranchesController : Controller
     {
 
