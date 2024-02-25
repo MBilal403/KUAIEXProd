@@ -37,19 +37,19 @@ $(document).ready(function () {
     function imagePreviewCivil_Id_Front(input) {
         const imagePreviewCivil_Id_Front = $('#imagePreviewCivil_Id_Front');
 
-        // Ensure that a file is selected
+
         if (input.files && input.files[0]) {
             const reader = new FileReader();
 
             reader.onload = function (e) {
-                // Display the selected image in the preview div
+         
                 imagePreviewCivil_Id_Front.html(`<img src="${e.target.result}" alt="Selected Image">`);
             };
 
-            // Read the selected file as a data URL
+    
             reader.readAsDataURL(input.files[0]);
         } else {
-            // Clear the preview if no file is selected
+            
             imagePreviewCivil_Id_Front.html('');
         }
     }
@@ -156,8 +156,9 @@ $(document).on('click', '.btn-edit', function () {
                 $('#Identification_Type').val(obj.Identification_Type).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Identification_Number').val(obj.Identification_Number);
                 $('#Nationality').val(obj.Nationality).prop('Enable', 'true').trigger("chosen:updated");
-                $('#Date_Of_Birth').val(obj.Date_Of_Birth);
-                $('#Identification_Expiry_Date').val(obj.Identification_Expiry_Date);
+                
+                $('#Date_Of_Birth').val(obj.Date_Of_Birth.split('T')[0]);
+               $('#Identification_Expiry_Date').val(obj.Identification_Expiry_Date.split('T')[0]);
                 $('#Occupation').val(obj.Occupation);
                 $('#Email_Address').val(obj.Email_Address);
                 $('#Mobile_No').val(obj.Mobile_No);
@@ -186,10 +187,16 @@ $(document).on('click', '.btn-edit', function () {
                 $('#Compliance_Trans_Count').val(obj.Compliance_Trans_Count);
                 $('#Compliance_Comments').val(obj.Compliance_Comments);
                 $('#Compliance_Limit_Expiry').val(obj.Compliance_Limit_Expiry);
-                $('#imagePreviewCivil_Id_Front').html(`<img src="${obj.Civil_Id_Front}" alt="Image">`);
-                $('#imagePreviewCivil_Id_Back').html(`<img src="${obj.Civil_Id_Back}" alt="Image" >`);
-                $('#Civil_Id_Front').val(obj.Civil_Id_Front.split('/').pop());
-                $('#Civil_Id_Back').val(obj.Civil_Id_Front.split('/').pop());
+
+                if (obj.Civil_Id_Front !== null && obj.Civil_Id_Front !== "") {
+                    $('#imagePreviewCivil_Id_Front').html(`<img src="../Uploads/${obj.Civil_Id_Front}" alt="Image">`);
+                }
+                if (obj.Civil_Id_Back !== null && obj.Civil_Id_Back !== "") {
+                    $('#imagePreviewCivil_Id_Back').html(`<img src="../Uploads/${obj.Civil_Id_Back}" alt="Image" >`);
+                }
+            
+          /*      $('#Civil_Id_Front').val(obj.Civil_Id_Front.split('/').pop());
+                $('#Civil_Id_Back').val(obj.Civil_Id_Front.split('/').pop());*/
 
 
                 //$('#City_Id').val(obj.City_Id).prop('disabled', 'true').trigger("chosen:updated");
@@ -260,10 +267,18 @@ var handleStaff = function () {
             let civilid = $('Identification_Number').val();
 
             var formData = new FormData();
-            formData.append('Civil_Id_Front', file1);
-            formData.append('Civil_Id_Back', file2);
+            if (file1 !== undefined) {
+                formData.append('Civil_Id_Front', file1);
+            }
+            if (file2 !== undefined) {
+                formData.append('Civil_Id_Back', file2);
+            }
+     
             formData.append('CivilId', civilid);
-            if (file1 != undefined || file2 != undefined) {
+
+
+        
+            if (file1 !== undefined || file2 !== undefined) {
 
                 $.ajax({
                     url: '../Remitter/AddCustomerFiles',
@@ -328,7 +343,7 @@ var handleStaff = function () {
             }
             else {
                 $.post(
-                    "../Remitter/EditCustomer?Civil_Id_Back=" + response.Civil_Id_Back + "&Civil_Id_Front=" + response.Civil_Id_Front,
+                    "../Remitter/EditCustomer?Civil_Id_Back=" + Civil_Id_Back + "&Civil_Id_Front=" + Civil_Id_Front,
                     $(".frmAddUsers").serialize(),
                     function (value) {
                         if (value == 'duplicate_value_exist') {

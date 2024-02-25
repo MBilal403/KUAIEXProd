@@ -230,7 +230,7 @@ namespace KuaiexDashboard.Controllers
                     HttpPostedFileBase file1 = Request.Files["Civil_Id_Front"];
                     HttpPostedFileBase file2 = Request.Files["Civil_Id_Back"];
                     string civilId = Request.Files["CivilId"].ToString();
-                    string uniqueFileName1 = null, uniqueFileName2 = null;
+                    string uniqueFileName1 = default, uniqueFileName2 = default;
 
                     if (file1 != null || file2 != null)
                     {
@@ -328,8 +328,8 @@ namespace KuaiexDashboard.Controllers
             string status = "";
             try
             {
-                editCustomerDto.Civil_Id_Front = Civil_Id_Front;
-                editCustomerDto.Civil_Id_Back = Civil_Id_Back;
+                editCustomerDto.Civil_Id_Front = Civil_Id_Front == "null" ? null : Civil_Id_Front;
+                editCustomerDto.Civil_Id_Back = Civil_Id_Back == "null" ? null : Civil_Id_Back;
                 status = _remitterService.EditRemitter(editCustomerDto);
 
             }
