@@ -221,7 +221,7 @@ namespace KuaiexDashboard.Controllers
             return Content(status);
         }
         [HttpPost]
-        public ActionResult AddCustomerFiles()
+        public ActionResult AddCustomerFiles(string CivilId)
         {
             try
             {
@@ -229,7 +229,6 @@ namespace KuaiexDashboard.Controllers
                 {
                     HttpPostedFileBase file1 = Request.Files["Civil_Id_Front"];
                     HttpPostedFileBase file2 = Request.Files["Civil_Id_Back"];
-                    string civilId = Request.Files["CivilId"].ToString();
                     string uniqueFileName1 = default, uniqueFileName2 = default;
 
                     if (file1 != null || file2 != null)
@@ -243,14 +242,14 @@ namespace KuaiexDashboard.Controllers
                         if (file1 != null )
                         {
                             string fileExtension1 = Path.GetExtension(file1.FileName);
-                             uniqueFileName1 = $"{civilId}F{fileExtension1}";
+                             uniqueFileName1 = $"{CivilId}F{fileExtension1}";
                             string filePath1 = Path.Combine(uploadDirectory, uniqueFileName1);
                             file1.SaveAs(filePath1);
                         }
                         if ( file2 != null)
                         {
                             string fileExtension2 = Path.GetExtension(file2.FileName);
-                             uniqueFileName2 = $"{civilId}R{fileExtension2}";
+                             uniqueFileName2 = $"{CivilId}R{fileExtension2}";
                             string filePath2 = Path.Combine(uploadDirectory, uniqueFileName2);
                             file2.SaveAs(filePath2);
                         }

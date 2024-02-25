@@ -156,7 +156,6 @@ $(document).on('click', '.btn-edit', function () {
                 $('#Identification_Type').val(obj.Identification_Type).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Identification_Number').val(obj.Identification_Number);
                 $('#Nationality').val(obj.Nationality).prop('Enable', 'true').trigger("chosen:updated");
-                
                 $('#Date_Of_Birth').val(obj.Date_Of_Birth.split('T')[0]);
                $('#Identification_Expiry_Date').val(obj.Identification_Expiry_Date.split('T')[0]);
                 $('#Occupation').val(obj.Occupation);
@@ -264,7 +263,7 @@ var handleStaff = function () {
 
             var file1 = $('#Civil_Id_Front')[0].files[0];
             var file2 = $('#Civil_Id_Back')[0].files[0];
-            let civilid = $('Identification_Number').val();
+            var civilid = $('#Identification_Number').val().trim();
 
             var formData = new FormData();
             if (file1 !== undefined) {
@@ -274,14 +273,11 @@ var handleStaff = function () {
                 formData.append('Civil_Id_Back', file2);
             }
      
-            formData.append('CivilId', civilid);
-
-
         
             if (file1 !== undefined || file2 !== undefined) {
 
                 $.ajax({
-                    url: '../Remitter/AddCustomerFiles',
+                    url: '../Remitter/AddCustomerFiles?CivilId=' + civilid,
                     type: 'POST',
                     data: formData,
                     contentType: false,
