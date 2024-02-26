@@ -1,9 +1,12 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.Entities;
+using DataAccessLayer.Helpers;
 using DataAccessLayer.ProcedureResults;
 using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.Filters;
 using KuaiexDashboard.Repository.Impl;
+using KuaiexDashboard.Services.CityServices;
+using KuaiexDashboard.Services.CityServices.Impl;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,13 +19,14 @@ namespace KuaiexDashboard.Controllers
     [AuthorizeFilter]
     public class CityController : Controller
     {
-        private readonly GenericRepository<City> cityRepository;
+        private readonly ICityService _cityService;
         public CityController()
         {
-            cityRepository = new GenericRepository<City>();
+            _cityService = new CityService();
         }
+
         CityDAL objCityDal = new CityDAL();
-        // GET: City
+        
         public ActionResult Index()
         {
             return View();
@@ -53,7 +57,7 @@ namespace KuaiexDashboard.Controllers
                 {
                     City obj = objCityDal.GetCityByName(objCity.Name);
                     objCity.Country_Id = objCity.Country_Id;
-
+                    objCity.UID = new Guid();
                     if (obj != null)
                     {
                         status = "exist";
@@ -66,9 +70,9 @@ namespace KuaiexDashboard.Controllers
                             objCity.Status = 0;
 
                         objCity.UID = Guid.NewGuid();
-                        Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
+                     /*   Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
                         objCity.Prod_City_Id = objKuaiex_Prod.GetCityIdByCityName(objCity.Name);
-
+*/
                         objCityDal.AddCity(objCity);
                         status = "success";
                     }
@@ -86,19 +90,20 @@ namespace KuaiexDashboard.Controllers
             return Content(status);
         }
 
-
-        public ActionResult LoadGrid()
+        [HttpGet]
+        public ActionResult LoadGrid(JqueryDatatableParam param)
         {
-            string status = "error";
-            //if (IsAdminUser)
-            //{v
+            PagedResult<GetCityList_Result> list = _cityService.GetActiveCities(param);
 
-           PagedResult<GetCityList_Result> list = cityRepository.GetPagedDataFromSP<GetCityList_Result>("GetCitiesWithPagination", 1, 10);
+            var result = new
+            {
+                draw = param.sEcho,
+                recordsTotal = list.TotalSize,
+                recordsFiltered = list.FilterRecored,
+                data = list.Data
+            };
 
-          //  List<GetCityList_Result> list = objCityDal.GetActiveCities();
-            status = Newtonsoft.Json.JsonConvert.SerializeObject(list);
-            //}
-            return Content(status);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
         public ActionResult Edit(Guid UID)
         {

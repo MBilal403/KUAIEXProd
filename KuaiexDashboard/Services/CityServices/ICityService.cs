@@ -1,4 +1,6 @@
 ﻿using DataAccessLayer.Entities;
+using DataAccessLayer.Helpers;
+using DataAccessLayer.Repository.Impl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,7 @@ namespace KuaiexDashboard.Services.CityServices
     public interface ICityService
     {
         List<City> GetActiveCities();
+        PagedResult<GetCityList_Result> GetActiveCities(JqueryDatatableParam param);    
 
     }
 }

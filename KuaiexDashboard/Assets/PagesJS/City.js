@@ -1,14 +1,12 @@
 ﻿var IsEditMode = false;
 
 $(document).ready(function () {
-    $('#tblUsers').DataTable({ responsive: true });
     handleStaff();
     LoadGridData();
 
     LoadCountry();
 
     $(document).ajaxStart(function () {
-        $(window).scrollTop(0);
         $("#wait").css("display", "block");
     });
     $(document).ajaxComplete(function () {
@@ -229,69 +227,55 @@ var handleStaff = function () {
 
 
 //load grid
+
 var LoadGridData = function () {
-    $.ajax({
-        type: "POST",
-        cache: false,
-        url: "../City/LoadGrid",
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            data = JSON.parse(data);
-            $('#tblUsers').DataTable().destroy();
-            var html = '';
-            for (var i = 0; i < data.length; i++) {
-                var obj = data[i];
+    $('#tblUsers').DataTable({
+        "destroy": true,
+        "lengthMenu": [5, 25, 50, 75, 100],
+        "sAjaxSource": "../City/LoadGrid",
+        "bServerSide": true,
+        "bProcessing": true,
+        "paging": true,
+        "order": [[1, 'asc']],
+        "language": {
+            "emptyTable": "No record found.",
+            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:#2a2b2b;"></i><span class="sr-only">Loading...</span> '
+        },
+        "columns": [
+            {
+                "data": "Name",
+                "autoWidth": true,
+                "searchable": true
+            },
+            {
+                "data": "Country",
+                "autoWidth": true,
+                "searchable": true
+            },
+            {
+                "data": "Status",
+                "render": function (data, type, row) {
 
-
-
-                html += '<tr>';
-
-                html += '<td class="hidden">' + obj.UID + '</td>';
-
-                if (obj.Name != null) {
-                    html += '<td>' + obj.Name + '</td>';
-                }
-                else {
-                    html += '<td>-</td>';
-                }
-                if (obj.Country != null) {
-                    html += '<td>' + obj.Country + '</td>';
-                }
-                else {
-                    html += '<td>-</td>';
-                }
-
-
-                if (obj.Status == 1) {
-                    html += '<td><span class="label label-success label-xs">Active</span></td>';
-                }
-                else {
-                    html += '<td><span class="label label-danger label-xs">In Active</span></td>';
-                }
-
-
-                html += '<td>';
-                html += '<button id=' + obj.UID + ' class="btn btn-warning btn-block btn-xs btn-edit" style="width: 80px;">';
-                html += '<i class="fa fa-edit"></i>';
-                html += ' Edit';
-                html += ' </button>';
-                html += ' </td>';
-
-                //html += ' <td>';
-                //html += '<a href="../UserRights/Index/?UID=' + obj.UID + '" class="btn btn-info btn-block btn-xs" style="width: 80px;">';
-                //html += '<i class="fa fa-users"></i>';
-                //html += ' Rights';
-                //html += ' </a>';
-                //html += ' </td>';
-
-                html += '</tr>'
+                    return data == 1 ? '<span class="label label-success label-xs">Active</span>' : '<span class="label label-danger label-xs">In Active</span>';
+                },
+                "autoWidth": true,
+                "searchable": true
+            },
+            {
+                "data": "UID",
+                "render": function (data, type, row) {
+                    console.log(data);
+                    return '<button id=' + data + ' class="btn btn-warning btn-block btn-xs btn-edit" style="width: 80px;">' +
+                        '<i class="fa fa-edit"></i>' +
+                        ' Edit' +
+                        '</button>';
+                },
+                "autoWidth": true
             }
-            $("#tblbody").append(html);
-            $('#tblUsers').DataTable().draw();
-        }
+        ]
     });
-}
+};
+
 
 //reset values
 

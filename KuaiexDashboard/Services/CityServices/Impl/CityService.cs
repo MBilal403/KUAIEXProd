@@ -1,4 +1,6 @@
 ﻿using DataAccessLayer.Entities;
+using DataAccessLayer.Helpers;
+using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.Repository;
 using KuaiexDashboard.Repository.Impl;
 using System;
@@ -20,6 +22,14 @@ namespace KuaiexDashboard.Services.CityServices.Impl
             List<City> listCities = _cityRepository.GetDataFromSP<City>("GetCityList");
             return listCities;
         }
+        public PagedResult<GetCityList_Result> GetActiveCities(JqueryDatatableParam param)
+        {
+            PagedResult<GetCityList_Result> list = _cityRepository.GetPagedDataFromSP<GetCityList_Result>("GetCitiesWithPagination", param.iDisplayStart + 1, param.iDisplayLength, param.sSearch);
+            return list;
+        }
+
+
+       
 
     }
 }
