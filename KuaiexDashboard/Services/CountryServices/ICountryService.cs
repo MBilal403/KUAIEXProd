@@ -12,7 +12,7 @@ namespace KuaiexDashboard.Services.CountryServices
     public interface ICountryService
     {
         Country GetCountryByName(string countryName);
-        int GetCountryIdByCountryName(string countryName);
+        int? GetCountryIdByCountryName(string countryName);
         List<GetCountryList_Result> GetCountryList();
         PagedResult<GetCountryList_Result> GetCountryList(JqueryDatatableParam param);
         Country GetCountryByUID(Guid countryId);

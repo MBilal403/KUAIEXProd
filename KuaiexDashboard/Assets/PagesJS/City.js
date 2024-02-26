@@ -63,10 +63,9 @@ $(document).on('click', '.btn-edit', function () {
         success: function (Rdata) {
             if (Rdata != 'error') {
                 var obj = JSON.parse(Rdata);
-
                 $('#UID').val(obj.UID);
                 $('#Name').val(obj.Name);
-                $('#Country_Id').val(obj.Country_Id).prop('Enable', 'true').trigger("chosen:updated");
+                $('#Country_Id').val(obj.Country_Id).trigger("chosen:updated");
                 $('#btn-save').html("<i class='fa fa-save'></i> Update");
                 IsEditMode = true;
                 if (obj.Status) {
@@ -137,8 +136,6 @@ var handleStaff = function () {
         },
 
         submitHandler: function (form) {
-            alert($('#Country_Id').val());
-            alert($(".frmAddUsers").serialize());
             $('#btn-save').attr('disabled', 'true');
             $(".frmAddUsers :disabled").removeAttr('disabled');
             if (!IsEditMode) {
@@ -147,17 +144,16 @@ var handleStaff = function () {
                     "../City/AddCity",
                     $(".frmAddUsers").serialize(),
                     function (value) {
-                        if (value === 'duplicate_value_exist') {
+                        if (value === "duplicate_value_exist") {
                             swal(
-                                'Failed',
+                                'Error',
                                 'City Already Exist!',
-                                'success'
+                                'error'
                             )
                             Reset();
                             $('#btn-save').removeAttr('disabled');
                         }
-
-                        if (value === 'insert_success') {
+                        else if (value === "insert_success") {
                             swal(
                                 'Success',
                                 'City Saved Successfully!',
@@ -167,7 +163,6 @@ var handleStaff = function () {
                             $('#btn-save').removeAttr('disabled');
                             $('#tblUsers').DataTable().clear().draw;
                             LoadGridData();
-
                         }
                         else {
                             swal("Error", "Data Not Saved. Please Refresh & Try Again", "error")

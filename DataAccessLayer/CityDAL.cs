@@ -38,6 +38,7 @@ namespace DataAccessLayer
                             {
                                 UID = row.Field<Guid?>("UID"),
                                 Name = row.Field<string>("Name"),
+                                Id = row.Field<int>("Id"),
                                 Nationality = row.Field<string>("Nationality"),
                                 Alpha_2_Code = row.Field<string>("Alpha_2_Code"),
                                 Alpha_3_Code = row.Field<string>("Alpha_3_Code"),

@@ -86,7 +86,7 @@ namespace KuaiexDashboard.Controllers
                 City obj = objCityDal.GetCityByUID(UID);
                 status = JsonConvert.SerializeObject(obj);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 status = "Error";
             }

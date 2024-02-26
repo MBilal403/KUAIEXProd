@@ -67,10 +67,17 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
             throw new NotImplementedException();
         }
 
-        public int GetCountryIdByCountryName(string countryName)
+        public int? GetCountryIdByCountryName(string countryName)
         {
             Country country = _countryRepository.FindBy(x => x.Name == countryName);
-            return country.Id;
+            if (country != null)
+            {
+                return country.Id;
+            }
+            else
+            {
+                return null;
+            }
 
         }
 

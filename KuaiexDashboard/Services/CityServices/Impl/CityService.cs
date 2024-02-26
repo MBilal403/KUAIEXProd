@@ -46,10 +46,17 @@ namespace KuaiexDashboard.Services.CityServices.Impl
                 return MsgKeys.Error;
             }
         }
-        private int GetCityIdByCityName(string cityName)
+        private int? GetCityIdByCityName(string cityName)
         {
             City city = _cityRepository.FindBy(x => x.Name == cityName);
-            return city.Id;
+            if (city != null)
+            {
+                return city.Id;
+            }
+            else
+            {
+                return null;
+            }
         }
 
 
