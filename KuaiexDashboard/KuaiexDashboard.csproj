@@ -112,6 +112,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\PagesJS\AddRemitter.js" />
     <Content Include="Assets\PagesJS\AgencyBranches.js" />
     <Content Include="Assets\PagesJS\banks.js" />
     <Content Include="Assets\PagesJS\Beneficiary.js" />
@@ -872,6 +873,7 @@
     <Content Include="Views\GeneralSettings\CustomerQuries.cshtml" />
     <Content Include="Views\BeneficiaryValidation\Index.cshtml" />
     <Content Include="Views\RemittanceTransaction\Index.cshtml" />
+    <Content Include="Views\Remitter\Add.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

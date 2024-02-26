@@ -1,0 +1,587 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+}
+
+<style>
+    #imagePreviewCivil_Id_Front img {
+        max-width: 150px;
+        max-height: 150px;
+    }
+
+    #imagePreviewCivil_Id_Back img {
+        max-width: 150px;
+        max-height: 150px;
+    }
+
+    .ibox-title-section {
+        -moz-border-bottom-colors: none;
+        -moz-border-left-colors: none;
+        -moz-border-right-colors: none;
+        -moz-border-top-colors: none;
+        background-color: #263949;
+        border-color: #E7EAEC;
+        border-image: none;
+        border-style: solid solid none;
+        border-width: 2px 0px 0px;
+        color: #FFF;
+        margin-bottom: 10px;
+        padding: 5px 15px 2px;
+        min-height: 48px;
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+    }
+</style>
+
+<div class="row ">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="ibox">
+            <div class="ibox-heading">
+                <div class="ibox-title">
+                    <h2><i class="fa fa-users"></i>&nbsp; Add/Edit Remitter</h2>
+                </div>
+            </div>
+            <div class="ibox ibox-content">
+                <form class="form-group frmAddUsers">
+                    <div class="row hidden">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="form-group">
+                                <label>UID<span style="color:red;">*</span></label>
+                                <input type="text" id="UID" class="form-control" name="UID">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="ibox-heading ">
+                                <div class="ibox-title-section">
+                                    <h3>Personal Details</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="ibox-heading">
+                                <div class="ibox-title-section">
+                                    <h3>Local Address</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Full Name<span style="color:red;">*</span></label>
+                                    <small><span class="text-danger required-text" id="ValName"></span></small>
+                                    <input type="text" id="Name" placeholder="Enter Name" class="form-control validate" name="Name" data-validation-target=".text-danger">
+                                </div>
+                            </div><div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Occupation<span style="color:red;">*</span></label>
+                                    <small><span class="text-danger required-text" id="ValOccupation"></span></small>
+                                    <input type="text" id="Occupation" placeholder="Enter Occupation" class="form-control validate" name="Occupation" data-validation-target=".text-danger">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Employer<span style="color:red;">*</span></label>
+                                    <small><span class="text-danger required-text" id="ValEmployer"></span></small>
+                                    <input type="text" id="Employer" placeholder="Enter Empoyer" class="form-control validate" name="Employer" data-validation-target=".text-danger">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3">
+                                <div class="form-group">
+                                    <label style="margin-top:5px">Is Profile Completed</label>
+                                    <div class="i-checks">
+                                        <label>
+                                            <input type="checkbox" class="icheckbox_square-green" id="Is_Profile_Completed" name="Is_Profile_Completed" disabled />
+                                            <i></i>
+                                            Active
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-3">
+                                <div class="form-group">
+                                    <label style="margin-top:5px">Is Reviewed</label>
+                                    <div class="i-checks">
+                                        <label>
+                                            <input type="checkbox" class="icheckbox_square-green" id="IsReviwed" name="IsReviwed" />
+                                            <i></i>
+                                            Active
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Area/City<span style="color:red;">*</span></label>
+                                    <small><span class="text-danger required-text" id="ValArea"></span></small>
+                                    <select class="form-control chzn" id="Area" name="Area"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Block</label>
+                                    <input type="text" id="Block" placeholder="Enter Block" class="form-control" name="Block">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Street</label>
+                                    <input type="text" id="Street" placeholder="Enter  Street" class="form-control" name="Street">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Building</label>
+                                    <input type="text" id="Building" placeholder="Enter Building" class="form-control" name="Building">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Floor</label>
+                                    <input type="text" id="Floor" placeholder="Enter  Floor" class="form-control" name="Floor">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Flat</label>
+                                    <input type="text" id="Flat" placeholder="Enter Flat" class="form-control" name="Flat">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="ibox-heading">
+                                <div class="ibox-title-section">
+                                    <h3>Identification Details</h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="ibox-heading">
+                                <div class="ibox-title-section">
+                                    <h3>Other Details</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Identification Type<span style="color:red;">*</span></label>
+                                    <small><span class="text-danger required-text" id="ValIdentification_Type"></span></small>
+                                    <select class="form-control chzn" id="Identification_Type" name="Identification_Type"></select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Civil ID<span style="color:red">*</span></label>
+                                    <small><span class="text-danger required-text" id="ValIdentification_Number"></span></small>
+                                    <input type="text" id="Identification_Number" placeholder="Enter Civil ID" class="form-control" name="Identification_Number">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group" id="data_2">
+                                    <label>Identification Expiry Date<span style="color:red;">*</span></label>
+                                    <small><span class="text-danger required-text" id="ValIdentification_Expiry_Date"></span></small>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" id="Identification_Expiry_Date" name="Identification_Expiry_Date">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Identification Additional Detail</label>
+                                    <input type="text" id="Identification_Additional_Detail" placeholder="Enter  Identification Additional Detail" class="form-control" name="Identification_Additional_Detail">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Kuwait Residence Type</label>
+                                    <select class="form-control chzn" id="Residence_Type" name="Residence_Type"></select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Mobile No<span style="color:red;">*</span></label>
+                                    <small><span class="text-danger required-text" id="ValMobile_No"></span></small>
+                                    <input type="text" id="Mobile_No" placeholder="Enter Mobile No" class="form-control" name="Mobile_No">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Telephone No</label>
+                                    <input type="text" id="Telephone_No" placeholder="Enter  Telephone No" class="form-control" name="Telephone_No">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Nationality<span style="color:red;">*</span></label>
+                                    <small><span class="text-danger required-text" id="ValNationality"></span></small>
+                                    <select class="form-control chzn" id="Nationality" name="Nationality"></select>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group" id="data_2">
+                                    <label>Date Of Birth <span style="color:red;">*</span></label>
+                                    <small><span class="text-danger required-text" id="ValDate_Of_Birth"></span></small>
+                                    <div class="input-group date">
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" id="Date_Of_Birth" name="Date_Of_Birth">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Birth Place</label>
+                                    <input type="text" id="Birth_Place" placeholder="Enter Birth Place" class="form-control" name="Birth_Place">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Birth Country</label>
+                                    <select class="form-control chzn" id="Birth_Country" name="Birth_Country"></select>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="ibox-heading">
+                                    <div class="ibox-title-section">
+                                        <h3>Income Details</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="ibox-heading">
+                                    <div class="ibox-title-section">
+                                        <h3>Transaction Limits</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Expected Monthly Trans Count</label>
+                                        <select class="form-control chzn" id="Expected_Monthly_Trans_Count" name="Expected_Monthly_Trans_Count"></select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Monthly Salary/Income</label>
+                                        <input type="text" id="Monthly_Income" placeholder="Enter Salary/Income" class="form-control" name="Monthly_Income">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Other Income </label>
+                                        <input type="text" id="Other_Income" placeholder="Enter  Other Income " class="form-control" name="Other_Income">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Other Income Detail</label>
+                                        <input type="text" id="Other_Income_Detail" placeholder="Enter Other Income Detail" class="form-control" name="Other_Income_Detail">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Monthly  Trans Limit</label>
+                                        <input type="text" id="Monthly_Trans_Limit" placeholder="Enter Monthly Trans Limit" class="form-control" name="Monthly_Trans_Limit">
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Yearly Trans Limit</label>
+                                        <input type="text" id="Yearly_Trans_Limit" placeholder="Enter Yearly Trans Limit" class="form-control" name="Yearly_Trans_Limit">
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Compliance Limit</label>
+                                        <input type="text" id="Compliance_Limit" placeholder="Enter Compliance Limit" class="form-control" name="Compliance_Limit">
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Compliance Trans  Count</label>
+                                        <input type="text" id="Compliance_Trans_Count" placeholder="Enter Compliance  Trans  Count" class="form-control" name="Compliance_Trans_Count">
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group" id="data_2">
+                                        <label class="font-normal">Compliance Limit Expiry</label>
+                                        <div class="input-group date">
+                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" id="Compliance_Limit_Expiry" name="Compliance_Limit_Expiry">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Compliance  Comments</label>
+                                        <input type="text" id="Compliance_Comments" placeholder="Enter Compliance Comments" class="form-control" name="Compliance_Comments">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @*<div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                    <div class="form-group">
+                                        <label>Occupation</label>
+                                        <input type="text" id="Occupation" placeholder="Enter Occupation" class="form-control" name="Occupation">
+                                    </div>
+                                </div>
+                            </div>*@
+                        @*<div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                    <div class="form-group">
+                                        <label>User Name<span style="color:red;">*</span></label>
+                                        <input type="text" id="Login_Id" placeholder="Enter User Name" class="form-control" name="Login_Id">
+                                    </div>
+                                </div>
+                            </div>*@
+                        @*<div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                    <div class="form-group">
+                                        <label>Pep Description</label>
+                                        <input type="text" id="Pep_Description" placeholder="Enter Pep Description" class="form-control" name="Pep_Description">
+                                    </div>
+                                </div>
+                            </div>*@
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="ibox-heading">
+                                    <div class="ibox-title-section">
+                                        <h3>KYC Detail</h3>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="ibox-heading">
+                                    <div class="ibox-title-section">
+                                        <h3>Security Question</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-check">
+                                    <input class="form-check-input group1 " type="checkbox" id="pepcheckbox15" name="pepcheckbox15">
+                                    <label class="form-check-label" for="pepcheckbox15">Are you a Politically Exposed Person (PEP)?</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input group1" type="checkbox" id="pepcheckbox16" name="pepcheckbox16">
+                                    <label class="form-check-label" for="pepcheckbox16">Any of your family members - up to second kinship - a Politically <br> Exposed Person (PEP)?</label>
+                                </div>
+
+                                <div class="form-check">
+                                    <input class="form-check-input group1" type="checkbox" id="pepcheckbox17" name="pepcheckbox17">
+                                    <label class="form-check-label" for="pepcheckbox17">Are you a closed associate to a Politically Exposed Person (PEP)?</label>
+                                </div>
+                                <div id="additionalCheckboxes">
+
+                                    <div class="form-group">
+                                        <label>In case you answered yes for any of the above questions, Please Select the PEP occupation:</label>
+                                        <small><span class="text-danger required-text" id="ValadditionalCheckboxes"></span></small>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input group2" type="checkbox" id="checkbox1" name="checkbox1">
+                                        <label class="form-check-label" for="checkbox1">Emir / Crown Prince / Head of State</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input group2" type="checkbox" id="checkbox2" name="checkbox2">
+                                        <label class="form-check-label" for="checkbox2">Prime Minister / Minister / Undersecretary</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input group2" type="checkbox" id="checkbox3" name="checkbox3">
+                                        <label class="form-check-label" for="checkbox3">Chairman / Deputy Chairman (State-Owned Company)</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input group2" type="checkbox" id="checkbox4" name="checkbox4">
+                                        <label class="form-check-label" for="checkbox4">Public Prosecutor / Head of Court</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input group2" type="checkbox" id="checkbox5" name="checkbox5">
+                                        <label class="form-check-label" for="checkbox5">CEO / Managing Director (State-Owned Company)</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input group2" type="checkbox" id="checkbox6" name="checkbox6">
+                                        <label class="form-check-label" for="checkbox6">Majlis Al Umma Member / Parliament Member</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input group2" type="checkbox" id="checkbox7" name="checkbox7">
+                                        <label class="form-check-label" for="checkbox7">Ambassador / General Counsel (Delegate Minister)</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input group2" type="checkbox" id="checkbox8" name="checkbox8">
+                                        <label class="form-check-label" for="checkbox8">Deputy Prime Minister / Assistant or Deputy Minister</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input group2" type="checkbox" id="checkbox9" name="checkbox9">
+                                        <label class="form-check-label" for="checkbox9">Governor / Deputy Governor</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input group2" type="checkbox" id="checkbox10" name="checkbox10">
+                                        <label class="form-check-label" for="checkbox10">Commander in Chief / Marshal / Lieutenant General</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input group2" type="checkbox" id="checkbox11" name="checkbox11">
+                                        <label class="form-check-label" for="checkbox11">Head / Board Member (International Organization)</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input group2" type="checkbox" id="checkbox12" name="checkbox12">
+                                        <label class="form-check-label" for="checkbox12">President / Vice President of a Political Party / Senior Politician</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input group2" type="checkbox" id="checkbox13" name="checkbox13">
+                                        <label class="form-check-label" for="checkbox13">President / Vice President of a Political Party (International Organization)</label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input group2" type="checkbox" id="checkbox14" name="checkbox14">
+                                        <label class="form-check-label" for="checkbox14">Other PEP Details</label>
+                                    </div>
+
+                                    <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                                        <label>Please Specify <span style="color:red;">*</span></label>
+                                        <small><span class="text-danger required-text" id="Valother_Detail"></span></small>
+                                        <input type="text" id="other_Detail" placeholder="Enter details" class="form-control" name="other_Detail" disabled>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Security Question 1<span style="color:red;">*</span></label>
+                                        <small><span class="text-danger required-text" id="ValSecurity_Question_Id_1"></span></small>
+                                        <select class="form-control chzn" id="Security_Question_Id_1" name="Security_Question_Id_1"></select>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Security Answer 1<span style="color:red;">*</span></label>
+                                        <small><span class="text-danger required-text" id="ValSecurity_Answer_1"></span></small>
+                                        <input type="text" id="Security_Answer_1" placeholder="Enter Security Answer 1" class="form-control" name="Security_Answer_1">
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Security Question 2<span style="color:red;">*</span></label>
+                                        <small><span class="text-danger required-text" id="ValSecurity_Question_Id_2"></span></small>
+                                        <select class="form-control chzn" id="Security_Question_Id_2" name="Security_Question_Id_2"></select>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Security Answer 2<span style="color:red;">*</span></label>
+                                        <small><span class="text-danger required-text" id="ValSecurity_Answer_2"></span></small>
+                                        <input type="text" id="Security_Answer_2" placeholder="Enter Security Answer 2" class="form-control" name="Security_Answer_2">
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Security_Question  3<span style="color:red;">*</span></label>
+                                        <small><span class="text-danger required-text" id="ValSecurity_Question_Id_3"></span></small>
+                                        <select class="form-control chzn" id="Security_Question_Id_3" name="Security_Question_Id_3"></select>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Security Answer 3<span style="color:red;">*</span></label>
+                                        <small><span class="text-danger required-text" id="ValSecurity_Answer_3"></span></small>
+                                        <input type="text" id="Security_Answer_3" placeholder="Enter Security Answer 3" class="form-control" name="Security_Answer_3">
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Civil Id Front</label>
+
+                                        <input type="file" name="Civil_Id_Front" id="Civil_Id_Front" onchange="imgvalid()" class="form-control-file">
+                                        <span id="Successimg"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Civil Id Back</label>
+                                        <input type="file" name="Civil_Id_Back" id="Civil_Id_Back" onchange="imgvalid()" class="form-control-file">
+                                        <span id="Successimg"></span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <div id="imagePreviewCivil_Id_Front"></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <div id="imagePreviewCivil_Id_Back"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <a id="btn-save" name="btn-save" class="btn btn-primary pull-right"><i class="fa fa-save"></i>&nbsp; Save</a>
+                            <a id="btn-refresh" name="btn-refresh" class="btn btn-info pull-right" style="margin-right:5px;"><i class="fa fa-refresh"></i>&nbsp; Reset</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/Assets/PagesJS/AddRemitter.js"></script>

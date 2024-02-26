@@ -1,7 +1,9 @@
 ﻿using BusinessLogicLayer.DomainEntities;
 using DataAccessLayer;
 using DataAccessLayer.Entities;
+using DataAccessLayer.Helpers;
 using DataAccessLayer.ProcedureResults;
+using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.DTO.Customer;
 using KuaiexDashboard.Filters;
 using KuaiexDashboard.Services.CountryServices;
@@ -146,24 +148,19 @@ namespace KuaiexDashboard.Controllers
 
             return Content(status);
         }
-        public ActionResult LoadGrid()
+        public ActionResult LoadGrid(JqueryDatatableParam param)
         {
-            string status = "error";
+            PagedResult<GetRemitterList_Result> list = _remitterService.GetRemitterList(param);
 
-            try
+            var result = new
             {
-                RemitterDAL objRemitterDal = new RemitterDAL();
+                draw = param.sEcho,
+                recordsTotal = list.TotalSize,
+                recordsFiltered = list.FilterRecored,
+                data = list.Data
+            };
 
-                List<Customer> result = objRemitterDal.GetRemitterList();
-
-                status = JsonConvert.SerializeObject(result);
-            }
-            catch (Exception ex)
-            {
-                status = "error";
-            }
-
-            return Content(status);
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
         public ActionResult LoadSecurityQuestions(int Customer_Id)
         {
@@ -203,6 +200,10 @@ namespace KuaiexDashboard.Controllers
             }
 
             return Content(status);
+        }
+        public ActionResult Add()
+        {
+            return View();
         }
         [HttpPost]
         public ActionResult AddCustomer(string Civil_Id_Back, string Civil_Id_Front, CustomerDTO addCustomerDto)
@@ -244,13 +245,27 @@ namespace KuaiexDashboard.Controllers
                             string fileExtension1 = Path.GetExtension(file1.FileName);
                              uniqueFileName1 = $"{CivilId}F{fileExtension1}";
                             string filePath1 = Path.Combine(uploadDirectory, uniqueFileName1);
+                            FileInfo fileInfo = new FileInfo(filePath1);
+                            if (fileInfo.Exists)
+                            {
+                                fileInfo.Delete();
+                            }
+
+
                             file1.SaveAs(filePath1);
                         }
+                    
                         if ( file2 != null)
                         {
                             string fileExtension2 = Path.GetExtension(file2.FileName);
                              uniqueFileName2 = $"{CivilId}R{fileExtension2}";
                             string filePath2 = Path.Combine(uploadDirectory, uniqueFileName2);
+                            FileInfo fileInfo = new FileInfo(filePath2);
+                            if (fileInfo.Exists)
+                            {
+                                fileInfo.Delete();
+                            }
+
                             file2.SaveAs(filePath2);
                         }
                         return Json(new
@@ -287,7 +302,7 @@ namespace KuaiexDashboard.Controllers
                     status = "Customer not found";
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 status = "Error";
             }
@@ -316,7 +331,7 @@ namespace KuaiexDashboard.Controllers
                     status = "Customer not found";
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 status = "error";
             }

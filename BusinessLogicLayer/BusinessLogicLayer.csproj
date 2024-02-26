@@ -116,7 +116,6 @@
     <Compile Include="DomainEntities\GetFAQSList_Result.cs" />
     <Compile Include="DomainEntities\GetPrivacyPolicy_Result.cs" />
     <Compile Include="DomainEntities\GetQuestionsList_Result.cs" />
-    <Compile Include="DomainEntities\GetRemitterList_Result.cs" />
     <Compile Include="DomainEntities\GetTermsConditions_Result.cs" />
     <Compile Include="DomainEntities\GetUsersList_Result.cs" />
     <Compile Include="DomainEntities\GetUserTypes_Result.cs" />

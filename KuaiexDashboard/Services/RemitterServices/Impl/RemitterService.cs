@@ -1,7 +1,10 @@
 ﻿using BusinessLogicLayer.DomainEntities;
 using DataAccessLayer;
 using DataAccessLayer.Entities;
+using DataAccessLayer.Helpers;
+using DataAccessLayer.ProcedureResults;
 using DataAccessLayer.Recources;
+using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.DTO.Beneficiary;
 using KuaiexDashboard.DTO.Customer;
 using KuaiexDashboard.Repository;
@@ -307,6 +310,13 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
         public List<Customer_Security_Questions> GetCustomerSecurityQuestions(int id)
         {
             return _customerSecurityQuestionRepository.GetAll(x => x.Customer_Id == id, null);
+        }
+
+        public PagedResult<GetRemitterList_Result> GetRemitterList(JqueryDatatableParam param)
+        {
+            PagedResult<GetRemitterList_Result> obj = _customerRepository.GetPagedDataFromSP<GetRemitterList_Result>("GetRemitterListWithPagination", param.iDisplayStart + 1, param.iDisplayLength, param.sSearch);
+
+            return obj;
         }
     }
 }

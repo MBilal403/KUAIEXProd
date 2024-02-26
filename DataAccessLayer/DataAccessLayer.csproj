@@ -73,6 +73,7 @@
     <Compile Include="Helpers\JqueryDatatableParam.cs" />
     <Compile Include="Kuaiex_Prod.cs" />
     <Compile Include="ProcedureResults\GetCountryList_Result.cs" />
+    <Compile Include="ProcedureResults\GetRemitterList_Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Recources\MsgKeys.cs" />
     <Compile Include="RemitterDAL.cs" />
