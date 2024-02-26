@@ -347,7 +347,7 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
-        public PagedResult<T> GetPagedDataFromSP<T>(string storedProcedureName, int page = 1, int pageSize = 10) where T : class
+        public PagedResult<T> GetPagedDataFromSP<T>(string storedProcedureName, int page = 1, int pageSize = 10, string searchString = null) where T : class
         {
             using (var connection = connectionHandler.OpenConnection())
             {
@@ -355,18 +355,18 @@ namespace KuaiexDashboard.Repository.Impl
                 {
                     var tableName = typeof(T).Name;
 
-                    // Calculate the starting row for the current page
-                    var startRow = (page - 1) * pageSize + 1;
+                    var startRow = page;
                     var endRow = startRow + pageSize - 1;
 
-                    // Call the stored procedure for paginated data
+           
                     using (var command = new SqlCommand(storedProcedureName, connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                        // Add parameters for pagination
+                     
                         command.Parameters.AddWithValue("@StartRow", startRow);
                         command.Parameters.AddWithValue("@EndRow", endRow);
+                        command.Parameters.AddWithValue("@searchString", "%" + searchString + "%");
 
                         // Add output parameter for total record count
                         var totalRecordsParameter = new SqlParameter
@@ -377,6 +377,15 @@ namespace KuaiexDashboard.Repository.Impl
                         };
                         command.Parameters.Add(totalRecordsParameter);
 
+                        // Add output parameter for total record count
+                        var filterRecordsParameter = new SqlParameter
+                        {
+                            ParameterName = "@FilteredCount",
+                            SqlDbType = SqlDbType.Int,
+                            Direction = ParameterDirection.Output
+                        };
+                        command.Parameters.Add(filterRecordsParameter);
+
                         using (var adapter = new SqlDataAdapter(command))
                         {
                             var dataTable = new DataTable();
@@ -386,13 +395,14 @@ namespace KuaiexDashboard.Repository.Impl
 
                             // Retrieve total record count from output parameter
                             var totalRecords = (int)totalRecordsParameter.Value;
+                            var filteredRecords = (int)filterRecordsParameter.Value;
 
-                            // Create and return PagedResult object
                             var result = new PagedResult<T>
                             {
                                 CurrentPage = page,
                                 PageSize = pageSize,
                                 TotalSize = totalRecords,
+                                FilterRecored = filteredRecords,
                                 Data = entities.ToList()
                             };
 

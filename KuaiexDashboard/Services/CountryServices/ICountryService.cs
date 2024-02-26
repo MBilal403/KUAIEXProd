@@ -1,5 +1,7 @@
 ﻿using DataAccessLayer.Entities;
+using DataAccessLayer.Helpers;
 using DataAccessLayer.ProcedureResults;
+using DataAccessLayer.Repository.Impl;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +14,7 @@ namespace KuaiexDashboard.Services.CountryServices
         Country GetCountryByName(string countryName);
         int GetCountryIdByCountryName(string countryName);
         List<GetCountryList_Result> GetCountryList();
+        PagedResult<GetCountryList_Result> GetCountryList(JqueryDatatableParam param);
         Country GetCountryByUID(Guid countryId);
         List<Country> GetAllCountries();
         void UpdateCountry(Country country);

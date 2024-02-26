@@ -1,6 +1,8 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.Entities;
+using DataAccessLayer.Helpers;
 using DataAccessLayer.ProcedureResults;
+using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.Filters;
 using KuaiexDashboard.Services.CityServices;
 using KuaiexDashboard.Services.CityServices.Impl;
@@ -66,12 +68,21 @@ namespace KuaiexDashboard.Controllers
             return Content(status);
         }
 
-        public ActionResult LoadGrid()
+        public ActionResult LoadGrid(JqueryDatatableParam param)
         {
-            string status = "error";
-            List<GetCountryList_Result> list = objCountryDal.GetCountryList();
-            status = Newtonsoft.Json.JsonConvert.SerializeObject(list);
-            return Content(status);
+
+            PagedResult<GetCountryList_Result> list = _countryService.GetCountryList(param);
+
+            var result = new
+            {
+                draw = param.sEcho,
+                recordsTotal = list.TotalSize,
+                recordsFiltered = list.FilterRecored,
+                data = list.Data
+            };
+
+            return Json(result, JsonRequestBehavior.AllowGet);
+
         }
 
         public ActionResult Edit(Guid UID)
@@ -94,37 +105,7 @@ namespace KuaiexDashboard.Controllers
             string status = "";
             try
             {
-                Country obj = objCountryDal.GetCountryByUID(objCountry.UID);
-                objCountry.Id = obj.Id;
-                objCountry.Name = obj.Name;
-                obj.Comission = objCountry.Comission;
-                obj.Nationality = objCountry.Nationality;
-                obj.Alpha_2_Code = objCountry.Alpha_2_Code;
-                obj.Alpha_3_Code = objCountry.Alpha_3_Code;
-                objCountry.Remittance_Status = obj.Remittance_Status;
-                objCountry.High_Risk_Status = obj.High_Risk_Status;
-                objCountry.CreatedIp = obj.CreatedIp;
-                objCountry.UpdatedIp = obj.UpdatedIp;
-                obj.Country_Dialing_Code = objCountry.Country_Dialing_Code;
-                if (obj.Prod_Country_Id == null || obj.Prod_Country_Id <= 0)
-                {
-                    Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                    obj.Prod_Country_Id = objKuaiex_Prod.GetCountryIdByCountryName(obj.Name);
-                }
-
-                if (objCountry.Status != null)
-                {
-                    objCountry.Status = "A";
-                }
-                else
-                {
-                    objCountry.Status = "N";
-                }
-                obj.Status = objCountry.Status;
-
-                // Save the changes to the database
-                objCountryDal.UpdateCountry(obj);
-
+                _countryService.UpdateCountry(objCountry);
                 status = "success";
             }
             catch (Exception ex)

@@ -262,6 +262,10 @@
     <Content Include="Images\logo-96-96.png" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\processing.gif" />
+    <Content Include="lib\jquery\jquery.js" />
+    <Content Include="lib\jquery\jquery.min.js" />
+    <Content Include="lib\jquery\jquery.slim.js" />
+    <Content Include="lib\jquery\jquery.slim.min.js" />
     <Content Include="Plugins\appendGrid\images\ui-bg_diagonals-thick_90_eeeeee_40x40.png" />
     <Content Include="Plugins\appendGrid\images\ui-bg_flat_15_cd0a0a_40x100.png" />
     <Content Include="Plugins\appendGrid\images\ui-bg_glass_100_e4f1fb_1x400.png" />
@@ -834,6 +838,9 @@
     <Content Include="Chat\assets\webfonts\inter\fonts\inter-regular.woff2" />
     <Content Include="Chat\assets\webfonts\inter\fonts\inter-semibold.woff" />
     <Content Include="Chat\assets\webfonts\inter\fonts\inter-semibold.woff2" />
+    <Content Include="libman.json" />
+    <Content Include="lib\jquery\jquery.min.map" />
+    <Content Include="lib\jquery\jquery.slim.min.map" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
