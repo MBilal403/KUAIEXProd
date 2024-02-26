@@ -147,9 +147,17 @@ var handleStaff = function () {
                     "../City/AddCity",
                     $(".frmAddUsers").serialize(),
                     function (value) {
+                        if (value === 'duplicate_value_exist') {
+                            swal(
+                                'Failed',
+                                'City Already Exist!',
+                                'success'
+                            )
+                            Reset();
+                            $('#btn-save').removeAttr('disabled');
+                        }
 
-
-                        if (value != 'error') {
+                        if (value === 'insert_success') {
                             swal(
                                 'Success',
                                 'City Saved Successfully!',

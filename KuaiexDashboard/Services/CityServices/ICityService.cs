@@ -11,6 +11,7 @@ namespace KuaiexDashboard.Services.CityServices
     public interface ICityService
     {
         List<City> GetActiveCities();
+        string AddCity(City objCity);
         PagedResult<GetCityList_Result> GetActiveCities(JqueryDatatableParam param);    
 
     }

@@ -53,34 +53,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                if (objCity != null)
-                {
-                    City obj = objCityDal.GetCityByName(objCity.Name);
-                    objCity.Country_Id = objCity.Country_Id;
-                    objCity.UID = new Guid();
-                    if (obj != null)
-                    {
-                        status = "exist";
-                    }
-                    else
-                    {
-                        if (objCity.Status != null)
-                            objCity.Status = 1;
-                        else
-                            objCity.Status = 0;
-
-                        objCity.UID = Guid.NewGuid();
-                     /*   Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                        objCity.Prod_City_Id = objKuaiex_Prod.GetCityIdByCityName(objCity.Name);
-*/
-                        objCityDal.AddCity(objCity);
-                        status = "success";
-                    }
-                }
-                else
-                {
-                    status = "error: objCity is null";
-                }
+                status = _cityService.AddCity(objCity);
             }
             catch (Exception ex)
             {
