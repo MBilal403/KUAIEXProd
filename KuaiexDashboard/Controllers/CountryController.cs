@@ -88,7 +88,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                Country obj = objCountryDal.GetCountryByUID(UID);
+                Country obj = _countryService.GetCountryByUID(UID);
                 status = JsonConvert.SerializeObject(obj);
             }
             catch (Exception ex)
@@ -103,8 +103,8 @@ namespace KuaiexDashboard.Controllers
             string status = "";
             try
             {
-                _countryService.UpdateCountry(objCountry);
-                status = "success";
+                status = _countryService.UpdateCountry(objCountry);
+                 
             }
             catch (Exception ex)
             {

@@ -15,7 +15,7 @@ namespace KuaiexDashboard.Repository
         List<T> GetAll(Expression<Func<T, bool>> condition = null, params Expression<Func<T, object>>[] columns);
         T GetbyId(int id, params Expression<Func<T, object>>[] columns);
         int Insert(T entity);
-        void Update(T entity, string whereClause);
+        int Update(T entity, string whereClause);
         void Delete(object id);
         PagedResult<T> GetPagedDataFromSP<T>(string storedProcedureName, int page = 1, int pageSize = 10, string searchString = null ) where T : class;
         PagedResult<T> GetPagedData(int page, int pageSize);

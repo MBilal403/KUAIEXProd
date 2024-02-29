@@ -52,9 +52,15 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
             }
         }
 
+        public List<GetCountryList_Result> GetActiveCountryList()
+        {
+            List<GetCountryList_Result> obj = _countryRepository.GetDataFromSP<GetCountryList_Result>("GetActiveCountryList");
+            return obj;
+        }
+
         public List<Country> GetAllCountries()
         {
-           List<Country> countries = _countryRepository.GetAll(x => x.Status == "A", x=>x.Id, x => x.Name);
+            List<Country> countries = _countryRepository.GetAll(x => x.Status == "A", x => x.Id, x => x.Name);
             return countries;
         }
 
@@ -63,9 +69,10 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
             throw new NotImplementedException();
         }
 
-        public Country GetCountryByUID(Guid countryId)
+        public Country GetCountryByUID(Guid UID)
         {
-            throw new NotImplementedException();
+            Country existingCountry = _countryRepository.FindBy(x => x.UID == UID);
+            return existingCountry;
         }
 
         public int? GetCountryIdByCountryName(string countryName)
@@ -90,45 +97,34 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
         public PagedResult<GetCountryList_Result> GetCountryList(JqueryDatatableParam param)
         {
             PagedResult<GetCountryList_Result> obj = _countryRepository.GetPagedDataFromSP<GetCountryList_Result>("GetAllCountriesWithPagination", param.iDisplayStart + 1, param.iDisplayLength, param.sSearch);
-           
+
             return obj;
         }
 
-        public void UpdateCountry(Country objCountry)
+        public string UpdateCountry(Country objCountry)
         {
-            Country obj = objCountryDal.GetCountryByUID(objCountry.UID);
-            objCountry.Id = obj.Id;
-            objCountry.Name = obj.Name;
-            obj.Comission = objCountry.Comission;
-            obj.Nationality = objCountry.Nationality;
-            obj.Alpha_2_Code = objCountry.Alpha_2_Code;
-            obj.Alpha_3_Code = objCountry.Alpha_3_Code;
-            obj.City_Id = objCountry.City_Id;
-            objCountry.Remittance_Status = obj.Remittance_Status;
-            objCountry.High_Risk_Status = obj.High_Risk_Status;
-            objCountry.CreatedIp = obj.CreatedIp;
-            objCountry.UpdatedIp = obj.UpdatedIp;
-            obj.CreatedOn = DateTime.Now;
-            obj.Country_Dialing_Code = objCountry.Country_Dialing_Code;
+            Guid guid = objCountry.UID ?? Guid.NewGuid();
+            Country existingCountry = _countryRepository.FindBy(x => x.UID == guid);
+
+            if (existingCountry != null)
+            {
+                objCountry.UpdatedOn = DateTime.Now;
+                objCountry.Id = existingCountry.Id;
+                objCountry.Prod_Country_Id = existingCountry.Prod_Country_Id;
+                objCountry.Status = objCountry.Status != null ? "A" : "N";
+                if (_countryRepository.Update(objCountry, $" Id = {objCountry.Id} ") > 0)
+                {
+                    return MsgKeys.UpdatedSuccessfully;
+                }
+                return MsgKeys.Error;
+            }
+            return MsgKeys.Error;
 
             /*    if (obj.Prod_Country_Id == null || obj.Prod_Country_Id <= 0)
                   {
                       Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
                       obj.Prod_Country_Id = objKuaiex_Prod.GetCountryIdByCountryName(obj.Name);
                   }*/
-
-            if (objCountry.Status != null)
-            {
-                objCountry.Status = "A";
-            }
-            else
-            {
-                objCountry.Status = "N";
-            }
-            obj.Status = objCountry.Status;
-
-            _countryRepository.Update(obj, $" Id = {obj.Id} ");
-
 
         }
     }

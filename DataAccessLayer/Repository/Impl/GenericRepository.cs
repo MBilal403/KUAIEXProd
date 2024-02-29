@@ -301,17 +301,17 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
-        public void Update(T entity, string whereClause)
+        public int Update(T entity, string whereClause)
         {
             using (var connection = connectionHandler.OpenConnection())
             {
                 try
                 {
                     var tableName = typeof(T).Name;
-                    var properties = typeof(T).GetProperties().Where(p => p.GetValue(entity) != null && !Attribute.IsDefined(p, typeof(KeyAttribute)));
+                    var properties = typeof(T).GetProperties().Where(p => !Attribute.IsDefined(p, typeof(KeyAttribute)));
 
                     // Create SET clause for update
-                    var updateColumns = string.Join(", ", properties.Where(p => p.GetValue(entity) != null).Select(p => $"{p.Name} = @{p.Name}"));
+                    var updateColumns = string.Join(", ", properties.Select(p => $"{p.Name} = @{p.Name}"));
 
                     var query = $"UPDATE {tableName} SET {updateColumns} ";
 
@@ -324,8 +324,8 @@ namespace KuaiexDashboard.Repository.Impl
                             var value = property.GetValue(entity);
                             command.Parameters.AddWithValue($"@{property.Name}", value ?? DBNull.Value);
                         }
-
-                        command.ExecuteNonQuery();
+                        int rowsAffected = command.ExecuteNonQuery();
+                        return rowsAffected;
                     }
                 }
                 catch (Exception ex)

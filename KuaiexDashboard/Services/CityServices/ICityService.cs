@@ -14,5 +14,7 @@ namespace KuaiexDashboard.Services.CityServices
         string AddCity(City objCity);
         PagedResult<GetCityList_Result> GetActiveCities(JqueryDatatableParam param);
         string UpdateCity(City objCity);
+
+        City GetCityByUID(Guid uid);
     }
 }

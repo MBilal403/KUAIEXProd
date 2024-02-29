@@ -19,7 +19,7 @@ namespace KuaiexDashboard.Services.CityServices.Impl
 
         public string AddCity(City objCity)
         {
-            int? existingCity = GetCityIdByCityName(objCity.Name);
+            int? existingCity = GetCityIdByCityName(objCity.Name , objCity.Country_Id);
             if (existingCity != null)
             {
                 return MsgKeys.DuplicateValueExist;
@@ -41,9 +41,9 @@ namespace KuaiexDashboard.Services.CityServices.Impl
                 return MsgKeys.Error;
             }
         }
-        private int? GetCityIdByCityName(string cityName)
+        private int? GetCityIdByCityName(string cityName,int Country_Id)
         {
-            City city = _cityRepository.FindBy(x => x.Name == cityName);
+            City city = _cityRepository.FindBy(x => x.Name == cityName && x.Country_Id == Country_Id);
             if (city != null)
             {
                 return city.Id;
@@ -68,7 +68,7 @@ namespace KuaiexDashboard.Services.CityServices.Impl
 
         public string UpdateCity(City objCity)
         {
-            int? existingCity = GetCityIdByCityName(objCity.Name);
+            int? existingCity = GetCityIdByCityName(objCity.Name, objCity.Country_Id);
             if (existingCity != null)
             {
                 objCity.Country_Id = objCity.Country_Id;
@@ -82,6 +82,12 @@ namespace KuaiexDashboard.Services.CityServices.Impl
 
             return MsgKeys.Error;
 
+        }
+
+        public City GetCityByUID(Guid uid)
+        {
+            City city = _cityRepository.FindBy(x => x.UID == uid);
+            return city;
         }
     }
 }

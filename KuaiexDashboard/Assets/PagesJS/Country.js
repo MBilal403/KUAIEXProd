@@ -71,7 +71,7 @@ $(document).on('click', '.btn-edit', function () {
                 $('#btn-save').html("<i class='fa fa-save'></i> Update");
                 IsEditMode = true;
 
-                if (obj.Status) {
+                if (obj.Status === "A") {
                     $("#Status").iCheck('check');
                 } else {
                     $("#Status").iCheck('uncheck');
@@ -252,7 +252,7 @@ var LoadGridData = function () {
             {
                 "data": "Status",
                 "render": function (data, type, row) {
-             
+                    console.log(data);
                     return data === 'A' ? '<span class="label label-success label-xs">Active</span>' : '<span class="label label-danger label-xs">In Active</span>';
                 },
                 "autoWidth": true,

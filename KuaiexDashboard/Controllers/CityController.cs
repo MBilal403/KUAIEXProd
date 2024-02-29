@@ -7,6 +7,8 @@ using KuaiexDashboard.Filters;
 using KuaiexDashboard.Repository.Impl;
 using KuaiexDashboard.Services.CityServices;
 using KuaiexDashboard.Services.CityServices.Impl;
+using KuaiexDashboard.Services.CountryServices;
+using KuaiexDashboard.Services.CountryServices.Impl;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,30 +22,29 @@ namespace KuaiexDashboard.Controllers
     public class CityController : Controller
     {
         private readonly ICityService _cityService;
+        private readonly ICountryService _countryService;
         public CityController()
         {
             _cityService = new CityService();
+            _countryService = new CountryService();
         }
 
         CityDAL objCityDal = new CityDAL();
-        
+
         public ActionResult Index()
         {
             return View();
         }
         public ActionResult LoadCountry()
         {
-
             string status = "0:{choose}";
             try
             {
-                //var result = db.GetUsersList();
-                List<GetCountryList_Result> lstCityCountry = objCityDal.GetActiveCountryList();
+                List<GetCountryList_Result> lstCityCountry = _countryService.GetActiveCountryList();
                 status = JsonConvert.SerializeObject(lstCityCountry);
             }
             catch (Exception ex)
             {
-
                 status = "error";
             }
             return Content(status);
@@ -83,7 +84,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                City obj = objCityDal.GetCityByUID(UID);
+                City obj = _cityService.GetCityByUID(UID);
                 status = JsonConvert.SerializeObject(obj);
             }
             catch (Exception)
@@ -106,37 +107,37 @@ namespace KuaiexDashboard.Controllers
             return Content(status);
         }
 
-        public ActionResult SynchronizeRecords()
-        {
-            int status = 0;
-            int Counter = 0;
-            try
+        /*    public ActionResult SynchronizeRecords()
             {
-                List<City> lst = objCityDal.GetAllCities();
-
-                foreach (var item in lst)
+                int status = 0;
+                int Counter = 0;
+                try
                 {
-                    City obj = objCityDal.GetCityByUID(item.UID);
-                    if (obj.Prod_City_Id == null || obj.Prod_City_Id <= 0)
-                    {
-                        Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                        obj.Prod_City_Id = objKuaiex_Prod.GetCityIdByCityName(obj.Name);
+                    List<City> lst = objCityDal.GetAllCities();
 
-                        if (obj.Prod_City_Id > 0)
+                    foreach (var item in lst)
+                    {
+                        City obj = objCityDal.GetCityByUID(item.UID);
+                        if (obj.Prod_City_Id == null || obj.Prod_City_Id <= 0)
                         {
-                            objCityDal.UpdateCity_ProdCityId(obj.Prod_City_Id, item.Id);
-                            Counter++;
+                            Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
+                            obj.Prod_City_Id = objKuaiex_Prod.GetCityIdByCityName(obj.Name);
+
+                            if (obj.Prod_City_Id > 0)
+                            {
+                                objCityDal.UpdateCity_ProdCityId(obj.Prod_City_Id, item.Id);
+                                Counter++;
+                            }
                         }
                     }
-                }
 
-            }
-            catch (Exception ex)
-            {
-                status = Counter;
-            }
-            return Content(status.ToString());
-        }
+                }
+                catch (Exception ex)
+                {
+                    status = Counter;
+                }
+                return Content(status.ToString());
+            }*/
 
     }
 }

@@ -17,8 +17,9 @@ namespace KuaiexDashboard.Services.CountryServices
         PagedResult<GetCountryList_Result> GetCountryList(JqueryDatatableParam param);
         Country GetCountryByUID(Guid countryId);
         List<Country> GetAllCountries();
-        void UpdateCountry(Country country);
+        string UpdateCountry(Country country);
         string AddCountry(Country country);
+        List<GetCountryList_Result> GetActiveCountryList();
 
 
 
