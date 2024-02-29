@@ -6,6 +6,8 @@ using KuaiexDashboard.DTO.Beneficiary;
 using KuaiexDashboard.Filters;
 using KuaiexDashboard.Services.BeneficiaryServices;
 using KuaiexDashboard.Services.BeneficiaryServices.Impl;
+using KuaiexDashboard.Services.RemitterServices;
+using KuaiexDashboard.Services.RemitterServices.Impl;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -19,21 +21,33 @@ namespace KuaiexDashboard.Controllers
     public class BeneficiaryController : Controller
     {
         IBeneficiaryService _beneficiaryService;
+        IRemitterService _remitterService;
         BeneficiaryDAL objBeneficiaryDAL = new BeneficiaryDAL();
 
         public BeneficiaryController()
         {
             _beneficiaryService = new BeneficiaryService();
+            _remitterService = new RemitterService();
         }
-        public ActionResult Index()
+        public ActionResult Index(Guid UID)
         {
-            return View();
+
+            var user = _remitterService.GetCustomerByUID(UID);
+            if (user != null)
+            {
+                ViewBag.UserName = $" {user.Identification_Number} -  {user.Name} ";
+                return View();
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Authentication");
+            }
         }
 
         public ActionResult LoadCountry()
         {
             string status = "0:{choose}";
-
             try
             {
                 List<GetCountryList_Result> lstCountries = objBeneficiaryDAL.GetCountryList();
@@ -252,8 +266,8 @@ namespace KuaiexDashboard.Controllers
         public ActionResult LoadGrid(Guid CUID)
         {
             string status = "error";
-            BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL();
-            var lstbeneficiary = objBeneficiaryDal.GetBeneficiaryByUID(CUID);
+            var customer = _remitterService.GetCustomerByUID(CUID);
+            var lstbeneficiary = _beneficiaryService.GetBeneficiariesByCustomerID(customer.Customer_Id);
             status = Newtonsoft.Json.JsonConvert.SerializeObject(lstbeneficiary);
             return Content(status);
         }
@@ -288,13 +302,22 @@ namespace KuaiexDashboard.Controllers
             }
             return Content(status);
         }
+        public ActionResult AddBeneficiary()
+        {
+            return View();
+        }
         public ActionResult AddBeneficiary(BeneficiaryDTO objBeneficiary)
         {
             string status = "error";
 
             try
             {
-                status = _beneficiaryService.AddBeneficiary(objBeneficiary);
+                var customer = _remitterService.GetCustomerByUID(objBeneficiary.CUID);
+                if (customer != null)
+                {
+                    objBeneficiary.Customer_Id = customer.Customer_Id;
+                    status = _beneficiaryService.AddBeneficiary(objBeneficiary);
+                }
             }
             catch (Exception ex)
             {
@@ -308,13 +331,14 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL();
-                Beneficiary obj = objBeneficiaryDal.GetBeneficiaryByUID(UID);
-                status = JsonConvert.SerializeObject(obj);
+                /*           BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL();
+                           Beneficiary obj = objBeneficiaryDal.GetBeneficiaryByUID(UID);*/
+                BeneficiaryDTO beneficiaryDto = _beneficiaryService.GetBeneficiaryByUID(UID);
+                status = JsonConvert.SerializeObject(beneficiaryDto);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                status = "Error";
+                status = "error";
             }
             return Content(status);
         }

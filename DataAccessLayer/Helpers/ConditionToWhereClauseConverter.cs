@@ -63,8 +63,15 @@ namespace DataAccessLayer.Helpers
         protected override Expression VisitConstant(ConstantExpression node)
         {
             var value = node.Value;
-            var formattedValue = (value is string) ? $"'{value}'" : value.ToString();
-            whereClause.Append(formattedValue);
+            if (value is Guid)
+            {
+                whereClause.Append($"'{value}'");
+            }
+            else
+            {
+                var formattedValue = (value is string) ? $"'{value}'" : value.ToString();
+                whereClause.Append(formattedValue);
+            }
             return node;
         }
 
@@ -73,8 +80,15 @@ namespace DataAccessLayer.Helpers
             if (node.Expression is ConstantExpression constantExpression)
             {
                 var value = Expression.Lambda(node).Compile().DynamicInvoke();
-                var formattedValue = (value is string) ? $"'{value}'" : value.ToString();
-                whereClause.Append(formattedValue);
+                if (value is Guid)
+                {
+                    whereClause.Append($"'{value}'");
+                }
+                else
+                {
+                    var formattedValue = (value is string) ? $"'{value}'" : value.ToString();
+                    whereClause.Append(formattedValue);
+                }
             }
             else
             {
@@ -83,6 +97,7 @@ namespace DataAccessLayer.Helpers
 
             return node;
         }
+
     }
 
 }

@@ -54,7 +54,8 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
 
         public List<Country> GetAllCountries()
         {
-            throw new NotImplementedException();
+           List<Country> countries = _countryRepository.GetAll(x => x.Status == "A", x=>x.Id, x => x.Name);
+            return countries;
         }
 
         public Country GetCountryByName(string countryName)

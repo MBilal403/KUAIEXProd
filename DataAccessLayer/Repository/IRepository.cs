@@ -11,7 +11,7 @@ namespace KuaiexDashboard.Repository
 {
     public interface IRepository<T> where T : class
     {
-        T FindBy(Expression<Func<T, bool>> condition = null);
+        T FindBy(Expression<Func<T, bool>> condition);
         List<T> GetAll(Expression<Func<T, bool>> condition = null, params Expression<Func<T, object>>[] columns);
         T GetbyId(int id, params Expression<Func<T, object>>[] columns);
         int Insert(T entity);
@@ -19,7 +19,7 @@ namespace KuaiexDashboard.Repository
         void Delete(object id);
         PagedResult<T> GetPagedDataFromSP<T>(string storedProcedureName, int page = 1, int pageSize = 10, string searchString = null ) where T : class;
         PagedResult<T> GetPagedData(int page, int pageSize);
-        List<TResult> GetDataFromSP<TResult>(string storedProcedureName) where TResult : class;
+        List<TResult> GetDataFromSP<TResult>(string storedProcedureName, Nullable<int> SPId = null) where TResult : class;
         List<TResult> GetAllWithJoins<TResult>(List<JoinInfo> joins, Func<TResult, bool> condition = null, string columns = null) where TResult : class;
 
     }

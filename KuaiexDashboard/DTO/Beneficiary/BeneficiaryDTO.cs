@@ -8,7 +8,7 @@ namespace KuaiexDashboard.DTO.Beneficiary
     public class BeneficiaryDTO
     {
         public int Beneficiary_Id { get; set; }
-
+        public Guid CUID { get; set; }
         public int Customer_Id { get; set; }
         public string FullName { get; set; }
         public string Customer_Name { get; set; }

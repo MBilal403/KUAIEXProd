@@ -5,14 +5,16 @@
     ViewBag.Title = "Index";
 }
 
-
 <div class="row ">
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="ibox">
             <div class="ibox-heading">
                 <div class="ibox-title">
-                    <h2><i class="fa fa-users"></i>&nbsp; Add/Edit Beneficiary</h2>
+                    <h2 style="display: inline-block;"><i class="fa fa-users"></i>&nbsp;Add/Edit Beneficiary </h2>
+                    <h3 style="float: right; margin-top:5px;">@ViewBag.UserName</h3>
                 </div>
+
+
             </div>
             <div class="ibox ibox-content">
                 <form class="form-group frmAddUsers">
@@ -203,6 +205,8 @@
         </div>
     </div>
 </div>
+
+<script src="https://unpkg.com/slim-select@latest/dist/slimselect.min.js"></script>
 
 
 

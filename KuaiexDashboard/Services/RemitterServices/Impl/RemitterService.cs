@@ -11,6 +11,7 @@ using KuaiexDashboard.Repository;
 using KuaiexDashboard.Repository.Impl;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -46,13 +47,12 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                 }
                 else
                 {
-                    Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-
-                    customer.Agency_Id = 1;
-                    customer.Agency_Branch_Id = 2;
+                 
+                    customer.Agency_Id = Convert.ToInt32(ConfigurationManager.AppSettings["Agency_Id"].ToString());
+                    customer.Agency_Branch_Id = Convert.ToInt32( ConfigurationManager.AppSettings["Agency_Branch_Id"].ToString());
                     customer.Name = customerDto.Name;
                     customer.Employer = customerDto.Employer;
-                    customer.Gender = 0;
+                   // customer.Gender = 0;
                     customer.Identification_Type = customerDto.Identification_Type;
                     customer.Identification_Number = customerDto.Identification_Number;
                     customer.Identification_Expiry_Date = customerDto.Identification_Expiry_Date;
@@ -66,8 +66,8 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.Building = customerDto.Building;
                     customer.Floor = customerDto.Floor;
                     customer.Flat = customerDto.Flat;
-                    customer.Login_Id = "33784939944";
-                    customer.Device_Key = "e537487483sj";
+                    customer.Login_Id = customerDto.Identification_Number;
+                  //  customer.Device_Key = "e537487483sj";
                     customer.UID = Guid.NewGuid();
                     customer.CreatedBy = 1;
                     customer.UID_Token = Guid.NewGuid();
@@ -76,13 +76,10 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.UpdatedBy = 1;
                     customer.UpdatedOn = DateTime.Now;
                     customer.UpdatedIp = "127.0.0.1";
-                    customer.IsBlocked = 0;
-                    customer.Block_Count = 0;
-                    customer.InvalidTryCount = 0;
                     customer.Civil_Id_Front = customerDto.Civil_Id_Front;
                     customer.Civil_Id_Back = customerDto.Civil_Id_Back;
-                    customer.Pep_Status = false;
-                    customer.Pep_Description = "";
+                   // customer.Pep_Status = false;
+                  //  customer.Pep_Description = "";
                     customer.Identification_Additional_Detail = customerDto.Identification_Additional_Detail;
                     customer.Residence_Type = customerDto.Residence_Type;
                     customer.Telephone_No = customerDto.Telephone_No;
@@ -99,8 +96,8 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.Compliance_Limit_Expiry = customerDto.Compliance_Limit_Expiry;
                     customer.Compliance_Comments = customerDto.Compliance_Comments;
                     customer.IsReviwed = customerDto.IsReviwed == null ? false : true;
-                    customer.Prod_Remitter_Id = 100;
-                    customer.Is_Profile_Completed = 0;
+                   // customer.Prod_Remitter_Id = 100;
+                    customer.Is_Profile_Completed = 1;
 
                     //customer.Prod_Remitter_Id = objKuaiex_Prod.GetRemittanceIdByIdentificationNumber(customerDto.Identification_Number);
                     customerDto.Customer_Id = _customerRepository.Insert(customer);
@@ -178,11 +175,11 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                       {*/
                 if (customer != null)
                 {
-                    customer.Agency_Id = 1;
-                    customer.Agency_Branch_Id = 2;
+                    customer.Agency_Id = Convert.ToInt32(ConfigurationManager.AppSettings["Agency_Id"].ToString());
+                    customer.Agency_Branch_Id = Convert.ToInt32(ConfigurationManager.AppSettings["Agency_Branch_Id"].ToString());
                     customer.Name = customerDto.Name;
                     customer.Employer = customerDto.Employer;
-                    customer.Gender = 0;
+                  //  customer.Gender = 0;
                     customer.Identification_Type = customerDto.Identification_Type;
                     customer.Identification_Number = customerDto.Identification_Number;
                     customer.Identification_Expiry_Date = customerDto.Identification_Expiry_Date;
@@ -190,15 +187,15 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.Occupation = customerDto.Occupation;
                     customer.Nationality = customerDto.Nationality;
                     customer.Mobile_No = customerDto.Mobile_No;
-                    customer.Email_Address = "";
+                  //  customer.Email_Address = "";
                     customer.Area = customerDto.Area;
                     customer.Block = customerDto.Block;
                     customer.Street = customerDto.Street;
                     customer.Building = customerDto.Building;
                     customer.Floor = customerDto.Floor;
                     customer.Flat = customerDto.Flat;
-                    customer.Login_Id = "33784939944";
-                    customer.Device_Key = "e537487483sj";
+                    customer.Login_Id = customerDto.Identification_Number;
+                   // customer.Device_Key = "e537487483sj";
                     customer.UID = Guid.NewGuid();
                     customer.CreatedBy = 1;
                     customer.UID_Token = Guid.NewGuid();
@@ -212,8 +209,8 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.InvalidTryCount = 0;
                     customer.Civil_Id_Front = customerDto.Civil_Id_Front;
                     customer.Civil_Id_Back = customerDto.Civil_Id_Back;
-                    customer.Pep_Status = false;
-                    customer.Pep_Description = "";
+                   // customer.Pep_Status = false;
+                   // customer.Pep_Description = "";
                     customer.Identification_Additional_Detail = customerDto.Identification_Additional_Detail;
                     customer.Residence_Type = customerDto.Residence_Type;
                     customer.Telephone_No = customerDto.Telephone_No;
@@ -231,8 +228,8 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.Compliance_Comments = customerDto.Compliance_Comments;
                     customer.IsVerified = customerDto.IsReviwed == null ? 0 : 1;
                     customer.IsReviwed = customerDto.IsReviwed == null ? false : true;
-                    customer.Prod_Remitter_Id = 100;
-                    customer.Is_Profile_Completed = 0;
+                   // customer.Prod_Remitter_Id = 100;
+                   // customer.Is_Profile_Completed = 1;
                 }
 
                 // customer.Prod_Remitter_Id = objKuaiex_Prod.GetRemittanceIdByIdentificationNumber(customerDto.Identification_Number);

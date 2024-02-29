@@ -122,6 +122,8 @@
     <Content Include="Assets\PagesJS\City.js" />
     <Content Include="Assets\PagesJS\ContactUs.js" />
     <Content Include="Assets\PagesJS\Country.js" />
+    <Content Include="Assets\PagesJS\CountryCurrency.js" />
+    <Content Include="Assets\PagesJS\Currency.js" />
     <Content Include="Assets\PagesJS\DashoBoard.js" />
     <Content Include="Assets\PagesJS\FAQS.js" />
     <Content Include="Assets\PagesJS\PrivacyPolicy.js" />
@@ -772,6 +774,8 @@
     <Compile Include="Controllers\ChatController.cs" />
     <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\CountryController.cs" />
+    <Compile Include="Controllers\CountryCurrencyController.cs" />
+    <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\GeneralSettingsController.cs" />
     <Compile Include="Controllers\KUAIEX_PROD_Controller.cs" />
@@ -782,6 +786,8 @@
     <Compile Include="Controllers\UserManagementController.cs" />
     <Compile Include="DTO\Beneficiary\Bank_Branch_MstDTO.cs" />
     <Compile Include="DTO\Beneficiary\BeneficiaryDTO.cs" />
+    <Compile Include="DTO\Beneficiary\LoadBeneficiaryDTO.cs" />
+    <Compile Include="DTO\CountryCurrency\CountryCurrencyDTO.cs" />
     <Compile Include="DTO\Customer\CustomerDTO.cs" />
     <Compile Include="DTO\Customer\EditCustomerDTO.cs" />
     <Compile Include="DTO\Remittance_TrnDetailDTO.cs" />
@@ -796,8 +802,12 @@
     <Compile Include="Services\BeneficiaryServices\Impl\BeneficiaryService.cs" />
     <Compile Include="Services\CityServices\ICityService.cs" />
     <Compile Include="Services\CityServices\Impl\CityService.cs" />
+    <Compile Include="Services\CountryCurrencyServices\ICountryCurrencyService.cs" />
+    <Compile Include="Services\CountryCurrencyServices\Impl\CountryCurrencyService.cs" />
     <Compile Include="Services\CountryServices\ICountryService.cs" />
     <Compile Include="Services\CountryServices\Impl\CountryService.cs" />
+    <Compile Include="Services\CurrencyServices\ICurrencyService.cs" />
+    <Compile Include="Services\CurrencyServices\Impl\CurrencyService.cs" />
     <Compile Include="Services\RemitterServices\Impl\RemitterService.cs" />
     <Compile Include="Services\RemitterServices\IRemitterService.cs" />
     <Compile Include="Services\RemittanceTransactionServices\Impl\RemittanceTransactionSerevice.cs" />
@@ -874,6 +884,9 @@
     <Content Include="Views\BeneficiaryValidation\Index.cshtml" />
     <Content Include="Views\RemittanceTransaction\Index.cshtml" />
     <Content Include="Views\Remitter\Add.cshtml" />
+    <Content Include="Views\CountryCurrency\Index.cshtml" />
+    <Content Include="Views\Currency\Index.cshtml" />
+    <Content Include="Views\Beneficiary\AddBeneficiary.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

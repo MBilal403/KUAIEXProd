@@ -33,8 +33,7 @@ var LoadGridData = function () {
         "paging": true,
         "order": [[1, 'asc']],
         "language": {
-            "emptyTable": "No record found.",
-            "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw" style="color:#2a2b2b;"></i><span class="sr-only">Loading...</span> '
+            "emptyTable": "No record found."
         },
         "columns": [
             {
@@ -60,8 +59,9 @@ var LoadGridData = function () {
             {
                 "data": "Identification_Expiry_Date",
                 "render": function (data, type, row) {
-                    console.log(data);
-                    return data.split('T')[0];
+                    var timestamp = parseInt(data.match(/\d+/)[0]); 
+                    var date = new Date(timestamp);
+                    return date.toLocaleDateString();
                 },
                 "autoWidth": true,
                 "searchable": true

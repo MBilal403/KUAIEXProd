@@ -56,7 +56,7 @@ namespace DataAccessLayer.Entities
         public Nullable<int> Routing_Bank_Branch_Id { get; set; }
         public Nullable<int> Remittance_Subtype_Id { get; set; }
         public string Birth_Place { get; set; }
-        public string IsBannedList { get; set; }
+        public char IsBannedList { get; set; }
         public Nullable<DateTime> BannedListCreatedOn { get; set; }
         public Nullable<int> BannedListClearedBy { get; set; }
         public string TransFastInfo { get; set; }

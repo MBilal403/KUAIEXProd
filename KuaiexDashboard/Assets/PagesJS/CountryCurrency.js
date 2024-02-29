@@ -4,16 +4,35 @@ $(document).ready(function () {
     handleStaff();
     LoadGridData();
     LoadCountry();
+    $('#Currency_Id').chosen();
 
     $(document).ajaxStart(function () {
-   
+
         $("#wait").css("display", "block");
     });
-
     $(document).ajaxComplete(function () {
         $("#wait").css("display", "none");
     });
+    /*   $('#CommissionRate1').on('input', function () {
+           validateInput($(this));
+       });
+       $('#CommissionRate2').on('input', function () {
+           validateInput($(this));
+       });
+       $('#AmountLimit').on('input', function () {
+           validateInput($(this));
+       });*/
+
+
 });
+
+function validateInput(input) {
+    const value = parseFloat(input.val());
+    const decimalCount = (value.toString().split('.')[1] || []).length;
+    if (decimalCount > 3) {
+        swal("Error", "Maximum 3 digits allowed after the decimal point", "error");
+    }
+}
 
 $(".DigitOnly").keypress(function (e) {
     e = e || window.event;
@@ -45,38 +64,33 @@ $(".DigitOnly").keypress(function (e) {
 
 // Edit method
 $(document).on('click', '.btn-edit', function () {
-    var uid = $(this).attr('id');
+    var UID = $(this).attr('id');
     var data = new FormData();
-    data.append("UID", uid);
+    data.append("UID", UID);
 
     $.ajax({
         type: "POST",
         cache: false,
-        url: "../country/Edit",
+        url: "../CountryCurrency/Edit",
         data: data,
         processData: false,
         contentType: false,
         success: function (Rdata) {
             if (Rdata != 'error') {
                 var obj = JSON.parse(Rdata);
-
-                $('#UID').val(obj.UID);
-                $('#Name').val(obj.Name);
-                $('#Nationality').val(obj.Nationality);
-                $('#Alpha_2_Code').val(obj.Alpha_2_Code);
-                $('#Alpha_3_Code').val(obj.Alpha_3_Code);
-                $('#Country_Dialing_Code').val(obj.Country_Dialing_Code);
-                $('#Comission').val(obj.Comission);
-                $('#City_Id').val(obj.City_Id).prop('Enable', 'true').trigger("chosen:updated");
+                  $('.required-text').text('');
+                $('#Id').val(obj.Id);
+                $('#Country_Id').val(obj.Country_Id).prop('Enable', 'true').trigger("chosen:updated");
+                LoadCurrency(obj.Country_Id);
+                $('#Currency_Id').val(obj.Currency_Id).prop('Enable', 'true').trigger("chosen:updated");
+                $('#CommissionRate1').val(obj.CommissionRate1);
+                $('#CommissionRate2').val(obj.CommissionRate2);
+                $('#AmountLimit').val(obj.AmountLimit);
+                $('#DisplayOrder').val(obj.DisplayOrder).prop('Enable', 'true').trigger("chosen:updated");
                 $('#btn-save').html("<i class='fa fa-save'></i> Update");
                 IsEditMode = true;
-
-                if (obj.Status) {
-                    $("#Status").iCheck('check');
-                } else {
-                    $("#Status").iCheck('uncheck');
-                }
-
+                $('#Country_Id').prop('disabled', true).trigger('chosen:updated');
+                $('#Currency_Id').prop('disabled', true).trigger('chosen:updated');
                 $(window).scrollTop(0);
             } else {
                 ShowErrorAlert("Error", "Some Error Occurred!");
@@ -89,59 +103,19 @@ $(document).on('click', '.btn-edit', function () {
     });
 });
 
-$("#Status").on('ifChecked', function (event) {
-    $(this).closest("input").attr('value', 1);
-});
-
-$("#Status").on('ifUnchecked', function (event) {
-    $(this).closest("input").attr('value', 0);
-});
-
 // Handle stuff
 var handleStaff = function () {
-    $('.frmAddUsers').validate({
-        errorElement: 'span',
-        errorClass: 'help-block',
-        focusInvalid: false,
-        ignore: "",
-        rules: {
-            Name: {
-                required: true,
-                maxlength: 50
-            },
-            Nationality: {
-                required: true,
-                maxlength: 50
-            },
-            CityId: {
-                required: true,
-                maxlength: 50
-            },
-        },
-        invalidHandler: function (event, validator) { },
-        highlight: function (element) {
-            $(element).closest('.form-group').addClass('has-error');
-        },
-        success: function (label) {
-            label.closest('.form-group').removeClass('has-error');
-            label.remove();
-        },
-        errorPlacement: function (error, element) {
-            if (element.closest('.input-icon').size() === 1) {
-                error.insertAfter(element.closest('.input-icon'));
-            } else {
-                error.insertAfter(element);
-            }
-        },
-        submitHandler: function (form) {
+    $(".frmAddCountryCurrency").submit(function (event) {
+        event.preventDefault();
+        if (validateForm()) {
             $('#btn-save').attr('disabled', 'true');
-            $(".frmAddUsers :disabled").removeAttr('disabled');
+            $(".frmAddCountryCurrency :disabled").removeAttr('disabled');
             if (!IsEditMode) {
                 $.post(
-                    "../country/AddCountry",
-                    $(".frmAddUsers").serialize(),
+                    "../CountryCurrency/AddCountryCurrency",
+                    $(".frmAddCountryCurrency").serialize(),
                     function (value) {
-                      if (value == 'duplicate_value_exist') {
+                        if (value == 'duplicate_value_exist') {
                             swal("Error", "Country Already Exist", "error");
                             $('#btn-save').removeAttr('disabled');
                         }
@@ -166,13 +140,13 @@ var handleStaff = function () {
                 );
             } else {
                 $.post(
-                    "../country/EditCountry",
-                    $(".frmAddUsers").serialize(),
+                    "../CountryCurrency/EditCountryCurrency",
+                    $(".frmAddCountryCurrency").serialize(),
                     function (value) {
-                        if (value == 'exist') {
+                        if (value == 'duplicate_value_exist') {
                             swal(
                                 'Warning',
-                                'User Name Already Exist!',
+                                'Country Currency Name Already Exist!',
                                 'warning'
                             );
                             return;
@@ -180,7 +154,7 @@ var handleStaff = function () {
                         if (value != 'error') {
                             swal(
                                 'Success',
-                                'User Updated Successfully!',
+                                'Country Currency Updated Successfully!',
                                 'success'
                             );
                             resetForm();
@@ -195,22 +169,51 @@ var handleStaff = function () {
                     "text"
                 );
             }
-            return false;
         }
     });
 
-    $('.frmAddUsers').keypress(function (e) {
+function validateForm() {
+    var isValid = true;
+
+    $('.required-text').text('');
+
+    var fieldsToValidate = ['Country_Id', 'Currency_Id', 'CommissionRate1', 'AmountLimit', 'CommissionRate2', 'DisplayOrder'];
+
+    fieldsToValidate.forEach(function (fieldName) {
+        var fieldValue = $('#' + fieldName).val().trim();
+
+        if (fieldValue === '') {
+            isValid = false;
+            $('#Val' + fieldName).text(' required ');
+        }
+    });
+
+    if (isValid) {
+        // Check if CommissionRate2 is not greater than CommissionRate1
+        var commissionRate1 = parseFloat($('#CommissionRate1').val());
+        var commissionRate2 = parseFloat($('#CommissionRate2').val());
+
+        if (isNaN(commissionRate1) || isNaN(commissionRate2) || commissionRate2 > commissionRate1) {
+            isValid = false;
+            swal("Error", "Commission Rate 2 must be less than or equal to Commission Rate 1", "error");
+        }
+    }
+
+    return isValid;
+}
+
+    $('.frmAddCountryCurrency').keypress(function (e) {
         if (e.which == 13) {
-            if ($('.frmAddUsers').validate().form()) {
-                $('.frmAddUsers').submit();
+            if ($('.frmAddCountryCurrency').validate().form()) {
+                $('.frmAddCountryCurrency').submit();
             }
             return false;
         }
     });
 
     jQuery('#btn-save').click(function () {
-        if ($('.frmAddUsers').validate().form()) {
-            $('.frmAddUsers').submit();
+        if ($('.frmAddCountryCurrency').validate().form()) {
+            $('.frmAddCountryCurrency').submit();
         }
     });
 }
@@ -219,8 +222,8 @@ var handleStaff = function () {
 var LoadGridData = function () {
     $('#tblUsers').DataTable({
         "destroy": true,
-        "lengthMenu": [5, 25, 50, 75, 100],
-        "sAjaxSource": "../country/LoadGrid",
+        "lengthMenu": [5, 10, 25, 50, 100],
+        "sAjaxSource": "../CountryCurrency/LoadGrid",
         "bServerSide": true,
         "bProcessing": true,
         "paging": true,
@@ -230,34 +233,36 @@ var LoadGridData = function () {
         },
         "columns": [
             {
-                "data": "Name",
+                "data": "Country_Name",
                 "autoWidth": true,
                 "searchable": true
             },
             {
-                "data": "Nationality",
+                "data": "Currency_Name",
                 "autoWidth": true,
                 "searchable": true
             },
             {
-                "data": "Alpha_2_Code",
+                "data": "CommissionRate1",
                 "autoWidth": true,
                 "searchable": true
             },
             {
-                "data": "City",
+                "data": "CommissionRate2",
                 "autoWidth": true,
                 "searchable": true
             },
             {
-                "data": "Status",
-                "render": function (data, type, row) {
-             
-                    return data === 'A' ? '<span class="label label-success label-xs">Active</span>' : '<span class="label label-danger label-xs">In Active</span>';
-                },
+                "data": "AmountLimit",
                 "autoWidth": true,
                 "searchable": true
             },
+            {
+                "data": "DisplayOrder",
+                "autoWidth": true,
+                "searchable": true
+            },
+
             {
                 "data": "UID",
                 "render": function (data, type, row) {
@@ -275,74 +280,96 @@ var LoadGridData = function () {
 
 // Reset values
 function resetForm() {
-    IsEditMode = false;
-    LoadCountry();
-    $('#Name').val('');
-    $('#City_Id').val('');
-    $('#Country_Dialing_Code').val('');
-    $('#Alpha_3_Code').val('');
-    $('#Alpha_2_Code').val('');
-    $('#Nationality').val('');
-    $('#Comission').val('');
-    $("#Status").iCheck('uncheck');
+    // Reset input values
+    $('.required-text').text('');
+    $('#Country_Id').prop('disabled', false).trigger('chosen:updated');
+    $('#Currency_Id').prop('disabled', false).trigger('chosen:updated');
+    $('.frmAddCountryCurrency input[type="text"]').val('');
+    $('.frmAddCountryCurrency input[type="number"]').val('');
+    $('.frmAddCountryCurrency select').each(function () {
+        // Manually set the selected option to the one with value '1'
+        $(this).find('option[value="1"]').prop('selected', true);
+    });
+    // Reset select values
+    $('.frmAddCountryCurrency select:not(#DisplayOrder)').val('');
+    $('.chzn').trigger('chosen:updated');
+    $('#Currency_Id').chosen();
+
+    var $el = $('#Currency_Id');
+    $el.chosen('destroy');
+    $el.empty();
+
+
+    $el.trigger("liszt:updated");
+    $el.chosen();
     $('#btn-save').html("<i class='fa fa-save'></i> Save");
-    $('#City_Id').val("").trigger("chosen:updated");
-    $('#btn-save').removeAttr('disabled');
 }
 
 $('#btn-refresh').click(function () {
     resetForm();
 });
 
-// For number validation
-function CellNumberValidator(CellNo) {
-    var phoneno = /^[9]{1}[2]{1}[0-9]{10}$/;
-    if (CellNo.match(phoneno)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// Load City
+// Load Country
 var LoadCountry = function () {
     $.ajax({
         type: "POST",
         cache: false,
-        url: "../Country/LoadCity",
+        url: "../CountryCurrency/LoadCountry",
         processData: false,
         contentType: false,
         success: function (data) {
             var sch = JSON.parse(data);
-            var $el = $('#City_Id');
+            var $el = $('#Country_Id');
             $el.empty();
             if (sch.length > 0) {
-                $el.append('<option value="">' + "Select City" + '</option>');
+                $el.append('<option value="">' + "Select Country" + '</option>');
                 $.each(sch, function (idx, obj) {
                     $el.append('<option value="' + obj.Id + '">' + obj.Name + '</option>');
                 });
             } else {
-                $el.append('<option value="">' + "Select City" + '</option>');
+                $el.append('<option value="">' + "Select Country" + '</option>');
             }
             $el.trigger("liszt:updated");
             $el.chosen();
         }
     });
 }
+$('#Country_Id').on('change', function () {
+    var Id = $('#Country_Id').val();
+    LoadCurrency(Id);
+});
 
-$('#btn-sync').on('click', function () {
+var LoadCurrency = function (Id) {
+    $("#wait").css("display", "block");
     $.ajax({
         type: "POST",
         cache: false,
-        url: "../Country/SynchronizeRecords",
+        async: false,
+        url: "../CountryCurrency/LoadCurrency?CountryId=" + Id,
         processData: false,
         contentType: false,
+        async: false,
         success: function (data) {
-            swal(
-                'Success',
-                data + ' Records Synchronized Successfully.',
-                'success'
-            );
+            var sch = JSON.parse(data);
+
+            var $el = $('#Currency_Id');
+            $el.chosen('destroy');
+            $el.empty();
+            if (sch.length > 0) {
+                $el.append('<option value="">' + "Select Currency" + '</option>');
+                $.each(sch, function (idx, obj) {
+                    $el.append('<option value="' + obj.CurrencyId + '">' + obj.CurrencyName + ' ' + obj.CurrencyCode + '</option>');
+                });
+            }
+            else {
+                $el.append('<option value="">' + "Select Currency" + '</option>');
+            }
+            $el.trigger("liszt:updated");
+            $el.chosen();
+        },
+        complete: function () {
+            $("#wait").css("display", "none");
         }
     });
-});
+};
+

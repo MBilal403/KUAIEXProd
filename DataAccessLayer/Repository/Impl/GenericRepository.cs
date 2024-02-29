@@ -191,7 +191,7 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
-        public T FindBy(Expression<Func<T, bool>> condition = null)
+        public T FindBy(Expression<Func<T, bool>> condition)
         {
             using (var connection = connectionHandler.OpenConnection())
             {
@@ -216,10 +216,28 @@ namespace KuaiexDashboard.Repository.Impl
                                 T result = Activator.CreateInstance<T>();
                                 foreach (var property in properties)
                                 {
-                                    if (!object.Equals(reader[property.Name], DBNull.Value))
+
+                                    if (!object.Equals(reader[property.Name], DBNull.Value) && !object.Equals(reader[property.Name], "\0"))
                                     {
-                                        property.SetValue(result, reader[property.Name]);
+                                        var columnValue = reader[property.Name];
+
+                                        if (columnValue is string stringValue )
+                                        {
+
+                                            property.SetValue(result, stringValue.ToString());
+                                        }
+                                        else if (columnValue is char charValue)
+                                        {
+                                            // If the value is already a char, set it directly
+                                            property.SetValue(result, Convert.ToChar(columnValue));
+                                        }
+                                        else
+                                        {
+                                            property.SetValue(result, columnValue);
+                                        }
                                     }
+
+
                                 }
                                 return result;
                             }
@@ -283,7 +301,7 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
-        public void Update(T entity,string whereClause)
+        public void Update(T entity, string whereClause)
         {
             using (var connection = connectionHandler.OpenConnection())
             {
@@ -358,12 +376,12 @@ namespace KuaiexDashboard.Repository.Impl
                     var startRow = page;
                     var endRow = startRow + pageSize - 1;
 
-           
+
                     using (var command = new SqlCommand(storedProcedureName, connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
 
-                     
+
                         command.Parameters.AddWithValue("@StartRow", startRow);
                         command.Parameters.AddWithValue("@EndRow", endRow);
                         command.Parameters.AddWithValue("@searchString", "%" + searchString + "%");
@@ -421,7 +439,7 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
-        public List<TResult> GetDataFromSP<TResult>(string storedProcedureName) where TResult : class
+        public List<TResult> GetDataFromSP<TResult>(string storedProcedureName, Nullable<int> SPId = null) where TResult : class
         {
             using (var connection = connectionHandler.OpenConnection())
             {
@@ -431,6 +449,8 @@ namespace KuaiexDashboard.Repository.Impl
                     using (var command = new SqlCommand(storedProcedureName, connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
+                        if (SPId != null)
+                            command.Parameters.AddWithValue("@SPId", SPId);
 
                         using (var adapter = new SqlDataAdapter(command))
                         {

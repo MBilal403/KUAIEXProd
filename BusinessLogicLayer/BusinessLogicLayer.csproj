@@ -91,8 +91,6 @@
     <Compile Include="DomainEntities\BeneficiaryValidation.cs" />
     <Compile Include="DomainEntities\BranchesInfo.cs" />
     <Compile Include="DomainEntities\ContactUs.cs" />
-    <Compile Include="DomainEntities\CountryCurrency.cs" />
-    <Compile Include="DomainEntities\Currency.cs" />
     <Compile Include="DomainEntities\Currency_Result.cs" />
     <Compile Include="DomainEntities\CustomerChatDetail_Result.cs" />
     <Compile Include="DomainEntities\CustomerChatMain_Result.cs" />

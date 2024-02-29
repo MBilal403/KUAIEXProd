@@ -64,7 +64,7 @@ namespace KuaiexDashboard
                     {
                         Beneficiary beneficiary = new Beneficiary
                         {
-                            Beneficiary_Id =Convert.ToInt32( row.Field<int?>("Beneficiary_Id")),
+                            Beneficiary_Id = Convert.ToInt32(row.Field<int>("Beneficiary_Id")),
                             Customer_Id = Convert.ToInt32(row.Field<int?>("Customer_Id")),
                             FullName = row.Field<string>("FullName"),
                             Address_Line1 = row.Field<string>("Address_Line1"),
@@ -72,7 +72,7 @@ namespace KuaiexDashboard
                             Address_Line3 = row.Field<string>("Address_Line3"),
                             Country_Id = row.Field<int?>("Country_Id"),
                             Currency_Id = row.Field<int?>("Currency_Id"),
-                            Birth_Date = row.Field<DateTime?>("Birth_Date"),
+                            Birth_Date = row.Field<DateTime>("Birth_Date"),
                             Remittance_Purpose = row.Field<string>("Remittance_Purpose"),
                             Remittance_Type_Id = row.Field<int?>("Remittance_Type_Id"),
                             Remittance_Instruction = row.Field<string>("Remittance_Instruction"),
@@ -84,8 +84,8 @@ namespace KuaiexDashboard
                             Identification_Type = row.Field<int?>("Identification_Type"),
                             Identification_No = row.Field<string>("Identification_No"),
                             Identification_Remarks = row.Field<string>("Identification_Remarks"),
-                            Identification_Issue_Date = row.Field<DateTime?>("Identification_Issue_Date"),
-                            Identification_Expiry_Date = row.Field<DateTime?>("Identification_Expiry_Date"),
+                            Identification_Issue_Date = row.Field<DateTime>("Identification_Issue_Date"),
+                            Identification_Expiry_Date = row.Field<DateTime>("Identification_Expiry_Date"),
                             Bank_Id = row.Field<int?>("Bank_Id"),
                             Branch_Id = row.Field<int?>("Branch_Id"),
                             Bank_Account_No = row.Field<string>("Bank_Account_No"),
@@ -110,16 +110,16 @@ namespace KuaiexDashboard
                             Routing_Bank_Branch_Id = row.Field<int?>("Routing_Bank_Branch_Id"),
                             Remittance_Subtype_Id = row.Field<int?>("Remittance_Subtype_Id"),
                             Birth_Place = row.Field<string>("Birth_Place"),
-                            IsBannedList = row.Field<string>("IsBannedList"),
-                            BannedListCreatedOn = row.Field<DateTime?>("BannedListCreatedOn"),
+                            IsBannedList = row.Field<char>("IsBannedList"),
+                            BannedListCreatedOn = row.Field<DateTime>("BannedListCreatedOn"),
                             BannedListClearedBy = row.Field<int?>("BannedListClearedBy"),
                             TransFastInfo = row.Field<string>("TransFastInfo"),
-                            UID = row.Field<Guid?>("UID"),
+                            UID = row.Field<Guid>("UID"),
                             CreatedBy = row.Field<int?>("CreatedBy"),
-                            CreatedOn = row.Field<DateTime?>("CreatedOn"),
+                            CreatedOn = row.Field<DateTime>("CreatedOn"),
                             CreatedIp = row.Field<string>("CreatedIp"),
                             UpdatedBy = row.Field<int?>("UpdatedBy"),
-                            UpdatedOn = row.Field<DateTime?>("UpdatedOn"),
+                            UpdatedOn = row.Field<DateTime>("UpdatedOn"),
                             UpdatedIp = row.Field<string>("UpdatedIp"),
                             Prod_Beneficiary_Id = row.Field<int?>("Prod_Beneficiary_Id"),
                             Remittance_Purpose_Detail = row.Field<string>("Remittance_Purpose_Detail"),
@@ -130,7 +130,6 @@ namespace KuaiexDashboard
                             Nationality_Id = row.Field<int?>("Nationality_Id"),
                             Bank_Account_Title = row.Field<string>("Bank_Account_Title"),
                         };
-
                         beneficiaries.Add(beneficiary);
                     }
                 }
@@ -239,11 +238,11 @@ namespace KuaiexDashboard
                                 Routing_Bank_Branch_Id = reader.GetInt32(reader.GetOrdinal("Routing_Bank_Branch_Id")),
                                 Remittance_Subtype_Id = reader.GetInt32(reader.GetOrdinal("Remittance_Subtype_Id")),
                                 Birth_Place = reader.GetString(reader.GetOrdinal("Birth_Place")),
-                                IsBannedList = reader.GetString(reader.GetOrdinal("IsBannedList")),
+                                IsBannedList = (char)reader.GetValue(reader.GetOrdinal("IsBannedList")),
                                 BannedListCreatedOn = reader.GetDateTime(reader.GetOrdinal("BannedListCreatedOn")),
                                 BannedListClearedBy = reader.GetInt32(reader.GetOrdinal("BannedListClearedBy")),
                                 TransFastInfo = reader.GetString(reader.GetOrdinal("TransFastInfo")),
-                                UID = (Guid?)reader.GetValue(reader.GetOrdinal("UID")),
+                                UID = (Guid)reader.GetValue(reader.GetOrdinal("UID")),
                                 CreatedBy = reader.GetInt32(reader.GetOrdinal("CreatedBy")),
                                 CreatedOn = reader.GetDateTime(reader.GetOrdinal("CreatedOn")),
                                 CreatedIp = reader.GetString(reader.GetOrdinal("CreatedIp")),

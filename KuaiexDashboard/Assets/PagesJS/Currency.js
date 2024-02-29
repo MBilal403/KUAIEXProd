@@ -3,80 +3,47 @@
 $(document).ready(function () {
     handleStaff();
     LoadGridData();
-    LoadCountry();
-
+    
     $(document).ajaxStart(function () {
-   
+
         $("#wait").css("display", "block");
     });
-
     $(document).ajaxComplete(function () {
         $("#wait").css("display", "none");
     });
 });
 
-$(".DigitOnly").keypress(function (e) {
-    e = e || window.event;
-    var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
-    if (!charCode || charCode == 8 /* Backspace */) {
-        return;
-    }
-
-    var typedChar = String.fromCharCode(charCode);
-
-    if (typedChar != "2" && this.value == "9") {
-        return false;
-    }
-
-    if (typedChar != "9" && this.value == "") {
-        return false;
-    }
-
-    if (/\d/.test(typedChar)) {
-        return;
-    }
-
-    if (typedChar == "-" && this.value == "") {
-        return;
-    }
-
-    return false;
-});
 
 // Edit method
 $(document).on('click', '.btn-edit', function () {
-    var uid = $(this).attr('id');
+    var UID = $(this).attr('id');
     var data = new FormData();
-    data.append("UID", uid);
+    data.append("UID", UID);
 
     $.ajax({
         type: "POST",
         cache: false,
-        url: "../country/Edit",
+        url: "../Currency/Edit",
         data: data,
         processData: false,
         contentType: false,
         success: function (Rdata) {
             if (Rdata != 'error') {
                 var obj = JSON.parse(Rdata);
-
-                $('#UID').val(obj.UID);
+                $('.required-text').text('');
+                $('#Id').val(obj.Id);
                 $('#Name').val(obj.Name);
-                $('#Nationality').val(obj.Nationality);
-                $('#Alpha_2_Code').val(obj.Alpha_2_Code);
-                $('#Alpha_3_Code').val(obj.Alpha_3_Code);
-                $('#Country_Dialing_Code').val(obj.Country_Dialing_Code);
-                $('#Comission').val(obj.Comission);
-                $('#City_Id').val(obj.City_Id).prop('Enable', 'true').trigger("chosen:updated");
-                $('#btn-save').html("<i class='fa fa-save'></i> Update");
-                IsEditMode = true;
-
-                if (obj.Status) {
+                $('#Code').val(obj.Code);
+                $('#DD_Rate').val(obj.DD_Rate);
+                if (obj.Status == "A") {
                     $("#Status").iCheck('check');
                 } else {
                     $("#Status").iCheck('uncheck');
                 }
-
+                $('#btn-save').html("<i class='fa fa-save'></i> Update");
+                IsEditMode = true;
+                $('#Name').prop('disabled', true);
+                $('#Code').prop('disabled', true);
                 $(window).scrollTop(0);
             } else {
                 ShowErrorAlert("Error", "Some Error Occurred!");
@@ -89,59 +56,19 @@ $(document).on('click', '.btn-edit', function () {
     });
 });
 
-$("#Status").on('ifChecked', function (event) {
-    $(this).closest("input").attr('value', 1);
-});
-
-$("#Status").on('ifUnchecked', function (event) {
-    $(this).closest("input").attr('value', 0);
-});
-
 // Handle stuff
 var handleStaff = function () {
-    $('.frmAddUsers').validate({
-        errorElement: 'span',
-        errorClass: 'help-block',
-        focusInvalid: false,
-        ignore: "",
-        rules: {
-            Name: {
-                required: true,
-                maxlength: 50
-            },
-            Nationality: {
-                required: true,
-                maxlength: 50
-            },
-            CityId: {
-                required: true,
-                maxlength: 50
-            },
-        },
-        invalidHandler: function (event, validator) { },
-        highlight: function (element) {
-            $(element).closest('.form-group').addClass('has-error');
-        },
-        success: function (label) {
-            label.closest('.form-group').removeClass('has-error');
-            label.remove();
-        },
-        errorPlacement: function (error, element) {
-            if (element.closest('.input-icon').size() === 1) {
-                error.insertAfter(element.closest('.input-icon'));
-            } else {
-                error.insertAfter(element);
-            }
-        },
-        submitHandler: function (form) {
+    $(".frmAddCurrency").submit(function (event) {
+        event.preventDefault();
+        if (validateForm()) {
             $('#btn-save').attr('disabled', 'true');
-            $(".frmAddUsers :disabled").removeAttr('disabled');
+            $(".frmAddCurrency :disabled").removeAttr('disabled');
             if (!IsEditMode) {
                 $.post(
-                    "../country/AddCountry",
-                    $(".frmAddUsers").serialize(),
+                    "../Currency/AddCurrency",
+                    $(".frmAddCurrency").serialize(),
                     function (value) {
-                      if (value == 'duplicate_value_exist') {
+                        if (value == 'duplicate_value_exist') {
                             swal("Error", "Country Already Exist", "error");
                             $('#btn-save').removeAttr('disabled');
                         }
@@ -166,13 +93,13 @@ var handleStaff = function () {
                 );
             } else {
                 $.post(
-                    "../country/EditCountry",
-                    $(".frmAddUsers").serialize(),
+                    "../Currency/EditCurrency",
+                    $(".frmAddCurrency").serialize(),
                     function (value) {
-                        if (value == 'exist') {
+                        if (value == 'duplicate_value_exist') {
                             swal(
                                 'Warning',
-                                'User Name Already Exist!',
+                                'Currency Name Already Exist!',
                                 'warning'
                             );
                             return;
@@ -180,7 +107,7 @@ var handleStaff = function () {
                         if (value != 'error') {
                             swal(
                                 'Success',
-                                'User Updated Successfully!',
+                                'Currency Updated Successfully!',
                                 'success'
                             );
                             resetForm();
@@ -195,22 +122,45 @@ var handleStaff = function () {
                     "text"
                 );
             }
-            return false;
         }
+       
     });
 
-    $('.frmAddUsers').keypress(function (e) {
+    function validateForm() {
+        var isValid = true;
+
+        // Reset previous validation messages
+        $('.required-text').text('');
+
+        // Define the fields to be validated
+        var fieldsToValidate = ['Name', 'Code', 'DD_Rate'];
+
+        // Check each field
+        fieldsToValidate.forEach(function (fieldName) {
+            var fieldValue = $('#' + fieldName).val().trim();
+
+            if (fieldValue === '') {
+                isValid = false;
+                $('#Val' + fieldName).text(' required.');
+            }
+        });
+
+        return isValid;
+    }
+
+
+    $('.frmAddCurrency').keypress(function (e) {
         if (e.which == 13) {
-            if ($('.frmAddUsers').validate().form()) {
-                $('.frmAddUsers').submit();
+            if ($('.frmAddCurrency').validate().form()) {
+                $('.frmAddCurrency').submit();
             }
             return false;
         }
     });
 
     jQuery('#btn-save').click(function () {
-        if ($('.frmAddUsers').validate().form()) {
-            $('.frmAddUsers').submit();
+        if ($('.frmAddCurrency').validate().form()) {
+            $('.frmAddCurrency').submit();
         }
     });
 }
@@ -219,8 +169,8 @@ var handleStaff = function () {
 var LoadGridData = function () {
     $('#tblUsers').DataTable({
         "destroy": true,
-        "lengthMenu": [5, 25, 50, 75, 100],
-        "sAjaxSource": "../country/LoadGrid",
+        "lengthMenu": [5, 10, 25, 50, 100],
+        "sAjaxSource": "../Currency/LoadGrid",
         "bServerSide": true,
         "bProcessing": true,
         "paging": true,
@@ -235,24 +185,19 @@ var LoadGridData = function () {
                 "searchable": true
             },
             {
-                "data": "Nationality",
+                "data": "Code",
                 "autoWidth": true,
                 "searchable": true
             },
             {
-                "data": "Alpha_2_Code",
-                "autoWidth": true,
-                "searchable": true
-            },
-            {
-                "data": "City",
+                "data": "DD_Rate",
                 "autoWidth": true,
                 "searchable": true
             },
             {
                 "data": "Status",
                 "render": function (data, type, row) {
-             
+
                     return data === 'A' ? '<span class="label label-success label-xs">Active</span>' : '<span class="label label-danger label-xs">In Active</span>';
                 },
                 "autoWidth": true,
@@ -275,60 +220,20 @@ var LoadGridData = function () {
 
 // Reset values
 function resetForm() {
-    IsEditMode = false;
-    LoadCountry();
-    $('#Name').val('');
-    $('#City_Id').val('');
-    $('#Country_Dialing_Code').val('');
-    $('#Alpha_3_Code').val('');
-    $('#Alpha_2_Code').val('');
-    $('#Nationality').val('');
-    $('#Comission').val('');
+    // Reset input values
+    $('#Name').prop('disabled', false);
+    $('#Code').prop('disabled', false);
+    $('.frmAddCurrency input[type="text"]').val('');
+    $('.frmAddCurrency input[type="number"]').val('');
+
     $("#Status").iCheck('uncheck');
     $('#btn-save').html("<i class='fa fa-save'></i> Save");
-    $('#City_Id').val("").trigger("chosen:updated");
-    $('#btn-save').removeAttr('disabled');
 }
 
 $('#btn-refresh').click(function () {
     resetForm();
 });
 
-// For number validation
-function CellNumberValidator(CellNo) {
-    var phoneno = /^[9]{1}[2]{1}[0-9]{10}$/;
-    if (CellNo.match(phoneno)) {
-        return true;
-    } else {
-        return false;
-    }
-}
-
-// Load City
-var LoadCountry = function () {
-    $.ajax({
-        type: "POST",
-        cache: false,
-        url: "../Country/LoadCity",
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            var sch = JSON.parse(data);
-            var $el = $('#City_Id');
-            $el.empty();
-            if (sch.length > 0) {
-                $el.append('<option value="">' + "Select City" + '</option>');
-                $.each(sch, function (idx, obj) {
-                    $el.append('<option value="' + obj.Id + '">' + obj.Name + '</option>');
-                });
-            } else {
-                $el.append('<option value="">' + "Select City" + '</option>');
-            }
-            $el.trigger("liszt:updated");
-            $el.chosen();
-        }
-    });
-}
 
 $('#btn-sync').on('click', function () {
     $.ajax({

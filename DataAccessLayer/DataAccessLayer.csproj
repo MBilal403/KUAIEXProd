@@ -61,6 +61,8 @@
     <Compile Include="Entities\Beneficiary.cs" />
     <Compile Include="Entities\City.cs" />
     <Compile Include="Entities\Country.cs" />
+    <Compile Include="Entities\CountryCurrency.cs" />
+    <Compile Include="Entities\Currency.cs" />
     <Compile Include="Entities\Customer.cs" />
     <Compile Include="Entities\Customer_Security_Questions.cs" />
     <Compile Include="Entities\Individual_KYC.cs" />
@@ -72,6 +74,7 @@
     <Compile Include="Helpers\ConditionToWhereClauseConverter.cs" />
     <Compile Include="Helpers\JqueryDatatableParam.cs" />
     <Compile Include="Kuaiex_Prod.cs" />
+    <Compile Include="ProcedureResults\GetCountryCurrencyList_Result.cs" />
     <Compile Include="ProcedureResults\GetCountryList_Result.cs" />
     <Compile Include="ProcedureResults\GetRemitterList_Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

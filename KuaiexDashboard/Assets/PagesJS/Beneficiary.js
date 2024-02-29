@@ -5,15 +5,28 @@ var SourceOfIncome;
 
 $(document).ready(function () {
 
-    $('#CUID').val(getParameterByName('UID'));
+    var cuidValue = getParameterByName('UID');
+    if (cuidValue === null || cuidValue === "") {
+        window.location.href = "../Remitter/Index";
+    } else {
+        $('#CUID').val(cuidValue);
+    }
 
     $('.dvRemittance_Purpose_Detail').hide();
     $('.dvSource_Of_Income_Detail').hide();
     $('.dvRemitter_Relation_Detail').hide();
 
+    LoadRemittancePurpose();
+    LoadRemitterRelation();
+    LoadSourceOfIncome();
+
+    LoadRemittanceType();
+
     LoadCountry();
     $('#Currency_Id').chosen();
     LoadNationality();
+
+
 
     $('#tblUsers').DataTable({ responsive: true });
 
@@ -52,11 +65,6 @@ $(document).ready(function () {
         }
     });
 
-    LoadRemittancePurpose();
-    LoadRemitterRelation();
-    LoadSourceOfIncome();
-
-    LoadRemittanceType();
     $('#Bank_Id').chosen();
     $('#Branch_Id').chosen();
     $('#Remittance_Subtype_Id').chosen();
@@ -90,6 +98,7 @@ var LoadCountry = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async:false,
         url: "../Beneficiary/LoadCountry",
         processData: false,
         contentType: false,
@@ -127,6 +136,7 @@ var LoadCurrency = function (Id) {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Beneficiary/LoadCurrency?CountryId=" + Id,
         processData: false,
         contentType: false,
@@ -140,7 +150,7 @@ var LoadCurrency = function (Id) {
             if (sch.length > 0) {
                 $el.append('<option value="">' + "Select Currency" + '</option>');
                 $.each(sch, function (idx, obj) {
-                    $el.append('<option value="' + obj.Id + '">' + obj.CurrencyName + ' ' + obj.CurrencyCode + '</option>');
+                    $el.append('<option value="' + obj.CurrencyId + '">' + obj.CurrencyName + ' ' + obj.CurrencyCode + '</option>');
                 });
             }
             else {
@@ -160,6 +170,7 @@ var LoadNationality = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Beneficiary/LoadNationality",
         processData: false,
         contentType: false,
@@ -190,6 +201,7 @@ var LoadRemittancePurpose = function () {
     $.ajax({
         type: "POST",
         cache: false,
+
         url: "../Beneficiary/LoadRemittancePurpose",
         processData: false,
         contentType: false,
@@ -293,6 +305,7 @@ var LoadRemittanceType = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Beneficiary/LoadRemittanceType",
         processData: false,
         contentType: false,
@@ -341,6 +354,7 @@ var LoadBank = function (CountryId) {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Beneficiary/LoadBank?CountryId=" + CountryId,
         processData: false,
         contentType: false,
@@ -389,6 +403,7 @@ var LoadBranch = function (BankId) {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Beneficiary/LoadBranch?BankId=" + BankId,
         processData: false,
         contentType: false,
@@ -431,6 +446,7 @@ var LoadRemintanceSubType = function (Remittance_Type_Id, Bank_Id) {
     $.ajax({
         type: "Get",
         cache: false,
+        async: false,
         url: "../Beneficiary/LoadRemittanceSubType?Remittance_Type_Id=" + Remittance_Type_Id + "&Bank_Id=" + Bank_Id,
         processData: false,
         contentType: false,
@@ -515,7 +531,7 @@ var handleStaff = function () {
                     "../Beneficiary/AddBeneficiary",
                     $(".frmAddUsers").serialize() ,
                     function (value) {
-                        if (value === 'exist') {
+                        if (value === 'duplicate_value_exist') {
                             swal(
                                 'Warning',
                                 'Beneficiary Name Already Exist!',
@@ -525,7 +541,7 @@ var handleStaff = function () {
                         }
                         if (value == 'noallowuser') {
                             swal('Warning', 'Your Are Not Allow To Add More Customer ', 'warning')
-                            Reset();
+                            resetForm();
                             return;
                         }
                         if (value != 'error') {
@@ -534,7 +550,7 @@ var handleStaff = function () {
                                 'Beneficiary Saved Successfully!',
                                 'success'
                             )
-                            Reset();
+                            resetForm();
                             $('#btn-save').removeAttr('disabled');
                             $('#tblUsers').DataTable().clear().draw;
                             LoadGridData($('#CUID').val());
@@ -567,7 +583,7 @@ var handleStaff = function () {
                                 'Beneficiary Updated Successfully!',
                                 'success'
                             )
-                            Reset();
+                            resetForm();
                             $('#btn-save').removeAttr('disabled');
 
                             $('#tblUsers').DataTable().clear().draw;
@@ -620,9 +636,11 @@ $(document).on('click', '.btn-edit', function () {
         success: function (Rdata) {
             if (Rdata != 'error') {
                 var obj = JSON.parse(Rdata);
-
+                console.log(obj);
+                debugger;
                 $('#UID').val(obj.UID);
                 $('#DD_Beneficiary_Name').val(obj.DD_Beneficiary_Name);
+            
                 $('#Customer_Id').val(obj.Customer_Id).prop('Enable', 'true').trigger("chosen:updated");
                 $('#FullName').val(obj.FullName);
                 $('#Gender').val(obj.Gender).prop('Enable', 'true').trigger("chosen:updated");
@@ -630,9 +648,13 @@ $(document).on('click', '.btn-edit', function () {
                 $('#Address_Line2').val(obj.Address_Line2);
                 $('#Address_Line3').val(obj.Address_Line3);
                 $('#Country_Id').val(obj.Country_Id).prop('Enable', 'true').trigger("chosen:updated");
-                $('#Currency_Id').val(obj.Currency_Id).prop('Enable', 'true').trigger("chosen:updated");
+                LoadCurrency(obj.Country_Id);
+                LoadBank(obj.Country_Id);
+                $('#Nationality_Id').val(obj.Nationality_Id).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Birth_Date').val(obj.Birth_Date);
-                $('#Remittance_Purpose').val(obj.Remittance_Purpose);
+            
+                $('#Currency_Id').val(obj.Currency_Id).prop('Enable', 'true').trigger("chosen:updated");
+                
                 $('#Remittance_Type_Id').val(obj.Remittance_Type_Id).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Remittance_Instruction').val(obj.Remittance_Instruction);
                 $('#Phone_No').val(obj.Phone_No);
@@ -647,6 +669,8 @@ $(document).on('click', '.btn-edit', function () {
                 $('#Identification_Expiry_Date').val(obj.Identification_Expiry_Date);
                 $('#Bank_Account_type').val(obj.Bank_Account_type).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Bank_Id').val(obj.Bank_Id).prop('Enable', 'true').trigger("chosen:updated");
+                LoadBranch(obj.Bank_Id);
+                LoadRemintanceSubType(obj.Remittance_Type_Id, obj.Bank_Id);
                 $('#Branch_Id').val(obj.Branch_Id).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Bank_Name').val(obj.Bank_Name);
                 $('#Branch_Name').val(obj.Branch_Name);
@@ -670,6 +694,7 @@ $(document).on('click', '.btn-edit', function () {
                 $('#Remittance_Subtype_Id').val(obj.Remittance_Subtype_Id).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Birth_Place').val(obj.Birth_Place);
                 $('#TransFastInfo').val(obj.TransFastInfo);
+                SetRemittance_Purpose(obj.Remittance_Purpose);
 
                 $('#btn-save').html("<i class='fa fa-save'></i> Update");
                 IsEditMode = true;
@@ -691,17 +716,22 @@ $(document).on('click', '.btn-edit', function () {
     });
 });
 
+function SetRemittance_Purpose(data) {
+    Remittance_Purpose.setSelected(data);
+}
 //load grid
 var LoadGridData = function (uid) {
     //alert(uid);
     $.ajax({
         type: "GET",
         cache: false,
+        async: false,
         url: "../Beneficiary/LoadGrid?CUID= "+ uid,
         processData: false,
         contentType: false,
         success: function (data) {
             data = JSON.parse(data);
+            console.log(data);
             $('#tblUsers').DataTable().destroy();
             var html = '';
             for (var i = 0; i < data.length; i++) {
@@ -750,8 +780,8 @@ var LoadGridData = function (uid) {
                     html += '<td>-</td>';
                 }
 
-                if (obj.Currency != null) {
-                    html += '<td>' + obj.Currency + '</td>';
+                if (obj.Currency_Name != null) {
+                    html += '<td>' + obj.Currency_Name + '</td>';
                 }
                 else {
                     html += '<td>-</td>';
@@ -788,11 +818,11 @@ var LoadGridData = function (uid) {
 }
 
 $('#btn-refresh').click(function () {
-    Reset();
+    resetForm();
 });
 
 //reset values
-function Reset() {
+function resetForm() {
     IsEditMode = false;
     LoadRemittanceType();
     
@@ -911,6 +941,7 @@ $('#btn-sync').on('click', function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Beneficiary/SynchronizeRecords",
         processData: false,
         contentType: false,

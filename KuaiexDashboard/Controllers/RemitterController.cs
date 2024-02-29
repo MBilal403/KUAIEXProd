@@ -211,8 +211,8 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                addCustomerDto.Civil_Id_Front = Civil_Id_Front == "null"? null : Civil_Id_Front;
-                addCustomerDto.Civil_Id_Back = Civil_Id_Back == "null"? null : Civil_Id_Back;
+                addCustomerDto.Civil_Id_Front = Civil_Id_Front == "null" ? null : Civil_Id_Front;
+                addCustomerDto.Civil_Id_Back = Civil_Id_Back == "null" ? null : Civil_Id_Back;
                 status = _remitterService.CreateRemitter(addCustomerDto);
             }
             catch (Exception)
@@ -234,38 +234,34 @@ namespace KuaiexDashboard.Controllers
 
                     if (file1 != null || file2 != null)
                     {
-                        string uploadDirectory = Server.MapPath(ConfigurationManager.AppSettings["LocalStoragePath"].ToString());
+                        string uploadDirectory = ConfigurationManager.AppSettings["LocalStoragePath"].ToString();
 
                         if (!Directory.Exists(uploadDirectory))
                         {
                             Directory.CreateDirectory(uploadDirectory);
                         }
-                        if (file1 != null )
+                        if (file1 != null)
                         {
                             string fileExtension1 = Path.GetExtension(file1.FileName);
-                             uniqueFileName1 = $"{CivilId}F{fileExtension1}";
+                            uniqueFileName1 = $"{CivilId}F{fileExtension1}";
                             string filePath1 = Path.Combine(uploadDirectory, uniqueFileName1);
-                            FileInfo fileInfo = new FileInfo(filePath1);
-                            if (fileInfo.Exists)
+
+                            if (System.IO.File.Exists(filePath1))
                             {
-                                fileInfo.Delete();
+                                System.IO.File.Delete(filePath1);
                             }
-
-
                             file1.SaveAs(filePath1);
                         }
-                    
-                        if ( file2 != null)
+
+                        if (file2 != null)
                         {
                             string fileExtension2 = Path.GetExtension(file2.FileName);
-                             uniqueFileName2 = $"{CivilId}R{fileExtension2}";
+                            uniqueFileName2 = $"{CivilId}R{fileExtension2}";
                             string filePath2 = Path.Combine(uploadDirectory, uniqueFileName2);
-                            FileInfo fileInfo = new FileInfo(filePath2);
-                            if (fileInfo.Exists)
+                            if (System.IO.File.Exists(filePath2))
                             {
-                                fileInfo.Delete();
+                                System.IO.File.Delete(filePath2);
                             }
-
                             file2.SaveAs(filePath2);
                         }
                         return Json(new

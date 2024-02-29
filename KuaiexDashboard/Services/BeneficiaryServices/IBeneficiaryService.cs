@@ -15,6 +15,8 @@ namespace KuaiexDashboard.Services.BeneficiaryServices
         List<Remittance_SubType_Mst> GetRemittanceSubtypes(int Remittance_Type_Id, int Bank_Id);
         List<Relationship_Lookup> GetRelationshipLookupList();
         List<Source_Of_Income_Lookup> GetSourceOfIncomeLookupList();
+        List<LoadBeneficiaryDTO> GetBeneficiariesByCustomerID(int CustomerId);
         List<Bank_Mst> GetBanksByCountry(int CountryId);
+        BeneficiaryDTO GetBeneficiaryByUID(Guid UID);
     }
 }

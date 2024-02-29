@@ -35,8 +35,6 @@ namespace KuaiexDashboard.Controllers
         {
             return View();
         }
-
-
         public ActionResult AddCountry(Country objCountry)
         {
             string status = "error";

@@ -38,22 +38,24 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             Beneficiary beneficiary = new Beneficiary();
             BeneficiaryDAL objBeneficiaryDAL = new BeneficiaryDAL();
             int existenceStatus = objBeneficiaryDAL.CheckBeneficiaryExistence(beneficiaryDto.FullName);
+
             if (existenceStatus == 1)
             {
                 return MsgKeys.DuplicateValueExist;
             }
             else
             {
-                beneficiaryDto.UID = Guid.NewGuid();
                 beneficiary = AutoMapper.Mapper.Map<Beneficiary>(beneficiaryDto);
+                beneficiary.UID = Guid.NewGuid();
+                beneficiary.CreatedOn = DateTime.Now;
+                beneficiary.IsBannedList = default;
                 beneficiary.Remittance_Purpose = string.Join(",", beneficiaryDto.Remittance_Purpose.Select(x => x.ToString()));
                 beneficiary.Source_Of_Income = string.Join(",", beneficiaryDto.Source_Of_Income.Select(x => x.ToString()));
                 beneficiary.Remitter_Relation = string.Join(",", beneficiaryDto.Remitter_Relation.Select(x => x.ToString()));
 
 
                 Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-
-
+                // beneficiary.Prod_Beneficiary_Id = objKuaiex_Prod.GetBeneficiaryIdByIdentificationNumber(beneficiary.Identification_No);
                 if (_beneficiaryRepository.Insert(beneficiary) > 0)
                 {
                     return MsgKeys.CreatedSuccessfully;
@@ -61,7 +63,7 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
                 return "error";
             }
 
-         
+
         }
         public List<Bank_Branch_Mst> GetGetBankBranches(int bankId)
         {
@@ -87,7 +89,21 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             return _bank_MstRepository.GetAll(x => x.Country_Id == CountryId && x.Record_Status == "A", x => x.Bank_Id, x => x.English_Name, x => x.Bank_Code);
         }
 
-   
+        public List<LoadBeneficiaryDTO> GetBeneficiariesByCustomerID(int CustomerId)
+        {
+            List<LoadBeneficiaryDTO> beneficiaryDTOs = _beneficiaryRepository.GetDataFromSP<LoadBeneficiaryDTO>("GetBeneficiariesByCustomerID", CustomerId);
+            return beneficiaryDTOs;
+        }
 
+        public BeneficiaryDTO GetBeneficiaryByUID(Guid UID)
+        {
+           Beneficiary beneficiary = _beneficiaryRepository.FindBy(x=> x.UID == UID);
+           var  beneficiarydto = AutoMapper.Mapper.Map<BeneficiaryDTO>(beneficiary);
+            beneficiarydto.Remittance_Purpose = Array.ConvertAll(beneficiary.Remittance_Purpose.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
+            beneficiarydto.Remitter_Relation = Array.ConvertAll(beneficiary.Remitter_Relation.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
+            beneficiarydto.Source_Of_Income = Array.ConvertAll(beneficiary.Source_Of_Income.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
+
+            return beneficiarydto;
+        }
     }
 }

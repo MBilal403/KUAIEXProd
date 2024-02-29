@@ -15,10 +15,9 @@ $(document).ready(function () {
     var uidParam = urlParams.get('UID');
 
     if (uidParam !== null) {
-        // UID parameter is present, execute the function after 5 seconds
-        setTimeout(function () {
-            editUserById(uidParam);
-        }, 5000);
+      
+      editUserById(uidParam);
+   
     }
 
 
@@ -150,6 +149,7 @@ function editUserById(uid) {
     $.ajax({
         type: "POST",
         cache: false,
+        async:false,
         url: "../Remitter/Edit",
         data: data,
         processData: false,
@@ -193,7 +193,7 @@ function editUserById(uid) {
                 $('#Compliance_Limit').val(obj.Compliance_Limit);
                 $('#Compliance_Trans_Count').val(obj.Compliance_Trans_Count);
                 $('#Compliance_Comments').val(obj.Compliance_Comments);
-                $('#Compliance_Limit_Expiry').val(obj.Compliance_Limit_Expiry);
+                $('#Compliance_Limit_Expiry').val(obj.Compliance_Limit_Expiry.split('T')[0]);
 
                 if (obj.Civil_Id_Front !== null && obj.Civil_Id_Front !== "") {
                     $('#imagePreviewCivil_Id_Front').html(`<img src="../Uploads/${obj.Civil_Id_Front}" alt="Image">`);
@@ -216,6 +216,13 @@ function editUserById(uid) {
                 else {
                     $("#IsVerified").iCheck('uncheck');
                 }
+                if (obj.Is_Profile_Completed) {
+                    $("#Is_Profile_Completed").iCheck('check');
+                }
+                else {
+                    $("#Is_Profile_Completed").iCheck('uncheck');
+                }
+
                 $(window).scrollTop(0);
 
                 LoadSecurityQuestions(obj.Customer_Id);
@@ -268,8 +275,7 @@ var handleStaff = function () {
             if (file2 !== undefined) {
                 formData.append('Civil_Id_Back', file2);
             }
-
-
+            
             if (file1 !== undefined || file2 !== undefined) {
 
                 $.ajax({
@@ -309,7 +315,7 @@ var handleStaff = function () {
                         }
                         if (value === 'noallowuser') {
                             swal('Warning', 'Your Are Not Allow To Add More Customer ', 'warning')
-                            Reset();
+                            resetForm();
                             return;
                         }
                         if (value !== 'error') {
@@ -319,7 +325,7 @@ var handleStaff = function () {
                                 'Customer Saved Successfully!',
                                 'success'
                             );
-                            Reset();
+                            resetForm();
                             $('#btn-save').removeAttr('disabled');
                             window.location = "../Remitter/Index";
 
@@ -351,7 +357,7 @@ var handleStaff = function () {
                                 'Customer Updated Successfully!',
                                 'success'
                             )
-                            Reset();
+                            resetForm();
                             $('#btn-save').removeAttr('disabled');
                             window.location = "../Remitter/Index";
 
@@ -480,7 +486,7 @@ jQuery('#btn-save').click(function () {
 
 
 //reset values
-function Reset() {
+function resetForm() {
     IsEditMode = false;
     LoadIdentificationType();
     LoadResidencyType();
@@ -563,7 +569,7 @@ function Reset() {
 }
 
 $('#btn-refresh').click(function () {
-    Reset();
+    resetForm();
 });
 
 
@@ -726,6 +732,7 @@ var LoadIdentificationType = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Remitter/LoadIdentificationType",
         processData: false,
         contentType: false,
@@ -753,6 +760,7 @@ var LoadResidencyType = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Remitter/LoadResidencyType",
         processData: false,
         contentType: false,
@@ -780,6 +788,7 @@ var LoadCountry = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Remitter/LoadCountry",
         processData: false,
         contentType: false,
@@ -807,6 +816,7 @@ var LoadNationality = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Remitter/LoadCountry",
         processData: false,
         contentType: false,
@@ -834,6 +844,7 @@ var LoadCity = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Remitter/LoadCity",
         processData: false,
         contentType: false,
@@ -861,6 +872,7 @@ var LoadQuestions = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Remitter/LoadQuestions",
         processData: false,
         contentType: false,
@@ -902,6 +914,7 @@ var LoadExpectTrancationsCount = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Remitter/LoadExpectTrancationsCount",
         processData: false,
         contentType: false,
