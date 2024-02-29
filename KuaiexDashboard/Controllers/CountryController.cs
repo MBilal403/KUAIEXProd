@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Serilog;
 
 namespace KuaiexDashboard.Controllers
 {
@@ -33,6 +34,7 @@ namespace KuaiexDashboard.Controllers
         // GET: Country
         public ActionResult Index()
         {
+            Log.Information( "An error occurred.");
             return View();
         }
         public ActionResult AddCountry(Country objCountry)
