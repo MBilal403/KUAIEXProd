@@ -12,7 +12,7 @@ namespace KuaiexDashboard
     using System;
     using System.Collections.Generic;
     
-    public partial class Terms_and_Privacy
+    public class Terms_and_Privacy
     {
         public int Id { get; set; }
         public string Description { get; set; }

@@ -11,7 +11,7 @@ namespace KuaiexDashboard
 {
     using System;
     
-    public partial class GetBeneficiaryList_Result
+    public class GetBeneficiaryList_Result
     {
         public Nullable<System.Guid> UID { get; set; }
         public string FullName { get; set; }

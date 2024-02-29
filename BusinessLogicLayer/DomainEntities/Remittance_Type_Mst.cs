@@ -12,7 +12,7 @@ namespace KuaiexDashboard
     using System;
     using System.Collections.Generic;
     
-    public partial class Remittance_Type_Mst
+    public class Remittance_Type_Mst
     {
         public int Remittance_Type_Id { get; set; }
         public string English_Name { get; set; }

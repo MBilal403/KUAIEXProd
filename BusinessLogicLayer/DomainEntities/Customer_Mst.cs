@@ -12,7 +12,7 @@ namespace KuaiexDashboard
     using System;
     using System.Collections.Generic;
     
-    public partial class Customer_Mst
+    public class Customer_Mst
     {
         public int Customer_Id { get; set; }
         public string GUID { get; set; }

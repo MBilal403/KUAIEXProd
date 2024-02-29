@@ -23,6 +23,6 @@ namespace DataAccessLayer.Entities
         public Nullable<int> UpdatedBy { get; set; }
         public DateTime UpdatedOn { get; set; }
         public string UpdatdIp { get; set; }
-        public Guid UID { get; set; }
+        public Nullable<Guid> UID { get; set; }
     }
 }

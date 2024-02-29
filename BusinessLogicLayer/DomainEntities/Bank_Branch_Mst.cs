@@ -12,7 +12,7 @@ namespace KuaiexDashboard
     using System;
     using System.Collections.Generic;
     
-    public partial class Bank_Branch_Mst
+    public class Bank_Branch_Mst
     {
         public int Bank_Branch_Id { get; set; }
         public Nullable<int> Bank_Id { get; set; }

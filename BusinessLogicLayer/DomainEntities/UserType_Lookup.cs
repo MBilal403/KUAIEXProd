@@ -12,7 +12,7 @@ namespace KuaiexDashboard
     using System;
     using System.Collections.Generic;
     
-    public partial class UserType_Lookup
+    public class UserType_Lookup
     {
         public int UserTypeId { get; set; }
         public string Name { get; set; }

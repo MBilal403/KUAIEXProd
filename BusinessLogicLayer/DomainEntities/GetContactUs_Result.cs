@@ -11,7 +11,7 @@ namespace KuaiexDashboard
 {
     using System;
     
-    public partial class GetContactUs_Result
+    public class GetContactUs_Result
     {
         public int Id { get; set; }
         public string ContactNo { get; set; }

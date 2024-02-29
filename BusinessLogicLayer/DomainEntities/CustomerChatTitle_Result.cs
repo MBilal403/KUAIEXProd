@@ -11,7 +11,7 @@ namespace KuaiexDashboard
 {
     using System;
     
-    public partial class CustomerChatTitle_Result
+    public class CustomerChatTitle_Result
     {
         public string Name { get; set; }
         public Nullable<System.Guid> UID { get; set; }

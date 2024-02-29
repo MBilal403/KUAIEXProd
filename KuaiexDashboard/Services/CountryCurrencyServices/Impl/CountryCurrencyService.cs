@@ -6,9 +6,6 @@ using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.Repository;
 using KuaiexDashboard.Repository.Impl;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace KuaiexDashboard.Services.CountryCurrencyServices.Impl
 {
@@ -59,6 +56,7 @@ namespace KuaiexDashboard.Services.CountryCurrencyServices.Impl
             if (currency != null)
             {
                 countryCurrency.UpdatedOn = DateTime.Now;
+                countryCurrency.UID = null;
                 _countryCurrencyRepository.Update(countryCurrency, $" Id = {countryCurrency.Id} ");
                 return MsgKeys.UpdatedSuccessfully;
             }

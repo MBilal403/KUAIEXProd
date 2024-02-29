@@ -12,7 +12,7 @@ namespace KuaiexDashboard
     using System;
     using System.Collections.Generic;
     
-    public partial class BeneficiaryValidation
+    public class BeneficiaryValidation
     {
         public int Id { get; set; }
         public Nullable<int> FieldId { get; set; }

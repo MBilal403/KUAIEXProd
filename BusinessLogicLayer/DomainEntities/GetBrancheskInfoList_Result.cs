@@ -11,7 +11,7 @@ namespace KuaiexDashboard
 {
     using System;
     
-    public partial class GetBrancheskInfoList_Result
+    public class GetBrancheskInfoList_Result
     {
         public int Id { get; set; }
         public string Name { get; set; }

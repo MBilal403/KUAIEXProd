@@ -12,7 +12,7 @@ namespace KuaiexDashboard.Services.CityServices
     {
         List<City> GetActiveCities();
         string AddCity(City objCity);
-        PagedResult<GetCityList_Result> GetActiveCities(JqueryDatatableParam param);    
-
+        PagedResult<GetCityList_Result> GetActiveCities(JqueryDatatableParam param);
+        string UpdateCity(City objCity);
     }
 }

@@ -97,25 +97,7 @@ namespace KuaiexDashboard.Controllers
             string status = "";
             try
             {
-                City obj = objCityDal.GetCityByUID(objcity.UID);
-                obj.Name = objcity.Name;
-
-                if (objcity.Prod_City_Id == null || objcity.Prod_City_Id <= 0)
-                {
-                    Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                    objcity.Prod_City_Id = objKuaiex_Prod.GetCityIdByCityName(obj.Name);
-                }
-
-                if (objcity.Status != null)
-                {
-                    objcity.Status = 1;
-                }
-                else
-                {
-                    objcity.Status = 0;
-                }
-                obj.Status = objcity.Status;
-                objCityDal.EditCity(objcity);
+                status = _cityService.UpdateCity(objcity);
             }
             catch (Exception ex)
             {

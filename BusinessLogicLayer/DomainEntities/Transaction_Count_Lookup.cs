@@ -12,7 +12,7 @@ namespace KuaiexDashboard
     using System;
     using System.Collections.Generic;
     
-    public partial class Transaction_Count_Lookup
+    public class Transaction_Count_Lookup
     {
         public int Id { get; set; }
         public string Name { get; set; }

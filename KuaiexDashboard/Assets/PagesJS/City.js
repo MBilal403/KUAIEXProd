@@ -177,7 +177,7 @@ var handleStaff = function () {
                     "../City/EditCity",
                     $(".frmAddUsers").serialize(),
                     function (value) {
-                        if (value == 'exist') {
+                        if (value == 'duplicate_value_exist') {
                             swal(
                                 'Warning',
                                 'City Name Already Exist!',

@@ -12,7 +12,7 @@ namespace KuaiexDashboard
     using System;
     using System.Collections.Generic;
     
-    public partial class EmailAlerts
+    public class EmailAlerts
     {
         public int Id { get; set; }
         public string ToAddress { get; set; }

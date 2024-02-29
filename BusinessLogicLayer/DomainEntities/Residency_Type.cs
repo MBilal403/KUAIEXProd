@@ -12,7 +12,7 @@ namespace KuaiexDashboard
     using System;
     using System.Collections.Generic;
     
-    public partial class Residency_Type
+    public class Residency_Type
     {
         public int Id { get; set; }
         public string Name { get; set; }

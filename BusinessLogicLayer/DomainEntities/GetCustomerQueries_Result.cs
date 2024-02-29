@@ -11,7 +11,7 @@ namespace KuaiexDashboard
 {
     using System;
     
-    public partial class GetCustomerQueries_Result
+    public class GetCustomerQueries_Result
     {
         public int id { get; set; }
         public string Name { get; set; }

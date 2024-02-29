@@ -11,7 +11,7 @@ namespace KuaiexDashboard
 {
     using System;
     
-    public partial class GetBanksListByCountry_Result
+    public class GetBanksListByCountry_Result
     {
         public int Bank_Id { get; set; }
         public string English_Name { get; set; }

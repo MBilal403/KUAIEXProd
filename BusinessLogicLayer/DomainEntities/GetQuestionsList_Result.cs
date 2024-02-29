@@ -11,7 +11,7 @@ namespace KuaiexDashboard
 {
     using System;
     
-    public partial class GetQuestionsList_Result
+    public class GetQuestionsList_Result
     {
         public string Question { get; set; }
         public string Status { get; set; }

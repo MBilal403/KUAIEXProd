@@ -22,6 +22,7 @@ $(document).ready(function () {
 
     LoadRemittanceType();
 
+
     LoadCountry();
     $('#Currency_Id').chosen();
     LoadNationality();
@@ -201,6 +202,32 @@ var LoadRemittancePurpose = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        url: "../Beneficiary/LoadRemittancePurpose",
+        processData: false,
+        contentType: false,
+        success: function (rdata) {
+            var sch = JSON.parse(rdata);
+
+            var data = [];
+            var d;
+
+            if (sch.length > 0) {
+                $.each(sch, function (idx, obj) {
+                    d = { 'value': obj.Id, 'text': obj.Name };
+                    data.push(d);
+                });
+            }
+
+            RemittancePurpose.setData(data);
+        }
+    });
+};
+
+
+ function  loadEdit() {
+    $.ajax({
+        type: "POST",
+        cache: false,
 
         url: "../Beneficiary/LoadRemittancePurpose",
         processData: false,
@@ -217,10 +244,22 @@ var LoadRemittancePurpose = function () {
                     data.push(d);
                 });
             }
+
+            
+            var targetValue = 3;
+            data = data.map(function (option) {
+                return {
+                    text: option.text,
+                    value: option.value,
+                    selected: option.value === targetValue  // Set selected to true if the condition is met
+                };
+            });
+
             RemittancePurpose.setData(data);
         }
     });
 };
+
 
 var RemittancePurpose_OnChange = function () {
     var rem_selected = RemittancePurpose.selected();
@@ -243,7 +282,7 @@ var LoadSourceOfIncome = function () {
             var sch = JSON.parse(rdata);
             var data = [];
             var d;
-
+            debugger;
             if (sch.length > 0) {
                 $.each(sch, function (idx, obj) {
                     d = { 'value': obj.Id, 'text': obj.Name };
@@ -654,7 +693,7 @@ $(document).on('click', '.btn-edit', function () {
                 $('#Birth_Date').val(obj.Birth_Date);
             
                 $('#Currency_Id').val(obj.Currency_Id).prop('Enable', 'true').trigger("chosen:updated");
-                
+                $('#Remittance_Purpose').val(obj.Remittance_Purpose);
                 $('#Remittance_Type_Id').val(obj.Remittance_Type_Id).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Remittance_Instruction').val(obj.Remittance_Instruction);
                 $('#Phone_No').val(obj.Phone_No);
@@ -716,9 +755,6 @@ $(document).on('click', '.btn-edit', function () {
     });
 });
 
-function SetRemittance_Purpose(data) {
-    Remittance_Purpose.setSelected(data);
-}
 //load grid
 var LoadGridData = function (uid) {
     //alert(uid);

@@ -15,9 +15,9 @@ $(document).ready(function () {
     var uidParam = urlParams.get('UID');
 
     if (uidParam !== null) {
-      
-      editUserById(uidParam);
-   
+
+        editUserById(uidParam);
+
     }
 
 
@@ -149,7 +149,7 @@ function editUserById(uid) {
     $.ajax({
         type: "POST",
         cache: false,
-        async:false,
+        async: false,
         url: "../Remitter/Edit",
         data: data,
         processData: false,
@@ -164,8 +164,12 @@ function editUserById(uid) {
                 $('#Identification_Type').val(obj.Identification_Type).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Identification_Number').val(obj.Identification_Number);
                 $('#Nationality').val(obj.Nationality).prop('Enable', 'true').trigger("chosen:updated");
-                $('#Date_Of_Birth').val(obj.Date_Of_Birth.split('T')[0]);
-                $('#Identification_Expiry_Date').val(obj.Identification_Expiry_Date.split('T')[0]);
+                if (obj.Date_Of_Birth !== null) {
+                    $('#Date_Of_Birth').val(obj.Date_Of_Birth.split('T')[0]);
+                }
+                if (obj.Identification_Expiry_Date !== null) {
+                    $('#Identification_Expiry_Date').val(obj.Identification_Expiry_Date.split('T')[0]);
+                }
                 $('#Occupation').val(obj.Occupation);
                 $('#Email_Address').val(obj.Email_Address);
                 $('#Mobile_No').val(obj.Mobile_No);
@@ -184,8 +188,6 @@ function editUserById(uid) {
                 $('#Expected_Monthly_Trans_Count').val(obj.Expected_Monthly_Trans_Count).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Other_Income').val(obj.Other_Income);
                 $('#Other_Income_Detail').val(obj.Other_Income_Detail);
-                $('#Login_Id').val(obj.Login_Id);
-                $('#Password').val(obj.Password);
                 $('#Pep_Description').val(obj.Pep_Description);
                 $('#Monthly_Income').val(obj.Monthly_Income);
                 $('#Monthly_Trans_Limit').val(obj.Monthly_Trans_Limit);
@@ -193,13 +195,15 @@ function editUserById(uid) {
                 $('#Compliance_Limit').val(obj.Compliance_Limit);
                 $('#Compliance_Trans_Count').val(obj.Compliance_Trans_Count);
                 $('#Compliance_Comments').val(obj.Compliance_Comments);
-                $('#Compliance_Limit_Expiry').val(obj.Compliance_Limit_Expiry.split('T')[0]);
+                if (obj.Compliance_Limit_Expiry !== null) {
+                    $('#Compliance_Limit_Expiry').val(obj.Compliance_Limit_Expiry.split('T')[0]);
+                }
 
                 if (obj.Civil_Id_Front !== null && obj.Civil_Id_Front !== "") {
-                    $('#imagePreviewCivil_Id_Front').html(`<img src="../Uploads/${obj.Civil_Id_Front}" alt="Image">`);
+                    $('#imagePreviewCivil_Id_Front').html(`<img src="${obj.Civil_Id_Front}" alt="Image">`);
                 }
                 if (obj.Civil_Id_Back !== null && obj.Civil_Id_Back !== "") {
-                    $('#imagePreviewCivil_Id_Back').html(`<img src="../Uploads/${obj.Civil_Id_Back}" alt="Image" >`);
+                    $('#imagePreviewCivil_Id_Back').html(`<img src="${obj.Civil_Id_Back}" alt="Image" >`);
                 }
 
                 $('#btn-save').html("<i class='fa fa-save'></i> Update");
@@ -275,7 +279,7 @@ var handleStaff = function () {
             if (file2 !== undefined) {
                 formData.append('Civil_Id_Back', file2);
             }
-            
+
             if (file1 !== undefined || file2 !== undefined) {
 
                 $.ajax({

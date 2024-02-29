@@ -12,7 +12,7 @@ namespace KuaiexDashboard
     using System;
     using System.Collections.Generic;
     
-    public partial class Bank_Account_Type
+    public class Bank_Account_Type
     {
         public int Id { get; set; }
         public string Name { get; set; }

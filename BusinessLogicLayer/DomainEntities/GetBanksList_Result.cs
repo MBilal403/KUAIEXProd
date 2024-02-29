@@ -11,7 +11,7 @@ namespace KuaiexDashboard
 {
     using System;
     
-    public partial class GetBanksList_Result
+    public class GetBanksList_Result
     {
         public Nullable<System.Guid> UID { get; set; }
         public string English_Name { get; set; }

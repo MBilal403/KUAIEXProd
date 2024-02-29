@@ -292,10 +292,11 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
         {
             EditCustomerDTO customerDTO = null;
             RemitterDAL objRemitterDal = new RemitterDAL();
-
+             string LocalStoragePath = ConfigurationManager.AppSettings["LocalStoragePath"].ToString();
             Customer obj = objRemitterDal.GetCustomerByUID(customerId);
-
             customerDTO = AutoMapper.Mapper.Map<EditCustomerDTO>(obj);
+            customerDTO.Civil_Id_Front = string.Concat(LocalStoragePath, customerDTO.Civil_Id_Front);
+            customerDTO.Civil_Id_Back = string.Concat(LocalStoragePath, customerDTO.Civil_Id_Back);
             return customerDTO;
         }
 

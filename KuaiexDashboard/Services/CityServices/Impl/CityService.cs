@@ -6,11 +6,6 @@ using KuaiexDashboard.Repository;
 using KuaiexDashboard.Repository.Impl;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Runtime.Remoting;
-using System.Security.Cryptography.X509Certificates;
-using System.Web;
 
 namespace KuaiexDashboard.Services.CityServices.Impl
 {
@@ -71,8 +66,22 @@ namespace KuaiexDashboard.Services.CityServices.Impl
             return list;
         }
 
+        public string UpdateCity(City objCity)
+        {
+            int? existingCity = GetCityIdByCityName(objCity.Name);
+            if (existingCity != null)
+            {
+                objCity.Country_Id = objCity.Country_Id;
+                objCity.Status = objCity.Status != null ? 1 : 0;
+                objCity.UpdatedOn = DateTime.Now;
+                //objCity.Prod_City_Id = objKuaiex_Prod.GetCityIdByCityName(objCity.Name);
 
+                _cityRepository.Update(objCity, $" UID = '{objCity.UID}' ");
+                return MsgKeys.UpdatedSuccessfully;
+            }
 
+            return MsgKeys.Error;
 
+        }
     }
 }

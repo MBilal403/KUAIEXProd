@@ -11,7 +11,7 @@ namespace KuaiexDashboard
 {
     using System;
     
-    public partial class GetUsersList_Result
+    public class GetUsersList_Result
     {
         public Nullable<System.Guid> UID { get; set; }
         public string UserName { get; set; }

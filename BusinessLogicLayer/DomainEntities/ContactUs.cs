@@ -12,7 +12,7 @@ namespace KuaiexDashboard
     using System;
     using System.Collections.Generic;
     
-    public partial class ContactUs
+    public class ContactUs
     {
         public int Id { get; set; }
         public string ContactNo { get; set; }

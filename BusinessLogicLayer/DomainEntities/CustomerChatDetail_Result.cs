@@ -11,7 +11,7 @@ namespace KuaiexDashboard
 {
     using System;
     
-    public partial class CustomerChatDetail_Result
+    public class CustomerChatDetail_Result
     {
         public string Message { get; set; }
         public Nullable<int> Message_Type { get; set; }

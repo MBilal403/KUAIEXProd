@@ -11,7 +11,7 @@ namespace KuaiexDashboard
 {
     using System;
     
-    public partial class GetCityList_Result
+    public class GetCityList_Result
     {
         public Nullable<System.Guid> UID { get; set; }
         public string Name { get; set; }

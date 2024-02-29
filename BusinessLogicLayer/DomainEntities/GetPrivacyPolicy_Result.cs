@@ -11,7 +11,7 @@ namespace KuaiexDashboard
 {
     using System;
     
-    public partial class GetPrivacyPolicy_Result
+    public class GetPrivacyPolicy_Result
     {
         public int Id { get; set; }
         public string Title { get; set; }

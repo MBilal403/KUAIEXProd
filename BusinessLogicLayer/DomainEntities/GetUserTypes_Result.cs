@@ -11,7 +11,7 @@ namespace KuaiexDashboard
 {
     using System;
     
-    public partial class GetUserTypes_Result
+    public class GetUserTypes_Result
     {
         public int UserTypeId { get; set; }
         public string Name { get; set; }

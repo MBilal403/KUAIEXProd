@@ -12,7 +12,7 @@ namespace KuaiexDashboard
     using System;
     using System.Collections.Generic;
     
-    public partial class FAQs
+    public class FAQs
     {
         public int Id { get; set; }
         public string Question { get; set; }

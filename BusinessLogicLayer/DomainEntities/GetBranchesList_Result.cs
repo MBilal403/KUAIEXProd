@@ -11,7 +11,7 @@ namespace KuaiexDashboard
 {
     using System;
     
-    public partial class GetBranchesList_Result
+    public class GetBranchesList_Result
     {
         public string English_Name { get; set; }
         public string Address_Line1 { get; set; }

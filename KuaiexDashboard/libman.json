@@ -13,6 +13,10 @@
         "jquery.min.map",
         "jquery.js"
       ]
+    },
+    {
+      "library": "slim.js@4.0.7",
+      "destination": "lib/slim.js/"
     }
   ]
 }
