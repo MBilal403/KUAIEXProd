@@ -2,6 +2,7 @@
 using DataAccessLayer;
 using KuaiexDashboard.Filters;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,8 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
-                status = "Error";
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
             }
             return Content(status);
         }
@@ -55,6 +57,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);
@@ -73,7 +76,8 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
-                status = "Error";
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
             }
             return Content(status);
         }
@@ -89,11 +93,12 @@ namespace KuaiexDashboard.Controllers
                     obj.Title = objterms.Title;
                     obj.Description = objterms.Description;
                     objGeneralSettingsDal.UpdatePrivacyPolicy(objterms);
-                   
+
                 }
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);
@@ -113,7 +118,8 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
-                status = "Error";
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
             }
             return Content(status);
         }
@@ -130,11 +136,12 @@ namespace KuaiexDashboard.Controllers
                     obj.Address = objContactUs.Address;
                     obj.CustomerService = objContactUs.CustomerService;
                     objGeneralSettingsDal.UpdateContactUs(objContactUs);
-                   
+
                 }
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);
@@ -164,24 +171,32 @@ namespace KuaiexDashboard.Controllers
                     else
                         objFAQS.Status = "N";
                     objGeneralSettingsDal.AddFAQs(objFAQS);
-                        status = "success";
+                    status = "success";
                 }
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
-            //}
             return Content(status);
         }
         public ActionResult LoadGrid()
         {
             string status = "error";
-            //if (IsAdminUser)
-            //{
-            List<GetFAQSList_Result> result = objGeneralSettingsDal.GetFAQSList();
-            status = Newtonsoft.Json.JsonConvert.SerializeObject(result);
-            //}
+            try
+            {
+                //if (IsAdminUser)
+                //{
+                List<GetFAQSList_Result> result = objGeneralSettingsDal.GetFAQSList();
+                status = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+                //}
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
             return Content(status);
         }
 
@@ -195,7 +210,8 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
-                status = "Error";
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
             }
             return Content(status);
         }
@@ -221,6 +237,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);
@@ -232,11 +249,16 @@ namespace KuaiexDashboard.Controllers
         public ActionResult LoadGridCustomerQuries()
         {
             string status = "error";
-            //if (IsAdminUser)
-            //{
-            List<GetCustomerQueries_Result> result = objGeneralSettingsDal.GetCustomerQueries();
-            status = Newtonsoft.Json.JsonConvert.SerializeObject(result);
-            //}
+            try
+            {
+                List<GetCustomerQueries_Result> result = objGeneralSettingsDal.GetCustomerQueries();
+                status = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
             return Content(status);
         }
 

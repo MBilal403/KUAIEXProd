@@ -20,7 +20,7 @@ namespace KuaiexDashboard.Services.CurrencyServices.Impl
         public string AddCurrency(Currency currency)
         {
             int currencyId = currency.Id;
-           Currency currencyExist = _currencyRepository.FindBy(x => x.Id == currencyId);
+            Currency currencyExist = _currencyRepository.FindBy(x => x.Id == currencyId);
             if (currencyExist != null)
             {
                 return MsgKeys.DuplicateValueExist;
@@ -33,7 +33,7 @@ namespace KuaiexDashboard.Services.CurrencyServices.Impl
             currency.TT_Rate = currency.DD_Rate;
             currency.UID = Guid.NewGuid();
 
-            currency.Status =  currency.Status != null ? "A" : "N";
+            currency.Status = currency.Status != null ? "A" : "N";
 
             if (_currencyRepository.Insert(currency) > 0)
             {
@@ -60,10 +60,14 @@ namespace KuaiexDashboard.Services.CurrencyServices.Impl
             Currency currencyExist = _currencyRepository.FindBy(x => x.Id == currencyId);
             if (currencyExist != null)
             {
+
                 currency.UpdatedOn = DateTime.Now;
                 currency.TT_Min_Rate = currency.DD_Rate;
                 currency.TT_Rate = currency.DD_Rate;
-                currency.UpdatedOn = DateTime.Now;
+                currency.IsBaseCurrency = currencyExist.Id == 1 ? 1 : 0;
+                currency.Display_Order = 1;
+                currency.CreatedOn = currencyExist.CreatedOn;
+                currency.UID = currencyExist.UID;
                 currency.Status = currency.Status != null ? "A" : "N";
                 _currencyRepository.Update(currency, $" Id = {currency.Id} ");
                 return MsgKeys.UpdatedSuccessfully;

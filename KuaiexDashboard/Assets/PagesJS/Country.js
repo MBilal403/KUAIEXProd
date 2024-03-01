@@ -148,7 +148,7 @@ var handleStaff = function () {
                         if (value != 'error') {
                             swal(
                                 'Success',
-                                'User Updated Successfully!',
+                                'Country Updated Successfully!',
                                 'success'
                             );
                             resetForm();

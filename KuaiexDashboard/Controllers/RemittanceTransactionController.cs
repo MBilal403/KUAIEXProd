@@ -5,6 +5,7 @@ using KuaiexDashboard.Repository;
 using KuaiexDashboard.Services.RemitterTransactionService;
 using KuaiexDashboard.Services.RemitterTransactionService.Impl;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +39,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
 

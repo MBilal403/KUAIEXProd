@@ -8,13 +8,15 @@ using System;
 using System.Web.Mvc;
 using KuaiexDashboard.Services.CurrencyServices;
 using KuaiexDashboard.Services.CurrencyServices.Impl;
+using DataAccessLayer.Recources;
+using Serilog;
 
 namespace KuaiexDashboard.Controllers
 {
     [AuthorizeFilter]
     public class CurrencyController : Controller
     {
-       
+
         private readonly ICurrencyService _currencyService;
 
         public CurrencyController()
@@ -38,7 +40,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);
@@ -47,18 +49,24 @@ namespace KuaiexDashboard.Controllers
 
         public ActionResult LoadGrid(JqueryDatatableParam param)
         {
-            PagedResult<Currency> list = _currencyService.GetAllCurrency(param);
-
-            var result = new
+            try
             {
-                draw = param.sEcho,
-                recordsTotal = list.TotalSize,
-                recordsFiltered = list.FilterRecored,
-                data = list.Data
-            };
+                PagedResult<Currency> list = _currencyService.GetAllCurrency(param);
 
-            return Json(result, JsonRequestBehavior.AllowGet);
-
+                var result = new
+                {
+                    draw = param.sEcho,
+                    recordsTotal = list.TotalSize,
+                    recordsFiltered = list.FilterRecored,
+                    data = list.Data
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                return Json(MsgKeys.Error, JsonRequestBehavior.AllowGet);
+            }
         }
 
         public ActionResult Edit(Guid UID)
@@ -71,7 +79,8 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
-                status = "Error";
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
             }
             return Content(status);
         }
@@ -85,6 +94,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);

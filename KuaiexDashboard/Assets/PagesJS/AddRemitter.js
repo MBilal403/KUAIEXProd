@@ -279,19 +279,26 @@ var handleStaff = function () {
             if (file2 !== undefined) {
                 formData.append('Civil_Id_Back', file2);
             }
+            formData.append('Civil_Id', civilid);
+
+            var url = 'https://stagingapi.creamerz.com/Remittance/UploadCivilid';
+            var url1 = '../Remitter/AddCustomerFiles';
 
             if (file1 !== undefined || file2 !== undefined) {
 
                 $.ajax({
-                    url: '../Remitter/AddCustomerFiles?CivilId=' + civilid,
+                    url: url1,
                     type: 'POST',
                     data: formData,
+                    async: false,
                     contentType: false,
                     processData: false,
                     success: function (response) {
+                        debugger;
+                        console.log();
                         $('#btn-save').attr('disabled', 'true');
                         $(".frmAddUsers :disabled").removeAttr('disabled');
-                        return AddCustomer(response.Civil_Id_Back, response.Civil_Id_Front);
+                        return AddCustomer(response.civil_Id_Back, response.civil_Id_Front);
                     },
                     error: function (error) {
                         console.error('Error uploading files:', error);
@@ -306,7 +313,7 @@ var handleStaff = function () {
         function AddCustomer(Civil_Id_Back, Civil_Id_Front) {
             if (!IsEditMode) {
                 $.post(
-                    "../Remitter/AddCustomer?Civil_Id_Back=" + Civil_Id_Back + "&Civil_Id_Front=" + Civil_Id_Front,
+                    "../Remitter/AddCustomer?civil_Id_Back=" + Civil_Id_Back + "&civil_Id_Front=" + Civil_Id_Front,
                     $(".frmAddUsers").serialize(),
                     function (value) {
                         if (value == 'duplicate_value_exist') {

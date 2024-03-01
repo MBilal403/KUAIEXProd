@@ -9,6 +9,7 @@ using KuaiexDashboard.Services.BeneficiaryServices.Impl;
 using KuaiexDashboard.Services.RemitterServices;
 using KuaiexDashboard.Services.RemitterServices.Impl;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,8 +56,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -71,8 +74,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -90,8 +95,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -107,8 +114,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -124,8 +133,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -140,8 +151,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -157,8 +170,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -172,8 +187,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -188,8 +205,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -206,8 +225,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -222,8 +243,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -239,8 +262,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -258,17 +283,28 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
         public ActionResult LoadGrid(Guid CUID)
         {
             string status = "error";
-            var customer = _remitterService.GetCustomerByUID(CUID);
-            var lstbeneficiary = _beneficiaryService.GetBeneficiariesByCustomerID(customer.Customer_Id);
-            status = Newtonsoft.Json.JsonConvert.SerializeObject(lstbeneficiary);
+            try
+            {
+                var customer = _remitterService.GetCustomerByUID(CUID);
+                var lstbeneficiary = _beneficiaryService.GetBeneficiariesByCustomerID(customer.Customer_Id);
+                status = Newtonsoft.Json.JsonConvert.SerializeObject(lstbeneficiary);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
+
             return Content(status);
         }
         public ActionResult LoadBanksByCountry(int countryId)
@@ -282,8 +318,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -298,8 +336,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
             return Content(status);
         }
         public ActionResult AddBeneficiary()
@@ -321,8 +361,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -336,10 +378,12 @@ namespace KuaiexDashboard.Controllers
                 BeneficiaryDTO beneficiaryDto = _beneficiaryService.GetBeneficiaryByUID(UID);
                 status = JsonConvert.SerializeObject(beneficiaryDto);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
             return Content(status);
         }
         public ActionResult EditBeneficiary(Beneficiary objBeneficiary)
@@ -418,8 +462,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
             return Content(status);
         }
         public ActionResult SynchronizeRecords()
@@ -450,8 +496,9 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
-                status = Counter;
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
             }
+
             return Content(status.ToString());
         }
     }

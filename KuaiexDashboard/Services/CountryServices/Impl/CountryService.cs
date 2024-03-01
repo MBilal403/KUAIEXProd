@@ -168,6 +168,8 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
                 {
                     objCountry.UpdatedOn = DateTime.Now;
                     objCountry.Id = existingCountry.Id;
+                    objCountry.CreatedOn = existingCountry.CreatedOn;
+                    objCountry.UID = existingCountry.UID;
                     objCountry.Prod_Country_Id = existingCountry.Prod_Country_Id;
                     objCountry.Status = objCountry.Status != null ? "A" : "N";
                     if (_countryRepository.Update(objCountry, $" Id = {objCountry.Id} ") > 0)

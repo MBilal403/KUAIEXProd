@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using DataAccessLayer;
 using KuaiexDashboard.DAL;
 using KuaiexDashboard.Filters;
+using Serilog;
 namespace KuaiexDashboard.Controllers
 {
     [AuthorizeFilter]
@@ -45,6 +46,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             //}
@@ -70,7 +72,8 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
-                status = "Error";
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
             }
             return Content(status);
         }
@@ -96,6 +99,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);

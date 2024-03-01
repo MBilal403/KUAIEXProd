@@ -11,12 +11,14 @@ using KuaiexDashboard.Services.CountryServices.Impl;
 using KuaiexDashboard.Services.RemitterServices;
 using KuaiexDashboard.Services.RemitterServices.Impl;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Http.Results;
 using System.Web.Mvc;
 
 namespace KuaiexDashboard.Controllers
@@ -48,8 +50,9 @@ namespace KuaiexDashboard.Controllers
 
                 status = JsonConvert.SerializeObject(lstIdentification);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
 
@@ -69,6 +72,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
 
@@ -86,6 +90,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
 
@@ -105,6 +110,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
 
@@ -124,6 +130,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
 
@@ -143,6 +150,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
 
@@ -150,17 +158,25 @@ namespace KuaiexDashboard.Controllers
         }
         public ActionResult LoadGrid(JqueryDatatableParam param)
         {
-            PagedResult<GetRemitterList_Result> list = _remitterService.GetRemitterList(param);
-
-            var result = new
+            try
             {
-                draw = param.sEcho,
-                recordsTotal = list.TotalSize,
-                recordsFiltered = list.FilterRecored,
-                data = list.Data
-            };
+                PagedResult<GetRemitterList_Result> list = _remitterService.GetRemitterList(param);
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+                var result = new
+                {
+                    draw = param.sEcho,
+                    recordsTotal = list.TotalSize,
+                    recordsFiltered = list.FilterRecored,
+                    data = list.Data
+                };
+
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                return Json("error", JsonRequestBehavior.AllowGet);
+            }
         }
         public ActionResult LoadSecurityQuestions(int Customer_Id)
         {
@@ -176,7 +192,8 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
-                status = "Error";
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
             }
 
             return Content(status);
@@ -194,9 +211,10 @@ namespace KuaiexDashboard.Controllers
 
                 status = JsonConvert.SerializeObject(individual_KYCs);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                status = "Error";
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
             }
 
             return Content(status);
@@ -215,14 +233,15 @@ namespace KuaiexDashboard.Controllers
                 addCustomerDto.Civil_Id_Back = Civil_Id_Back == "null" ? null : Civil_Id_Back;
                 status = _remitterService.CreateRemitter(addCustomerDto);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);
         }
         [HttpPost]
-        public ActionResult AddCustomerFiles(string CivilId)
+        public ActionResult AddCustomerFiles()
         {
             try
             {
@@ -230,6 +249,7 @@ namespace KuaiexDashboard.Controllers
                 {
                     HttpPostedFileBase file1 = Request.Files["Civil_Id_Front"];
                     HttpPostedFileBase file2 = Request.Files["Civil_Id_Back"];
+                    string CivilId = Request.Form["Civil_Id"];
                     string uniqueFileName1 = default, uniqueFileName2 = default;
 
                     if (file1 != null || file2 != null)
@@ -268,8 +288,8 @@ namespace KuaiexDashboard.Controllers
                         {
                             success = true,
                             message = "Files uploaded successfully.",
-                            Civil_Id_Front = uniqueFileName1,
-                            Civil_Id_Back = uniqueFileName2,
+                            civil_Id_Front = uniqueFileName1,
+                            civil_Id_Back = uniqueFileName2,
                         });
                     }
                 }
@@ -277,7 +297,8 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = "Exception :" + ex.Message });
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                return Json(new { success = false, message = "No files were selected." });
             }
             return Json(new { success = false, message = "No files were selected." });
         }
@@ -298,9 +319,10 @@ namespace KuaiexDashboard.Controllers
                     status = "Customer not found";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                status = "Error";
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
             }
             return Content(status);
         }
@@ -327,8 +349,9 @@ namespace KuaiexDashboard.Controllers
                     status = "Customer not found";
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);
@@ -345,6 +368,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);
@@ -378,7 +402,8 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
-                status = Counter;
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+
             }
             return Content(status.ToString());
         }

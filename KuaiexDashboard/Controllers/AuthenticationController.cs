@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http.Results;
 using System.Web.Mvc;
 using KuaiexDashboard.DAL;
+using Serilog;
 
 namespace KuaiexDashboard.Controllers
 {
@@ -42,6 +44,7 @@ namespace KuaiexDashboard.Controllers
 
                 if (authenticatedUser != null)
                 {
+                    Log.Information("User logged in: {UserId}", authenticatedUser.Id);
                     Session["Id"] = authenticatedUser.Id.ToString();
                     Session["UserName"] = authenticatedUser.UserName.ToString();
                     return RedirectToAction("Index", "Dashboard");
@@ -59,7 +62,8 @@ namespace KuaiexDashboard.Controllers
                 bool registrationSuccess = objUsersDAL.RegisterUser(newUser);
                 if (registrationSuccess)
                 {
-                   return RedirectToAction("Login");
+                    Log.Information("User Sign up in: {UserEmail}", newUser.Email);
+                    return RedirectToAction("Login");
                 }
                 else
                 {

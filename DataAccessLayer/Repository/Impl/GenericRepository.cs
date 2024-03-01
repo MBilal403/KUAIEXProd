@@ -281,6 +281,10 @@ namespace KuaiexDashboard.Repository.Impl
                         foreach (var property in properties)
                         {
                             var value = property.GetValue(entity);
+                            if (value is string stringValue)
+                            {
+                                value = string.IsNullOrWhiteSpace(stringValue) ? null : stringValue.Trim();
+                            }
                             // Add parameters dynamically based on entity properties
                             command.Parameters.AddWithValue($"@{property.Name}", value ?? DBNull.Value);
                         }
@@ -308,7 +312,7 @@ namespace KuaiexDashboard.Repository.Impl
                 try
                 {
                     var tableName = typeof(T).Name;
-                    var properties = typeof(T).GetProperties().Where(p => !Attribute.IsDefined(p, typeof(KeyAttribute)));
+                    var properties = typeof(T).GetProperties().Where(p => !Attribute.IsDefined(p, typeof(KeyAttribute)) );
 
                     // Create SET clause for update
                     var updateColumns = string.Join(", ", properties.Select(p => $"{p.Name} = @{p.Name}"));
@@ -322,6 +326,10 @@ namespace KuaiexDashboard.Repository.Impl
                         foreach (var property in properties)
                         {
                             var value = property.GetValue(entity);
+                            if (value is string stringValue)
+                            {
+                                value = string.IsNullOrWhiteSpace(stringValue) ? null : stringValue.Trim();
+                            }
                             command.Parameters.AddWithValue($"@{property.Name}", value ?? DBNull.Value);
                         }
                         int rowsAffected = command.ExecuteNonQuery();

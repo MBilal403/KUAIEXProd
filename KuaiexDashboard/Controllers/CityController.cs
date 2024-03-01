@@ -2,6 +2,7 @@
 using DataAccessLayer.Entities;
 using DataAccessLayer.Helpers;
 using DataAccessLayer.ProcedureResults;
+using DataAccessLayer.Recources;
 using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.Filters;
 using KuaiexDashboard.Repository.Impl;
@@ -10,10 +11,12 @@ using KuaiexDashboard.Services.CityServices.Impl;
 using KuaiexDashboard.Services.CountryServices;
 using KuaiexDashboard.Services.CountryServices.Impl;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Http.Results;
 using System.Web.Mvc;
 
 namespace KuaiexDashboard.Controllers
@@ -45,6 +48,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);
@@ -54,30 +58,45 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                status = _cityService.AddCity(objCity);
+                if (ModelState.IsValid)
+                {
+                    status = _cityService.AddCity(objCity);
+                }
+                else
+                {
+                    throw new InvalidOperationException(MsgKeys.InvalidInputParameters);
+                }
             }
             catch (Exception ex)
             {
-                status = "error: " + ex.Message;
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
             }
-
             return Content(status);
         }
 
         [HttpGet]
         public ActionResult LoadGrid(JqueryDatatableParam param)
         {
-            PagedResult<GetCityList_Result> list = _cityService.GetActiveCities(param);
-
-            var result = new
+            try
             {
-                draw = param.sEcho,
-                recordsTotal = list.TotalSize,
-                recordsFiltered = list.FilterRecored,
-                data = list.Data
-            };
+                PagedResult<GetCityList_Result> list = _cityService.GetActiveCities(param);
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+                var result = new
+                {
+                    draw = param.sEcho,
+                    recordsTotal = list.TotalSize,
+                    recordsFiltered = list.FilterRecored,
+                    data = list.Data
+                };
+
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                return Json("Error", JsonRequestBehavior.AllowGet);
+            }
         }
         public ActionResult Edit(Guid UID)
         {
@@ -87,9 +106,10 @@ namespace KuaiexDashboard.Controllers
                 City obj = _cityService.GetCityByUID(UID);
                 status = JsonConvert.SerializeObject(obj);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                status = "Error";
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
             }
             return Content(status);
         }
@@ -98,10 +118,18 @@ namespace KuaiexDashboard.Controllers
             string status = "";
             try
             {
-                status = _cityService.UpdateCity(objcity);
+                if (ModelState.IsValid)
+                {
+                    status = _cityService.UpdateCity(objcity);
+                }
+                else
+                {
+                    throw new InvalidOperationException(MsgKeys.InvalidInputParameters);
+                }
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);

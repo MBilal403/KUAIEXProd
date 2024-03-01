@@ -1,5 +1,7 @@
 ﻿using DataAccessLayer;
+using DataAccessLayer.Recources;
 using KuaiexDashboard.Filters;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,17 +23,21 @@ namespace KuaiexDashboard.Controllers
         public ActionResult LoadGrid()
         {
             string status = "error";
-            //if (IsAdminUser)
-            //{
-            List<GetCurrencyRate_Result> result = objDashDal.GetCurrencyRates();
-            status = Newtonsoft.Json.JsonConvert.SerializeObject(result);
-            //}
+            try
+            {
+                List<GetCurrencyRate_Result> result = objDashDal.GetCurrencyRates();
+                status = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
             return Content(status);
         }
         public ActionResult TotalCustomers()
         {
             string status = "error";
-
             try
             {
                 var result = objDashDal.GetTotalCustomerCount();
@@ -39,6 +45,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
 
@@ -47,31 +54,46 @@ namespace KuaiexDashboard.Controllers
         public ActionResult TodayCustomers()
         {
             string status = "error";
-            //if (IsAdminUser)
-            //{
-            var result = objDashDal.GetTodayCustomerCount();
-            status = result.ToString();
-            //}
+            try
+            {
+                var result = objDashDal.GetTodayCustomerCount();
+                status = result.ToString();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
             return Content(status);
         }
         public ActionResult TotalReviwed()
         {
             string status = "error";
-            //if (IsAdminUser)
-            //{
-            var result = objDashDal.GetTotalCustomerReviewedCount();
-            status = result.ToString();
-            //}
+            try
+            {
+                var result = objDashDal.GetTotalCustomerReviewedCount();
+                status = result.ToString();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
             return Content(status);
         }
         public ActionResult TodayReviwed()
         {
             string status = "error";
-            //if (IsAdminUser)
-            //{
-            var result = objDashDal.GetTodayCustomerReviewedCount();
-            status = result.ToString();
-            //}
+            try
+            {
+                var result = objDashDal.GetTodayCustomerReviewedCount();
+                status = result.ToString();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
             return Content(status);
         }
     }

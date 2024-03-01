@@ -11,7 +11,9 @@ namespace DataAccessLayer.Entities
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public int Country_Id { get; set; }
+        [Required]
         public string Name { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<System.Guid> UID { get; set; }

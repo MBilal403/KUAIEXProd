@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Entities;
+using DataAccessLayer.Recources;
 using KuaiexDashboard.DTO;
 using KuaiexDashboard.Repository;
 using KuaiexDashboard.Repository.Impl;
@@ -19,7 +20,15 @@ namespace KuaiexDashboard.Services.RemitterTransactionService.Impl
 
         public List<Remittance_TrnDetailDTO> GetRemitterTransactionList()
         {
-            return _remittance_TrnRepository.GetDataFromSP<Remittance_TrnDetailDTO>("GetRemitterTransactionList");
+            try
+            {
+                return _remittance_TrnRepository.GetDataFromSP<Remittance_TrnDetailDTO>("GetRemitterTransactionList");
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
         }
     }
 }

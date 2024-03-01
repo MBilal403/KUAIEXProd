@@ -35,75 +35,139 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
 
         public string AddBeneficiary(BeneficiaryDTO beneficiaryDto)
         {
-            Beneficiary beneficiary = new Beneficiary();
-            BeneficiaryDAL objBeneficiaryDAL = new BeneficiaryDAL();
-            int existenceStatus = objBeneficiaryDAL.CheckBeneficiaryExistence(beneficiaryDto.FullName);
-
-            if (existenceStatus == 1)
+            try
             {
-                return MsgKeys.DuplicateValueExist;
-            }
-            else
-            {
-                beneficiary = AutoMapper.Mapper.Map<Beneficiary>(beneficiaryDto);
-                beneficiary.UID = Guid.NewGuid();
-                beneficiary.CreatedOn = DateTime.Now;
-                beneficiary.IsBannedList = default;
-                beneficiary.Remittance_Purpose = string.Join(",", beneficiaryDto.Remittance_Purpose.Select(x => x.ToString()));
-                beneficiary.Source_Of_Income = string.Join(",", beneficiaryDto.Source_Of_Income.Select(x => x.ToString()));
-                beneficiary.Remitter_Relation = string.Join(",", beneficiaryDto.Remitter_Relation.Select(x => x.ToString()));
+                Beneficiary beneficiary = new Beneficiary();
+                BeneficiaryDAL objBeneficiaryDAL = new BeneficiaryDAL();
+                int existenceStatus = objBeneficiaryDAL.CheckBeneficiaryExistence(beneficiaryDto.FullName);
 
-
-                Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                // beneficiary.Prod_Beneficiary_Id = objKuaiex_Prod.GetBeneficiaryIdByIdentificationNumber(beneficiary.Identification_No);
-                if (_beneficiaryRepository.Insert(beneficiary) > 0)
+                if (existenceStatus == 1)
                 {
-                    return MsgKeys.CreatedSuccessfully;
+                    return MsgKeys.DuplicateValueExist;
                 }
-                return "error";
+                else
+                {
+                    beneficiary = AutoMapper.Mapper.Map<Beneficiary>(beneficiaryDto);
+                    beneficiary.UID = Guid.NewGuid();
+                    beneficiary.CreatedOn = DateTime.Now;
+                    beneficiary.IsBannedList = default;
+                    beneficiary.Remittance_Purpose = string.Join(",", beneficiaryDto.Remittance_Purpose.Select(x => x.ToString()));
+                    beneficiary.Source_Of_Income = string.Join(",", beneficiaryDto.Source_Of_Income.Select(x => x.ToString()));
+                    beneficiary.Remitter_Relation = string.Join(",", beneficiaryDto.Remitter_Relation.Select(x => x.ToString()));
+
+
+                    Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
+                    // beneficiary.Prod_Beneficiary_Id = objKuaiex_Prod.GetBeneficiaryIdByIdentificationNumber(beneficiary.Identification_No);
+                    if (_beneficiaryRepository.Insert(beneficiary) > 0)
+                    {
+                        return MsgKeys.CreatedSuccessfully;
+                    }
+                    return "error";
+                }
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
 
 
         }
         public List<Bank_Branch_Mst> GetGetBankBranches(int bankId)
         {
-            return _bank_Branch_MstRepository.GetAll(x => x.Bank_Id == bankId, x => x.Bank_Branch_Id, x => x.Branch_Code, x => x.English_Name);
+            try
+            {
+                return _bank_Branch_MstRepository.GetAll(x => x.Bank_Id == bankId, x => x.Bank_Branch_Id, x => x.Branch_Code, x => x.English_Name);
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
 
         }
         public List<Relationship_Lookup> GetRelationshipLookupList()
         {
-            return _relationship_LookupRepository.GetAll(x => x.Status == 1, null);
+            try
+            {
+                return _relationship_LookupRepository.GetAll(x => x.Status == 1, null);
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
         }
         public List<Remittance_SubType_Mst> GetRemittanceSubtypes(int Remittance_Type_Id, int Bank_Id)
         {
-            return _remittance_SubType_MstRepository.GetAll(x => x.Remittance_Type_Id == Remittance_Type_Id && x.Bank_Id == Bank_Id,
+            try
+            {
+                return _remittance_SubType_MstRepository.GetAll(x => x.Remittance_Type_Id == Remittance_Type_Id && x.Bank_Id == Bank_Id,
 
-                x => x.Remittance_SubType, x => x.Remittance_SubType_Id);
+                        x => x.Remittance_SubType, x => x.Remittance_SubType_Id);
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
         }
         public List<Source_Of_Income_Lookup> GetSourceOfIncomeLookupList()
         {
-            return _source_Of_Income_LookupRepository.GetAll(x => x.Record_Status == "A", null);
+            try
+            {
+                return _source_Of_Income_LookupRepository.GetAll(x => x.Record_Status == "A", null);
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
         }
         public List<Bank_Mst> GetBanksByCountry(int CountryId)
         {
-            return _bank_MstRepository.GetAll(x => x.Country_Id == CountryId && x.Record_Status == "A", x => x.Bank_Id, x => x.English_Name, x => x.Bank_Code);
+            try
+            {
+                return _bank_MstRepository.GetAll(x => x.Country_Id == CountryId && x.Record_Status == "A", x => x.Bank_Id, x => x.English_Name, x => x.Bank_Code);
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
         }
 
         public List<LoadBeneficiaryDTO> GetBeneficiariesByCustomerID(int CustomerId)
         {
-            List<LoadBeneficiaryDTO> beneficiaryDTOs = _beneficiaryRepository.GetDataFromSP<LoadBeneficiaryDTO>("GetBeneficiariesByCustomerID", CustomerId);
-            return beneficiaryDTOs;
+            try
+            {
+                List<LoadBeneficiaryDTO> beneficiaryDTOs = _beneficiaryRepository.GetDataFromSP<LoadBeneficiaryDTO>("GetBeneficiariesByCustomerID", CustomerId);
+                return beneficiaryDTOs;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
         }
 
         public BeneficiaryDTO GetBeneficiaryByUID(Guid UID)
         {
-           Beneficiary beneficiary = _beneficiaryRepository.FindBy(x=> x.UID == UID);
-           var  beneficiarydto = AutoMapper.Mapper.Map<BeneficiaryDTO>(beneficiary);
-            beneficiarydto.Remittance_Purpose = Array.ConvertAll(beneficiary.Remittance_Purpose.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
-            beneficiarydto.Remitter_Relation = Array.ConvertAll(beneficiary.Remitter_Relation.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
-            beneficiarydto.Source_Of_Income = Array.ConvertAll(beneficiary.Source_Of_Income.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
+            try
+            {
+                Beneficiary beneficiary = _beneficiaryRepository.FindBy(x => x.UID == UID);
+                var beneficiarydto = AutoMapper.Mapper.Map<BeneficiaryDTO>(beneficiary);
+                beneficiarydto.Remittance_Purpose = Array.ConvertAll(beneficiary.Remittance_Purpose.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
+                beneficiarydto.Remitter_Relation = Array.ConvertAll(beneficiary.Remitter_Relation.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
+                beneficiarydto.Source_Of_Income = Array.ConvertAll(beneficiary.Source_Of_Income.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
 
-            return beneficiarydto;
+                return beneficiarydto;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
         }
     }
 }

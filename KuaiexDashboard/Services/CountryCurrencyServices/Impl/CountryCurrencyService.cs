@@ -52,11 +52,13 @@ namespace KuaiexDashboard.Services.CountryCurrencyServices.Impl
         {
             int countryId = countryCurrency.Country_Id;
             int displayOrder = countryCurrency.DisplayOrder;
-            CountryCurrency currency = _countryCurrencyRepository.FindBy(x => x.Country_Id == countryId && x.DisplayOrder == displayOrder);
-            if (currency != null)
+            CountryCurrency existingCurrency = _countryCurrencyRepository.FindBy(x => x.Country_Id == countryId && x.DisplayOrder == displayOrder);
+            if (existingCurrency != null)
             {
                 countryCurrency.UpdatedOn = DateTime.Now;
-                countryCurrency.UID = null;
+                countryCurrency.UID = existingCurrency.UID;
+                countryCurrency.CreatedOn = existingCurrency.CreatedOn;
+
                 _countryCurrencyRepository.Update(countryCurrency, $" Id = {countryCurrency.Id} ");
                 return MsgKeys.UpdatedSuccessfully;
             }

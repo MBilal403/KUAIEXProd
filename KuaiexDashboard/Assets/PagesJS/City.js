@@ -147,7 +147,7 @@ var handleStaff = function () {
                             )
                             return;
                         }
-                        if (value != 'error') {
+                        if (value == 'update_success') {
                             swal(
                                 'Success',
                                 'City Updated Successfully!',
@@ -178,7 +178,7 @@ var handleStaff = function () {
         var fieldsToValidate = ['Country_Id', 'Name'];
 
         fieldsToValidate.forEach(function (fieldName) {
-            var fieldValue = $('#' + fieldName).val().trim();
+            var fieldValue = $('#' + fieldName).val();
 
             // Assuming you have a span element with id 'Val' + fieldName to display validation messages
             var validationMessageElement = $('#Val' + fieldName);
@@ -279,6 +279,7 @@ var LoadCountry = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../City/LoadCountry",
         processData: false,
         contentType: false,

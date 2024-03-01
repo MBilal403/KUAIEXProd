@@ -4,6 +4,7 @@ using DataAccessLayer.ProcedureResults;
 using KuaiexDashboard.DAL;
 using KuaiexDashboard.Filters;
 using Newtonsoft.Json;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,9 +33,10 @@ namespace KuaiexDashboard.Controllers
                 List<GetCountryList_Result> lstCountries = objBeneficiaryDAL.GetCountryList();
 
                 status = JsonConvert.SerializeObject(lstCountries);
-            }
+            }    
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
 
@@ -59,8 +61,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -77,8 +81,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -95,8 +101,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -111,8 +119,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -127,8 +137,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -156,8 +168,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
 
             return Content(status);
         }
@@ -172,8 +186,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
-                status = "Error";
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
             }
+
             return Content(status);
         }
         public ActionResult EditBank(Bank_Mst objBank)
@@ -212,8 +228,10 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
             return Content(status);
         }
     }

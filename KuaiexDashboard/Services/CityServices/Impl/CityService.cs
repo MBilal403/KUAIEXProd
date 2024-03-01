@@ -19,75 +19,125 @@ namespace KuaiexDashboard.Services.CityServices.Impl
 
         public string AddCity(City objCity)
         {
-            int? existingCity = GetCityIdByCityName(objCity.Name , objCity.Country_Id);
-            if (existingCity != null)
+            try
             {
-                return MsgKeys.DuplicateValueExist;
-            }
-            else
-            {
-                objCity.Country_Id = objCity.Country_Id;
-                objCity.Status = objCity.Status != null ? 1 : 0;
-                objCity.UID = Guid.NewGuid();
-                objCity.CreatedOn = DateTime.Now;
-
-                // Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                //objCity.Prod_City_Id = objKuaiex_Prod.GetCityIdByCityName(objCity.Name);
-
-                if (_cityRepository.Insert(objCity) > 0)
+                City existingCity = GetCityIdByCityName(objCity.Name, objCity.Country_Id);
+                if (existingCity != null)
                 {
-                    return MsgKeys.CreatedSuccessfully;
+                    return MsgKeys.DuplicateValueExist;
                 }
-                return MsgKeys.Error;
+                else
+                {
+                    objCity.Country_Id = objCity.Country_Id;
+                    objCity.Status = objCity.Status != null ? 1 : 0;
+                    objCity.UID = Guid.NewGuid();
+                    objCity.CreatedOn = DateTime.Now;
+                    // Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
+                    //objCity.Prod_City_Id = objKuaiex_Prod.GetCityIdByCityName(objCity.Name);
+                    if (_cityRepository.Insert(objCity) > 0)
+                    {
+                        return MsgKeys.CreatedSuccessfully;
+                    }
+                }
             }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong ,ex);
+            }
+            return MsgKeys.Error;
         }
-        private int? GetCityIdByCityName(string cityName,int Country_Id)
+        private City GetCityIdByCityName(string cityName, int Country_Id)
         {
-            City city = _cityRepository.FindBy(x => x.Name == cityName && x.Country_Id == Country_Id);
-            if (city != null)
+            try
             {
-                return city.Id;
+                City city = _cityRepository.FindBy(x => x.Name == cityName && x.Country_Id == Country_Id);
+                if (city != null)
+                {
+                    return city;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return null;
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
         }
 
 
         public List<City> GetActiveCities()
         {
-            List<City> listCities = _cityRepository.GetDataFromSP<City>("GetCityList");
-            return listCities;
+            try
+            {
+                List<City> listCities = _cityRepository.GetDataFromSP<City>("GetCityList");
+                return listCities;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
         }
         public PagedResult<GetCityList_Result> GetActiveCities(JqueryDatatableParam param)
         {
-            PagedResult<GetCityList_Result> list = _cityRepository.GetPagedDataFromSP<GetCityList_Result>("GetCitiesWithPagination", param.iDisplayStart + 1, param.iDisplayLength, param.sSearch);
-            return list;
+            try
+            {
+                PagedResult<GetCityList_Result> list = _cityRepository.GetPagedDataFromSP<GetCityList_Result>("GetCitiesWithPagination", param.iDisplayStart + 1, param.iDisplayLength, param.sSearch);
+                return list;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
+          
         }
 
         public string UpdateCity(City objCity)
         {
-            int? existingCity = GetCityIdByCityName(objCity.Name, objCity.Country_Id);
-            if (existingCity != null)
+            try
             {
-                objCity.Country_Id = objCity.Country_Id;
-                objCity.Status = objCity.Status != null ? 1 : 0;
-                objCity.UpdatedOn = DateTime.Now;
-                //objCity.Prod_City_Id = objKuaiex_Prod.GetCityIdByCityName(objCity.Name);
+                City existingCity = GetCityIdByCityName(objCity.Name, objCity.Country_Id);
+                if (existingCity != null)
+                {
+                    objCity.Country_Id = objCity.Country_Id;
+                    objCity.Status = objCity.Status != null ? 1 : 0;
+                    objCity.UpdatedOn = DateTime.Now;
+                    objCity.UID = existingCity.UID;
+                    objCity.CreatedOn = existingCity.CreatedOn;
+                    objCity.Prod_City_Id = existingCity.Prod_City_Id;
+                    //objCity.Prod_City_Id = objKuaiex_Prod.GetCityIdByCityName(objCity.Name);
 
-                _cityRepository.Update(objCity, $" UID = '{objCity.UID}' ");
-                return MsgKeys.UpdatedSuccessfully;
+                    _cityRepository.Update(objCity, $" UID = '{objCity.UID}' ");
+                    return MsgKeys.UpdatedSuccessfully;
+                }
+
+                return MsgKeys.Error;
             }
-
-            return MsgKeys.Error;
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
 
         }
 
         public City GetCityByUID(Guid uid)
         {
-            City city = _cityRepository.FindBy(x => x.UID == uid);
-            return city;
+            try
+            {
+                City city = _cityRepository.FindBy(x => x.UID == uid);
+                return city;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
         }
     }
 }

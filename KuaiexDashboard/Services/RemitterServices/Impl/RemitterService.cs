@@ -1,5 +1,4 @@
-﻿using BusinessLogicLayer.DomainEntities;
-using DataAccessLayer;
+﻿using DataAccessLayer;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Helpers;
 using DataAccessLayer.ProcedureResults;
@@ -13,9 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KuaiexDashboard.Services.RemitterServices.Impl
 {
@@ -47,18 +43,18 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                 }
                 else
                 {
-                 
+
                     customer.Agency_Id = Convert.ToInt32(ConfigurationManager.AppSettings["Agency_Id"].ToString());
-                    customer.Agency_Branch_Id = Convert.ToInt32( ConfigurationManager.AppSettings["Agency_Branch_Id"].ToString());
+                    customer.Agency_Branch_Id = Convert.ToInt32(ConfigurationManager.AppSettings["Agency_Branch_Id"].ToString());
                     customer.Name = customerDto.Name;
                     customer.Employer = customerDto.Employer;
-                   // customer.Gender = 0;
+                    // customer.Gender = 0;
                     customer.Identification_Type = customerDto.Identification_Type;
                     customer.Identification_Number = customerDto.Identification_Number;
                     customer.Identification_Expiry_Date = customerDto.Identification_Expiry_Date;
                     customer.Date_Of_Birth = customerDto.Date_Of_Birth;
                     customer.Occupation = customerDto.Occupation;
-                    customer.Nationality = customerDto.Nationality;
+                    customer.Nationality = string.IsNullOrEmpty(customerDto.Nationality) ? null : customerDto.Nationality;
                     customer.Mobile_No = customerDto.Mobile_No;
                     customer.Area = customerDto.Area;
                     customer.Block = customerDto.Block;
@@ -67,7 +63,7 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.Floor = customerDto.Floor;
                     customer.Flat = customerDto.Flat;
                     customer.Login_Id = customerDto.Identification_Number;
-                  //  customer.Device_Key = "e537487483sj";
+                    //  customer.Device_Key = "e537487483sj";
                     customer.UID = Guid.NewGuid();
                     customer.CreatedBy = 1;
                     customer.UID_Token = Guid.NewGuid();
@@ -78,8 +74,8 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.UpdatedIp = "127.0.0.1";
                     customer.Civil_Id_Front = customerDto.Civil_Id_Front;
                     customer.Civil_Id_Back = customerDto.Civil_Id_Back;
-                   // customer.Pep_Status = false;
-                  //  customer.Pep_Description = "";
+                    // customer.Pep_Status = false;
+                    //  customer.Pep_Description = "";
                     customer.Identification_Additional_Detail = customerDto.Identification_Additional_Detail;
                     customer.Residence_Type = customerDto.Residence_Type;
                     customer.Telephone_No = customerDto.Telephone_No;
@@ -96,7 +92,7 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.Compliance_Limit_Expiry = customerDto.Compliance_Limit_Expiry;
                     customer.Compliance_Comments = customerDto.Compliance_Comments;
                     customer.IsReviwed = customerDto.IsReviwed == null ? false : true;
-                   // customer.Prod_Remitter_Id = 100;
+                    // customer.Prod_Remitter_Id = 100;
                     customer.Is_Profile_Completed = 1;
 
                     //customer.Prod_Remitter_Id = objKuaiex_Prod.GetRemittanceIdByIdentificationNumber(customerDto.Identification_Number);
@@ -148,7 +144,8 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
             }
             catch (Exception ex)
             {
-                return MsgKeys.Error;
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
 
         }
@@ -162,32 +159,21 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                 Customer customer = objRemitterDal.GetCustomerByUID(customerDto.UID);
                 List<Customer_Security_Questions> securityQuestions;
                 List<Individual_KYC> individual_KYCs;
-                Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-
-
-                /*      Customer existingCustomer = objRemitterDal.GetCustomerByIdentificationAndName(customerDto.Identification_Number, customerDto.Name);
-
-                      if (existingCustomer != null)
-                      {
-                          return MsgKeys.DuplicateValueExist;
-                      }
-                      else
-                      {*/
                 if (customer != null)
                 {
                     customer.Agency_Id = Convert.ToInt32(ConfigurationManager.AppSettings["Agency_Id"].ToString());
                     customer.Agency_Branch_Id = Convert.ToInt32(ConfigurationManager.AppSettings["Agency_Branch_Id"].ToString());
                     customer.Name = customerDto.Name;
                     customer.Employer = customerDto.Employer;
-                  //  customer.Gender = 0;
+                    //  customer.Gender = 0;
                     customer.Identification_Type = customerDto.Identification_Type;
                     customer.Identification_Number = customerDto.Identification_Number;
                     customer.Identification_Expiry_Date = customerDto.Identification_Expiry_Date;
                     customer.Date_Of_Birth = customerDto.Date_Of_Birth;
                     customer.Occupation = customerDto.Occupation;
-                    customer.Nationality = customerDto.Nationality;
+                    customer.Nationality = string.IsNullOrEmpty(customerDto.Nationality) ? null : customerDto.Nationality;
                     customer.Mobile_No = customerDto.Mobile_No;
-                  //  customer.Email_Address = "";
+                    //  customer.Email_Address = "";
                     customer.Area = customerDto.Area;
                     customer.Block = customerDto.Block;
                     customer.Street = customerDto.Street;
@@ -195,7 +181,7 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.Floor = customerDto.Floor;
                     customer.Flat = customerDto.Flat;
                     customer.Login_Id = customerDto.Identification_Number;
-                   // customer.Device_Key = "e537487483sj";
+                    // customer.Device_Key = "e537487483sj";
                     customer.UID = Guid.NewGuid();
                     customer.CreatedBy = 1;
                     customer.UID_Token = Guid.NewGuid();
@@ -204,13 +190,13 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.UpdatedBy = 1;
                     customer.UpdatedOn = DateTime.Now;
                     customer.UpdatedIp = "127.0.0.1";
-                    customer.IsBlocked = 0;
-                    customer.Block_Count = 0;
-                    customer.InvalidTryCount = 0;
+                    customer.IsBlocked = customerDto.IsBlocked ?? customer.IsBlocked;
+                    customer.Block_Count = customerDto.Block_Count ?? customer.Block_Count;
+                    customer.InvalidTryCount = customerDto.InvalidTryCount ?? customer.InvalidTryCount;
                     customer.Civil_Id_Front = customerDto.Civil_Id_Front;
                     customer.Civil_Id_Back = customerDto.Civil_Id_Back;
-                   // customer.Pep_Status = false;
-                   // customer.Pep_Description = "";
+                    // customer.Pep_Status = false;
+                    // customer.Pep_Description = "";
                     customer.Identification_Additional_Detail = customerDto.Identification_Additional_Detail;
                     customer.Residence_Type = customerDto.Residence_Type;
                     customer.Telephone_No = customerDto.Telephone_No;
@@ -228,12 +214,22 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.Compliance_Comments = customerDto.Compliance_Comments;
                     customer.IsVerified = customerDto.IsReviwed == null ? 0 : 1;
                     customer.IsReviwed = customerDto.IsReviwed == null ? false : true;
-                   // customer.Prod_Remitter_Id = 100;
-                   // customer.Is_Profile_Completed = 1;
+                    // customer.Prod_Remitter_Id = 100;
+                    // customer.Is_Profile_Completed = 1;
                 }
 
                 // customer.Prod_Remitter_Id = objKuaiex_Prod.GetRemittanceIdByIdentificationNumber(customerDto.Identification_Number);
+                // Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
 
+
+                /*      Customer existingCustomer = objRemitterDal.GetCustomerByIdentificationAndName(customerDto.Identification_Number, customerDto.Name);
+
+                      if (existingCustomer != null)
+                      {
+                          return MsgKeys.DuplicateValueExist;
+                      }
+                      else
+                      {*/
                 _customerRepository.Update(customer, $"  Customer_Id = {customer.Customer_Id} ");
 
                 customerDto.Customer_Id = customer.Customer_Id;
@@ -283,38 +279,71 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
             }
             catch (Exception ex)
             {
-                return MsgKeys.Error;
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
 
         }
 
         public EditCustomerDTO GetCustomerByUID(Guid customerId)
         {
-            EditCustomerDTO customerDTO = null;
-            RemitterDAL objRemitterDal = new RemitterDAL();
-             string LocalStoragePath = ConfigurationManager.AppSettings["LocalStoragePath"].ToString();
-            Customer obj = objRemitterDal.GetCustomerByUID(customerId);
-            customerDTO = AutoMapper.Mapper.Map<EditCustomerDTO>(obj);
-            customerDTO.Civil_Id_Front = string.Concat(LocalStoragePath, customerDTO.Civil_Id_Front);
-            customerDTO.Civil_Id_Back = string.Concat(LocalStoragePath, customerDTO.Civil_Id_Back);
-            return customerDTO;
+            try
+            {
+                EditCustomerDTO customerDTO = null;
+                RemitterDAL objRemitterDal = new RemitterDAL();
+                string LocalStoragePath = ConfigurationManager.AppSettings["LocalStoragePath"].ToString();
+                Customer obj = objRemitterDal.GetCustomerByUID(customerId);
+                customerDTO = AutoMapper.Mapper.Map<EditCustomerDTO>(obj);
+                customerDTO.Civil_Id_Front = string.Concat(LocalStoragePath, customerDTO.Civil_Id_Front);
+                customerDTO.Civil_Id_Back = string.Concat(LocalStoragePath, customerDTO.Civil_Id_Back);
+                return customerDTO;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
         }
 
         public List<Individual_KYC> GetCustomerLoadKYCIndividuals(int id)
         {
-            return _individual_KYCRepository.GetAll(x => x.Customer_Id == id, null);
+            try
+            {
+                return _individual_KYCRepository.GetAll(x => x.Customer_Id == id, null);
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
         }
 
         public List<Customer_Security_Questions> GetCustomerSecurityQuestions(int id)
         {
-            return _customerSecurityQuestionRepository.GetAll(x => x.Customer_Id == id, null);
+            try
+            {
+                return _customerSecurityQuestionRepository.GetAll(x => x.Customer_Id == id, null);
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
         }
 
         public PagedResult<GetRemitterList_Result> GetRemitterList(JqueryDatatableParam param)
         {
-            PagedResult<GetRemitterList_Result> obj = _customerRepository.GetPagedDataFromSP<GetRemitterList_Result>("GetRemitterListWithPagination", param.iDisplayStart + 1, param.iDisplayLength, param.sSearch);
+            try
+            {
+                PagedResult<GetRemitterList_Result> obj = _customerRepository.GetPagedDataFromSP<GetRemitterList_Result>("GetRemitterListWithPagination", param.iDisplayStart + 1, param.iDisplayLength, param.sSearch);
 
-            return obj;
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
         }
     }
 }
