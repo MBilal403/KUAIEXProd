@@ -27,41 +27,65 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
 
         public string AddCountry(Country objCountry)
         {
-            int? existingCountry = GetCountryIdByCountryName(objCountry.Name);
-
-            if (existingCountry != null)
+            try
             {
-                return MsgKeys.DuplicateValueExist;
-            }
-            else
-            {
-                objCountry.Status = objCountry.Status != null ? "A" : "N";
-                objCountry.Remittance_Status = "Y";
-                objCountry.High_Risk_Status = "A";
-                objCountry.CreatedOn = DateTime.Now;
-                objCountry.CreatedIp = "127.0.0.1";
-                objCountry.UpdatedIp = "127.0.0.1";
-                objCountry.UID = Guid.NewGuid();
-                // objCountry.Prod_Country_Id = objKuaiex_Prod.GetCountryIdByCountryName(objCountry.Name);
+                int? existingCountry = GetCountryIdByCountryName(objCountry.Name);
 
-                if (_countryRepository.Insert(objCountry) > 0)
+                if (existingCountry != null)
                 {
-                    return MsgKeys.CreatedSuccessfully;
+                    return MsgKeys.DuplicateValueExist;
                 }
-                return MsgKeys.Error;
+                else
+                {
+                    objCountry.Status = objCountry.Status != null ? "A" : "N";
+                    objCountry.Remittance_Status = "Y";
+                    objCountry.High_Risk_Status = "A";
+                    objCountry.CreatedOn = DateTime.Now;
+                    objCountry.CreatedIp = "127.0.0.1";
+                    objCountry.UpdatedIp = "127.0.0.1";
+                    objCountry.UID = Guid.NewGuid();
+                    // objCountry.Prod_Country_Id = objKuaiex_Prod.GetCountryIdByCountryName(objCountry.Name);
+
+                    if (_countryRepository.Insert(objCountry) > 0)
+                    {
+                        return MsgKeys.CreatedSuccessfully;
+                    }
+                    return MsgKeys.Error;
+                }
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong);
             }
         }
 
         public List<GetCountryList_Result> GetActiveCountryList()
         {
-            List<GetCountryList_Result> obj = _countryRepository.GetDataFromSP<GetCountryList_Result>("GetActiveCountryList");
-            return obj;
+            try
+            {
+                List<GetCountryList_Result> obj = _countryRepository.GetDataFromSP<GetCountryList_Result>("GetActiveCountryList");
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong);
+            }
         }
 
         public List<Country> GetAllCountries()
         {
-            List<Country> countries = _countryRepository.GetAll(x => x.Status == "A", x => x.Id, x => x.Name);
-            return countries;
+            try
+            {
+                List<Country> countries = _countryRepository.GetAll(x => x.Status == "A", x => x.Id, x => x.Name);
+                return countries;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong);
+            }
         }
 
         public Country GetCountryByName(string countryName)
@@ -71,61 +95,100 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
 
         public Country GetCountryByUID(Guid UID)
         {
-            Country existingCountry = _countryRepository.FindBy(x => x.UID == UID);
-            return existingCountry;
+            try
+            {
+                Country existingCountry = _countryRepository.FindBy(x => x.UID == UID);
+                return existingCountry;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong);
+            }
         }
 
         public int? GetCountryIdByCountryName(string countryName)
         {
-            Country country = _countryRepository.FindBy(x => x.Name == countryName);
-            if (country != null)
+            try
             {
-                return country.Id;
+                Country country = _countryRepository.FindBy(x => x.Name == countryName);
+                if (country != null)
+                {
+                    return country.Id;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return null;
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong);
             }
 
         }
 
         public List<GetCountryList_Result> GetCountryList()
         {
-            List<GetCountryList_Result> obj = _countryRepository.GetDataFromSP<GetCountryList_Result>("GetCountryList");
-            return obj;
+            try
+            {
+                List<GetCountryList_Result> obj = _countryRepository.GetDataFromSP<GetCountryList_Result>("GetCountryList");
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong);
+            }
         }
         public PagedResult<GetCountryList_Result> GetCountryList(JqueryDatatableParam param)
         {
-            PagedResult<GetCountryList_Result> obj = _countryRepository.GetPagedDataFromSP<GetCountryList_Result>("GetAllCountriesWithPagination", param.iDisplayStart + 1, param.iDisplayLength, param.sSearch);
+            try
+            {
+                PagedResult<GetCountryList_Result> obj = _countryRepository.GetPagedDataFromSP<GetCountryList_Result>("GetAllCountriesWithPagination", param.iDisplayStart + 1, param.iDisplayLength, param.sSearch);
 
-            return obj;
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong);
+            }
         }
 
         public string UpdateCountry(Country objCountry)
         {
-            Guid guid = objCountry.UID ?? Guid.NewGuid();
-            Country existingCountry = _countryRepository.FindBy(x => x.UID == guid);
-
-            if (existingCountry != null)
+            try
             {
-                objCountry.UpdatedOn = DateTime.Now;
-                objCountry.Id = existingCountry.Id;
-                objCountry.Prod_Country_Id = existingCountry.Prod_Country_Id;
-                objCountry.Status = objCountry.Status != null ? "A" : "N";
-                if (_countryRepository.Update(objCountry, $" Id = {objCountry.Id} ") > 0)
+                Guid guid = objCountry.UID ?? Guid.NewGuid();
+                Country existingCountry = _countryRepository.FindBy(x => x.UID == guid);
+
+                if (existingCountry != null)
                 {
-                    return MsgKeys.UpdatedSuccessfully;
+                    objCountry.UpdatedOn = DateTime.Now;
+                    objCountry.Id = existingCountry.Id;
+                    objCountry.Prod_Country_Id = existingCountry.Prod_Country_Id;
+                    objCountry.Status = objCountry.Status != null ? "A" : "N";
+                    if (_countryRepository.Update(objCountry, $" Id = {objCountry.Id} ") > 0)
+                    {
+                        return MsgKeys.UpdatedSuccessfully;
+                    }
+                    return MsgKeys.Error;
                 }
                 return MsgKeys.Error;
+
+                /*    if (obj.Prod_Country_Id == null || obj.Prod_Country_Id <= 0)
+                      {
+                          Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
+                          obj.Prod_Country_Id = objKuaiex_Prod.GetCountryIdByCountryName(obj.Name);
+                      }*/
             }
-            return MsgKeys.Error;
-
-            /*    if (obj.Prod_Country_Id == null || obj.Prod_Country_Id <= 0)
-                  {
-                      Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                      obj.Prod_Country_Id = objKuaiex_Prod.GetCountryIdByCountryName(obj.Name);
-                  }*/
-
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong);
+            }
         }
     }
 }

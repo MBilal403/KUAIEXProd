@@ -6,7 +6,7 @@ $(document).ready(function () {
     LoadCountry();
 
     $(document).ajaxStart(function () {
-   
+
         $("#wait").css("display", "block");
     });
 
@@ -99,41 +99,9 @@ $("#Status").on('ifUnchecked', function (event) {
 
 // Handle stuff
 var handleStaff = function () {
-    $('.frmAddUsers').validate({
-        errorElement: 'span',
-        errorClass: 'help-block',
-        focusInvalid: false,
-        ignore: "",
-        rules: {
-            Name: {
-                required: true,
-                maxlength: 50
-            },
-            Nationality: {
-                required: true,
-                maxlength: 50
-            },
-            CityId: {
-                required: true,
-                maxlength: 50
-            },
-        },
-        invalidHandler: function (event, validator) { },
-        highlight: function (element) {
-            $(element).closest('.form-group').addClass('has-error');
-        },
-        success: function (label) {
-            label.closest('.form-group').removeClass('has-error');
-            label.remove();
-        },
-        errorPlacement: function (error, element) {
-            if (element.closest('.input-icon').size() === 1) {
-                error.insertAfter(element.closest('.input-icon'));
-            } else {
-                error.insertAfter(element);
-            }
-        },
-        submitHandler: function (form) {
+    $(".frmAddUsers").submit(function (event) {
+        event.preventDefault();
+        if (validateForm()) {
             $('#btn-save').attr('disabled', 'true');
             $(".frmAddUsers :disabled").removeAttr('disabled');
             if (!IsEditMode) {
@@ -141,7 +109,7 @@ var handleStaff = function () {
                     "../country/AddCountry",
                     $(".frmAddUsers").serialize(),
                     function (value) {
-                      if (value == 'duplicate_value_exist') {
+                        if (value == 'duplicate_value_exist') {
                             swal("Error", "Country Already Exist", "error");
                             $('#btn-save').removeAttr('disabled');
                         }
@@ -195,154 +163,172 @@ var handleStaff = function () {
                     "text"
                 );
             }
-            return false;
         }
     });
 
-    $('.frmAddUsers').keypress(function (e) {
-        if (e.which == 13) {
+    function validateForm() {
+        var isValid = true;
+
+        $('.required-text').text('');
+        var fieldsToValidate = ['Comission', 'Alpha_2_Code', 'Nationality', 'Name'];
+
+        fieldsToValidate.forEach(function (fieldName) {
+            var fieldValue = $('#' + fieldName).val().trim();
+
+            if (fieldValue === '') {
+                isValid = false;
+                $('#Val' + fieldName).text(' required ');
+            }
+
+        });
+        return isValid;
+    }
+
+
+        $('.frmAddUsers').keypress(function (e) {
+            if (e.which == 13) {
+                if ($('.frmAddUsers').validate().form()) {
+                    $('.frmAddUsers').submit();
+                }
+                return false;
+            }
+        });
+
+        jQuery('#btn-save').click(function () {
             if ($('.frmAddUsers').validate().form()) {
                 $('.frmAddUsers').submit();
             }
+        });
+    }
+
+    // Load grid
+    var LoadGridData = function () {
+        $('#tblUsers').DataTable({
+            "destroy": true,
+            "lengthMenu": [5, 25, 50, 75, 100],
+            "sAjaxSource": "../country/LoadGrid",
+            "bServerSide": true,
+            "bProcessing": true,
+            "paging": true,
+            "order": [[1, 'asc']],
+            "language": {
+                "emptyTable": "No record found."
+            },
+            "columns": [
+                {
+                    "data": "Name",
+                    "autoWidth": true,
+                    "searchable": true
+                },
+                {
+                    "data": "Nationality",
+                    "autoWidth": true,
+                    "searchable": true
+                },
+                {
+                    "data": "Alpha_2_Code",
+                    "autoWidth": true,
+                    "searchable": true
+                },
+                {
+                    "data": "City",
+                    "autoWidth": true,
+                    "searchable": true
+                },
+                {
+                    "data": "Status",
+                    "render": function (data, type, row) {
+                        console.log(data);
+                        return data === 'A' ? '<span class="label label-success label-xs">Active</span>' : '<span class="label label-danger label-xs">In Active</span>';
+                    },
+                    "autoWidth": true,
+                    "searchable": true
+                },
+                {
+                    "data": "UID",
+                    "render": function (data, type, row) {
+                        console.log(data);
+                        return '<button id=' + data + ' class="btn btn-warning btn-block btn-xs btn-edit" style="width: 80px;">' +
+                            '<i class="fa fa-edit"></i>' +
+                            ' Edit' +
+                            '</button>';
+                    },
+                    "autoWidth": true
+                }
+            ]
+        });
+    };
+
+    // Reset values
+    function resetForm() {
+        IsEditMode = false;
+        LoadCountry();
+        $('#Name').val('');
+        $('#City_Id').val('');
+        $('#Country_Dialing_Code').val('');
+        $('#Alpha_3_Code').val('');
+        $('#Alpha_2_Code').val('');
+        $('#Nationality').val('');
+        $('#Comission').val('');
+        $("#Status").iCheck('uncheck');
+        $('#btn-save').html("<i class='fa fa-save'></i> Save");
+        $('#City_Id').val("").trigger("chosen:updated");
+        $('#btn-save').removeAttr('disabled');
+    }
+
+    $('#btn-refresh').click(function () {
+        resetForm();
+    });
+
+    // For number validation
+    function CellNumberValidator(CellNo) {
+        var phoneno = /^[9]{1}[2]{1}[0-9]{10}$/;
+        if (CellNo.match(phoneno)) {
+            return true;
+        } else {
             return false;
         }
-    });
-
-    jQuery('#btn-save').click(function () {
-        if ($('.frmAddUsers').validate().form()) {
-            $('.frmAddUsers').submit();
-        }
-    });
-}
-
-// Load grid
-var LoadGridData = function () {
-    $('#tblUsers').DataTable({
-        "destroy": true,
-        "lengthMenu": [5, 25, 50, 75, 100],
-        "sAjaxSource": "../country/LoadGrid",
-        "bServerSide": true,
-        "bProcessing": true,
-        "paging": true,
-        "order": [[1, 'asc']],
-        "language": {
-            "emptyTable": "No record found."
-        },
-        "columns": [
-            {
-                "data": "Name",
-                "autoWidth": true,
-                "searchable": true
-            },
-            {
-                "data": "Nationality",
-                "autoWidth": true,
-                "searchable": true
-            },
-            {
-                "data": "Alpha_2_Code",
-                "autoWidth": true,
-                "searchable": true
-            },
-            {
-                "data": "City",
-                "autoWidth": true,
-                "searchable": true
-            },
-            {
-                "data": "Status",
-                "render": function (data, type, row) {
-                    console.log(data);
-                    return data === 'A' ? '<span class="label label-success label-xs">Active</span>' : '<span class="label label-danger label-xs">In Active</span>';
-                },
-                "autoWidth": true,
-                "searchable": true
-            },
-            {
-                "data": "UID",
-                "render": function (data, type, row) {
-                    console.log(data);
-                    return '<button id=' + data + ' class="btn btn-warning btn-block btn-xs btn-edit" style="width: 80px;">' +
-                        '<i class="fa fa-edit"></i>' +
-                        ' Edit' +
-                        '</button>';
-                },
-                "autoWidth": true
-            }
-        ]
-    });
-};
-
-// Reset values
-function resetForm() {
-    IsEditMode = false;
-    LoadCountry();
-    $('#Name').val('');
-    $('#City_Id').val('');
-    $('#Country_Dialing_Code').val('');
-    $('#Alpha_3_Code').val('');
-    $('#Alpha_2_Code').val('');
-    $('#Nationality').val('');
-    $('#Comission').val('');
-    $("#Status").iCheck('uncheck');
-    $('#btn-save').html("<i class='fa fa-save'></i> Save");
-    $('#City_Id').val("").trigger("chosen:updated");
-    $('#btn-save').removeAttr('disabled');
-}
-
-$('#btn-refresh').click(function () {
-    resetForm();
-});
-
-// For number validation
-function CellNumberValidator(CellNo) {
-    var phoneno = /^[9]{1}[2]{1}[0-9]{10}$/;
-    if (CellNo.match(phoneno)) {
-        return true;
-    } else {
-        return false;
     }
-}
 
-// Load City
-var LoadCountry = function () {
-    $.ajax({
-        type: "POST",
-        cache: false,
-        url: "../Country/LoadCity",
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            var sch = JSON.parse(data);
-            var $el = $('#City_Id');
-            $el.empty();
-            if (sch.length > 0) {
-                $el.append('<option value="">' + "Select City" + '</option>');
-                $.each(sch, function (idx, obj) {
-                    $el.append('<option value="' + obj.Id + '">' + obj.Name + '</option>');
-                });
-            } else {
-                $el.append('<option value="">' + "Select City" + '</option>');
+    // Load City
+    var LoadCountry = function () {
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "../Country/LoadCity",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                var sch = JSON.parse(data);
+                var $el = $('#City_Id');
+                $el.empty();
+                if (sch.length > 0) {
+                    $el.append('<option value="">' + "Select City" + '</option>');
+                    $.each(sch, function (idx, obj) {
+                        $el.append('<option value="' + obj.Id + '">' + obj.Name + '</option>');
+                    });
+                } else {
+                    $el.append('<option value="">' + "Select City" + '</option>');
+                }
+                $el.trigger("liszt:updated");
+                $el.chosen();
             }
-            $el.trigger("liszt:updated");
-            $el.chosen();
-        }
-    });
-}
+        });
+    }
 
-$('#btn-sync').on('click', function () {
-    $.ajax({
-        type: "POST",
-        cache: false,
-        url: "../Country/SynchronizeRecords",
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            swal(
-                'Success',
-                data + ' Records Synchronized Successfully.',
-                'success'
-            );
-        }
+    $('#btn-sync').on('click', function () {
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "../Country/SynchronizeRecords",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                swal(
+                    'Success',
+                    data + ' Records Synchronized Successfully.',
+                    'success'
+                );
+            }
+        });
     });
-});

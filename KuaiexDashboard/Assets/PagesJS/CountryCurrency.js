@@ -182,9 +182,14 @@ function validateForm() {
     fieldsToValidate.forEach(function (fieldName) {
         var fieldValue = $('#' + fieldName).val().trim();
 
-        if (fieldValue === '') {
+        // Assuming you have a span element with id 'Val' + fieldName to display validation messages
+        var validationMessageElement = $('#Val' + fieldName);
+
+        if (fieldValue === '' || (fieldValue === '0' && $('#' + fieldName).is('select'))) {
             isValid = false;
-            $('#Val' + fieldName).text(' required ');
+            validationMessageElement.text(' required ');
+        } else {
+            validationMessageElement.text(''); // Clear any previous validation message
         }
     });
 

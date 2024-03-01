@@ -74,11 +74,6 @@ namespace DataAccessLayer.Recources
         public static string NotAllowed => "not_allowed";
 
         /// <summary>
-        /// "Something went wrong."
-        /// </summary>
-        public static string SomethingWentWrong => "something_went_wrong";
-
-        /// <summary>
         /// "Upload Files Failed. "
         /// </summary>
         public static string uploadFilesFailed => "upload_files_failed";
@@ -334,5 +329,9 @@ namespace DataAccessLayer.Recources
         /// Get the NoFileExistInRequest
         /// </summary>
         public static string Error => "error";
+        /// <summary>
+        /// "Something went wrong."
+        /// </summary>
+        public static string SomethingWentWrong => "something_went_wrong";
     }
 }

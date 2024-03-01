@@ -11,9 +11,12 @@ namespace DataAccessLayer.Entities
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Nationality { get; set; }
         public string Status { get; set; }
+        [Required]
         public string Alpha_2_Code { get; set; }
         public string Alpha_3_Code { get; set; }
         public string Remittance_Status { get; set; }
@@ -27,6 +30,7 @@ namespace DataAccessLayer.Entities
         public Nullable<System.DateTime> UpdatedOn { get; set; }
         public string UpdatedIp { get; set; }
         public Nullable<System.Guid> UID { get; set; }
+        [Required]
         public Nullable<decimal> Comission { get; set; }
         public Nullable<int> Prod_Country_Id { get; set; }
     }

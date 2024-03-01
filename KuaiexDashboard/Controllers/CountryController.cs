@@ -15,6 +15,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Serilog;
+using Serilog.Core;
+using DataAccessLayer.Recources;
 
 namespace KuaiexDashboard.Controllers
 {
@@ -34,7 +36,6 @@ namespace KuaiexDashboard.Controllers
         // GET: Country
         public ActionResult Index()
         {
-            Log.Information( "An error occurred.");
             return View();
         }
         public ActionResult AddCountry(Country objCountry)
@@ -42,11 +43,18 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                status = _countryService.AddCountry(objCountry);
+                if (ModelState.IsValid)
+                {
+                    status = _countryService.AddCountry(objCountry);
+                }
+                else
+                {
+                    throw new InvalidOperationException(MsgKeys.InvalidInputParameters);
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
 
@@ -63,6 +71,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);
@@ -70,18 +79,25 @@ namespace KuaiexDashboard.Controllers
 
         public ActionResult LoadGrid(JqueryDatatableParam param)
         {
-
-            PagedResult<GetCountryList_Result> list = _countryService.GetCountryList(param);
-
-            var result = new
+            try
             {
-                draw = param.sEcho,
-                recordsTotal = list.TotalSize,
-                recordsFiltered = list.FilterRecored,
-                data = list.Data
-            };
+                PagedResult<GetCountryList_Result> list = _countryService.GetCountryList(param);
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+                var result = new
+                {
+                    draw = param.sEcho,
+                    recordsTotal = list.TotalSize,
+                    recordsFiltered = list.FilterRecored,
+                    data = list.Data
+                };
+
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                return Json("error");
+            }
 
         }
 
@@ -95,6 +111,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "Error";
             }
             return Content(status);
@@ -105,11 +122,18 @@ namespace KuaiexDashboard.Controllers
             string status = "";
             try
             {
-                status = _countryService.UpdateCountry(objCountry);
-                 
+                if (ModelState.IsValid)
+                {
+                    status = _countryService.UpdateCountry(objCountry);
+                }
+                else
+                {
+                    throw new InvalidOperationException(MsgKeys.InvalidInputParameters);
+                }
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);
@@ -142,6 +166,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = Counter;
             }
             return Content(status.ToString());

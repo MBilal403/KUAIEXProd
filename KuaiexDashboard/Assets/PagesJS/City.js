@@ -95,47 +95,9 @@ $("#Status").on('ifUnchecked', function (event) {
 
 //handle stuff
 var handleStaff = function () {
-    $('.frmAddUsers').validate({
-        errorElement: 'span', //default input error message container
-        errorClass: 'help-block', // default input error message class
-        focusInvalid: false, // do not focus the last invalid input
-        ignore: "",
-        rules: {
-            Name: {
-                required: true,
-                maxlength: 50
-            },
-            Country: {
-                required: true,
-                maxlength: 20
-            },
-
-
-        },
-
-        invalidHandler: function (event, validator) { //display error alert on form submit
-
-        },
-
-        highlight: function (element) { // hightlight error inputs            
-            $(element)
-                .closest('.form-group').addClass('has-error'); // set error class to the control group
-        },
-
-        success: function (label) {
-            label.closest('.form-group').removeClass('has-error');
-            label.remove();
-        },
-
-        errorPlacement: function (error, element) {
-            if (element.closest('.input-icon').size() === 1) {
-                error.insertAfter(element.closest('.input-icon'));
-            } else {
-                error.insertAfter(element);
-            }
-        },
-
-        submitHandler: function (form) {
+    $(".frmAddUsers").submit(function (event) {
+        event.preventDefault();
+        if (validateForm()) {
             $('#btn-save').attr('disabled', 'true');
             $(".frmAddUsers :disabled").removeAttr('disabled');
             if (!IsEditMode) {
@@ -205,11 +167,35 @@ var handleStaff = function () {
                     "text"
                 );
             }
-            return false;
-
         }
 
     });
+
+    function validateForm() {
+        var isValid = true;
+
+        $('.required-text').text('');
+        var fieldsToValidate = ['Country_Id', 'Name'];
+
+        fieldsToValidate.forEach(function (fieldName) {
+            var fieldValue = $('#' + fieldName).val().trim();
+
+            // Assuming you have a span element with id 'Val' + fieldName to display validation messages
+            var validationMessageElement = $('#Val' + fieldName);
+
+            if (fieldValue === '' || (fieldValue === '0' && $('#' + fieldName).is('select'))) {
+                isValid = false;
+                validationMessageElement.text(' required ');
+            } else {
+                validationMessageElement.text(''); // Clear any previous validation message
+            }
+        });
+
+        return isValid;
+    }
+
+
+
     $('.frmAddUsers').keypress(function (e) {
         if (e.which == 13) {
             if ($('.frmAddUsers').validate().form()) {

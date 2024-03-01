@@ -73,7 +73,7 @@ var handleStaff = function () {
                             $('#btn-save').removeAttr('disabled');
                         }
 
-                        else if (value != 'error') {
+                        else if (value == 'insert_success') {
                             swal(
                                 'Success',
                                 'Country Saved Successfully!',
@@ -104,7 +104,7 @@ var handleStaff = function () {
                             );
                             return;
                         }
-                        if (value != 'error') {
+                        if (value == 'update_success') {
                             swal(
                                 'Success',
                                 'Currency Updated Successfully!',
