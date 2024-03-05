@@ -287,18 +287,17 @@ var handleStaff = function () {
             if (file1 !== undefined || file2 !== undefined) {
 
                 $.ajax({
-                    url: url1,
+                    url: url,
                     type: 'POST',
                     data: formData,
                     async: false,
                     contentType: false,
                     processData: false,
                     success: function (response) {
-                        debugger;
-                        console.log();
-                        $('#btn-save').attr('disabled', 'true');
-                        $(".frmAddUsers :disabled").removeAttr('disabled');
-                        return AddCustomer(response.civil_Id_Back, response.civil_Id_Front);
+                        var data = response.responseMessage;
+                        var data1 = response.responseData;
+                        console.log(data1[0].civil_Id_Back);
+                        return AddCustomer(data1[0].civil_Id_Back, data1[0].civil_Id_Front);
                     },
                     error: function (error) {
                         console.error('Error uploading files:', error);
@@ -311,6 +310,8 @@ var handleStaff = function () {
         }
 
         function AddCustomer(Civil_Id_Back, Civil_Id_Front) {
+            $('#btn-save').attr('disabled', 'true');
+            $(".frmAddUsers :disabled").removeAttr('disabled');
             if (!IsEditMode) {
                 $.post(
                     "../Remitter/AddCustomer?civil_Id_Back=" + Civil_Id_Back + "&civil_Id_Front=" + Civil_Id_Front,
@@ -329,7 +330,7 @@ var handleStaff = function () {
                             resetForm();
                             return;
                         }
-                        if (value !== 'error') {
+                        if (value === 'insert_success') {
 
                             swal(
                                 'Success',
@@ -362,7 +363,7 @@ var handleStaff = function () {
                             )
                             return;
                         }
-                        if (value != 'error') {
+                        if (value === 'update_success') {
                             swal(
                                 'Success',
                                 'Customer Updated Successfully!',

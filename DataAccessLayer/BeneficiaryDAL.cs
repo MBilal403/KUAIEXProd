@@ -137,41 +137,7 @@ namespace KuaiexDashboard
 
             return beneficiaries;
         }
-        public GetBeneficiaryList_Result GetBeneficiaryFromUID(Guid? uid)
-        {
-            GetBeneficiaryList_Result beneficiary = null;
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                using (SqlCommand command = new SqlCommand("GetBeneficiaryFromUID", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add("@UID", SqlDbType.UniqueIdentifier).Value = (object)uid ?? DBNull.Value;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    DataSet ds = new DataSet();
-                    adapter.Fill(ds, "Beneficiary");
-                    if (ds.Tables["Beneficiary"].Rows.Count > 0)
-                    {
-                        DataRow row = ds.Tables["Beneficiary"].Rows[0];
-                        beneficiary = new GetBeneficiaryList_Result
-                        {
-                            UID = row.Field<Guid?>("UID"),
-                            FullName = row.Field<string>("FullName"),
-                            Birth_Date = row.Field<DateTime?>("Birth_Date"),
-                            Address_Line3 = row.Field<string>("Address_Line3"),
-                            Branch_Address_Line3 = row.Field<string>("Branch_Address_Line3"),
-                            Country_Name = row.Field<string>("Country_Id"),
-                            Currency = row.Field<string>("Currency_Id"),
-                            Bank_Name = row.Field<string>("Bank_Id"),
-                            Customer_Name = row.Field<string>("Customer_Id")
-                        };
-                    }
-                }
-            }
-
-            return beneficiary;
-        }
         public Beneficiary GetBeneficiaryByUID(Guid? uid)
         {
             Beneficiary beneficiary = null;
@@ -365,71 +331,7 @@ namespace KuaiexDashboard
 
             return remittancePurposes;
         }
-        public List<Relationship_Lookup> GetRelationshipLookupList()
-        {
-            List<Relationship_Lookup> relationshipLookupList = new List<Relationship_Lookup>();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                using (SqlCommand command = new SqlCommand("GetRelationshipLookupList", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    DataSet ds = new DataSet();
-
-                    
-                    adapter.Fill(ds, "Relationship_Lookup");
-
-                    foreach (DataRow row in ds.Tables["Relationship_Lookup"].Rows)
-                    {
-                        Relationship_Lookup relationshipLookup = new Relationship_Lookup
-                        {
-                            Relationship_Id = row.Field<int>("Relationship_Id"),
-                            Status = row.Field<int>("Status"),
-                            Name = row.Field<string>("Name")
-                        };
-
-                        relationshipLookupList.Add(relationshipLookup);
-                    }
-                }
-            }
-
-            return relationshipLookupList;
-        }
-        public List<Source_Of_Income_Lookup> GetSourceOfIncomeLookupList()
-        {
-            List<Source_Of_Income_Lookup> sourceOfIncomeLookupList = new List<Source_Of_Income_Lookup>();
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                using (SqlCommand command = new SqlCommand("GetSourceOfIncomeLookupList", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    DataSet ds = new DataSet();
-
-                    
-                    adapter.Fill(ds, "Source_Of_Income_Lookup");
-
-                    foreach (DataRow row in ds.Tables["Source_Of_Income_Lookup"].Rows)
-                    {
-                        Source_Of_Income_Lookup sourceOfIncomeLookup = new Source_Of_Income_Lookup
-                        {
-                            Id = row.Field<int>("Id"),
-                            Name = row.Field<string>("Name"),
-                            Record_Status = row.Field<string>("Record_Status"),
-                            Display_Order = row.Field<int?>("Display_Order")
-                        };
-
-                        sourceOfIncomeLookupList.Add(sourceOfIncomeLookup);
-                    }
-                }
-            }
-
-            return sourceOfIncomeLookupList;
-        }
         public List<Remittance_Type_Mst> GetRemittanceTypeList()
         {
             List<Remittance_Type_Mst> remittanceTypeList = new List<Remittance_Type_Mst>();
@@ -469,42 +371,6 @@ namespace KuaiexDashboard
             return remittanceTypeList;
         }
        
-            public List<Bank_Mst> GetBanksByCountry(int countryId)
-            {
-                List<Bank_Mst> bankList = new List<Bank_Mst>();
-
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                using (SqlCommand command = new SqlCommand("GetBanksByCountry", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.AddWithValue("@CountryId", countryId);
-
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    DataTable dataTable = new DataTable();
-
-                    connection.Open();
-                    adapter.Fill(dataTable);
-
-                    foreach (DataRow row in dataTable.Rows)
-                    {
-                        Bank_Mst bank = new Bank_Mst
-                        {
-                            Bank_Id = Convert.ToInt32(row["Bank_Id"]),
-                            English_Name = Convert.ToString(row["English_Name"]),
-                            Arabic_Name = Convert.ToString(row["Arabic_Name"]),
-                            Short_English_Name = Convert.ToString(row["Short_English_Name"]),
-                            Short_Arabic_Name = Convert.ToString(row["Short_Arabic_Name"]),
-                            Country_Id = row["Country_Id"] != DBNull.Value ? Convert.ToInt32(row["Country_Id"]) : (int?)null,
-                            Currency_Id = row["Currency_Id"] != DBNull.Value ? Convert.ToInt32(row["Currency_Id"]) : (int?)null,
-                           
-                        };
-
-                        bankList.Add(bank);
-                    }
-                }
-
-                return bankList;
-            }
         
 
     public List<Bank_Account_Type> GetBankAccountTypes()
@@ -536,43 +402,6 @@ namespace KuaiexDashboard
             }
 
             return bankAccountTypes;
-        }
-        public List<Remittance_SubType_Mst> GetRemittanceSubtypes(int remittanceTypeId, int bankId)
-        {
-            List<Remittance_SubType_Mst> remittanceSubtypes = new List<Remittance_SubType_Mst>();
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                using (SqlCommand command = new SqlCommand("GetRemittanceSubtypes", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add("@Remittance_Type_Id", SqlDbType.Int).Value = remittanceTypeId;
-                    command.Parameters.Add("@Bank_Id", SqlDbType.Int).Value = bankId;
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    DataSet ds = new DataSet();
-                    adapter.Fill(ds, "Remittance_Subtype_Mst");
-                    foreach (DataRow row in ds.Tables["Remittance_Subtype_Mst"].Rows)
-                    {
-                        Remittance_SubType_Mst remittanceSubtype = new Remittance_SubType_Mst
-                        {
-                            Remittance_SubType_Id = row.Field<int>("Remittance_SubType_Id"),
-                            Remittance_Type_Id = row.Field<int>("Remittance_Type_Id"),
-                            Remittance_SubType = row.Field<string>("Remittance_SubType"),
-                            Bank_Id = row.Field<int>("Bank_Id"),
-                            English_Name = row.Field<string>("English_Name"),
-                            Txn_Code1 = row.Field<string>("Txn_Code1"),
-                            Txn_Code2 = row.Field<string>("Txn_Code2"),
-                            Txn_Code3 = row.Field<string>("Txn_Code3"),
-                            Record_Status = row.Field<string>("Record_Status"),
-                            TT_Number_Prefix = row.Field<string>("TT_Number_Prefix")
-                        };
-
-                        remittanceSubtypes.Add(remittanceSubtype);
-                    }
-                }
-            }
-
-            return remittanceSubtypes;
         }
         public List<IdentificationTypeLookup> GetIdentificationTypes()
         {
@@ -774,101 +603,6 @@ namespace KuaiexDashboard
             }
 
             return bankBranches;
-        }
-        public int AddBeneficiary(Beneficiary objBeneficiary)
-        {
-            int beneficiaryId = -1;
-
-            try
-            {
-                using (SqlConnection connection = new SqlConnection(connectionString))
-                {
-                    connection.Open();
-
-                    using (SqlCommand command = new SqlCommand("AddBeneficiary", connection))
-                    {
-                        command.CommandType = CommandType.StoredProcedure;
-
-                        command.Parameters.AddWithValue("@FullName", objBeneficiary.FullName);
-                        command.Parameters.AddWithValue("@Address_Line1", objBeneficiary.Address_Line1);
-                        command.Parameters.AddWithValue("@Address_Line2", objBeneficiary.Address_Line2);
-                        command.Parameters.AddWithValue("@Address_Line3", objBeneficiary.Address_Line3);
-                        command.Parameters.AddWithValue("@Country_Id", objBeneficiary.Country_Id);
-                        command.Parameters.AddWithValue("@Currency_Id", objBeneficiary.Currency_Id);
-                        command.Parameters.AddWithValue("@Birth_Date", objBeneficiary.Birth_Date);
-                        command.Parameters.AddWithValue("@Remittance_Purpose", objBeneficiary.Remittance_Purpose);
-                        command.Parameters.AddWithValue("@Remittance_Type_Id", objBeneficiary.Remittance_Type_Id);
-                        command.Parameters.AddWithValue("@Remittance_Instruction", objBeneficiary.Remittance_Instruction);
-                        command.Parameters.AddWithValue("@Phone_No", objBeneficiary.Phone_No);
-                        command.Parameters.AddWithValue("@Mobile_No", objBeneficiary.Mobile_No);
-                        command.Parameters.AddWithValue("@Fax_No", objBeneficiary.Fax_No);
-                        command.Parameters.AddWithValue("@Email_Address1", objBeneficiary.Email_Address1);
-                        command.Parameters.AddWithValue("@Email_Address2", objBeneficiary.Email_Address2);
-                        command.Parameters.AddWithValue("@Identification_Type", objBeneficiary.Identification_Type);
-                        command.Parameters.AddWithValue("@Identification_No", objBeneficiary.Identification_No);
-                        command.Parameters.AddWithValue("@Identification_Remarks", objBeneficiary.Identification_Remarks);
-                        command.Parameters.AddWithValue("@Identification_Issue_Date", objBeneficiary.Identification_Issue_Date);
-                        command.Parameters.AddWithValue("@Identification_Expiry_Date", objBeneficiary.Identification_Expiry_Date);
-                        command.Parameters.AddWithValue("@Bank_Id", objBeneficiary.Bank_Id);
-                        command.Parameters.AddWithValue("@Branch_Id", objBeneficiary.Branch_Id);
-                        command.Parameters.AddWithValue("@Bank_Account_No", objBeneficiary.Bank_Account_No);
-                        command.Parameters.AddWithValue("@Bank_Name", objBeneficiary.Bank_Name);
-                        command.Parameters.AddWithValue("@Branch_Name", objBeneficiary.Branch_Name);
-                        command.Parameters.AddWithValue("@Branch_City_Id", objBeneficiary.Branch_City_Id);
-                        command.Parameters.AddWithValue("@Branch_City_Name", objBeneficiary.Branch_City_Name);
-                        command.Parameters.AddWithValue("@Branch_Address_Line1", objBeneficiary.Branch_Address_Line1);
-                        command.Parameters.AddWithValue("@Branch_Address_Line2", objBeneficiary.Branch_Address_Line2);
-                        command.Parameters.AddWithValue("@Branch_Address_Line3", objBeneficiary.Branch_Address_Line3);
-                        command.Parameters.AddWithValue("@Branch_Number", objBeneficiary.Branch_Number);
-                        command.Parameters.AddWithValue("@Branch_Phone_Number", objBeneficiary.Branch_Phone_Number);
-                        command.Parameters.AddWithValue("@Branch_Fax_Number", objBeneficiary.Branch_Fax_Number);
-                        command.Parameters.AddWithValue("@Destination_Country_Id", objBeneficiary.Destination_Country_Id);
-                        command.Parameters.AddWithValue("@Destination_City_Id", objBeneficiary.Destination_City_Id);
-                        command.Parameters.AddWithValue("@DD_Beneficiary_Name", objBeneficiary.DD_Beneficiary_Name);
-                        command.Parameters.AddWithValue("@Bank_Account_type", objBeneficiary.Bank_Account_type);
-                        command.Parameters.AddWithValue("@Gender", objBeneficiary.Gender);
-                        command.Parameters.AddWithValue("@Remittance_Remarks", objBeneficiary.Remittance_Remarks);
-                        command.Parameters.AddWithValue("@Bank_Code", objBeneficiary.Bank_Code);
-                        command.Parameters.AddWithValue("@Routing_Bank_Id", objBeneficiary.Routing_Bank_Id);
-                        command.Parameters.AddWithValue("@Routing_Bank_Branch_Id", objBeneficiary.Routing_Bank_Branch_Id);
-                        command.Parameters.AddWithValue("@Remittance_Subtype_Id", objBeneficiary.Remittance_Subtype_Id);
-                        command.Parameters.AddWithValue("@Birth_Place", objBeneficiary.Birth_Place);
-                        command.Parameters.AddWithValue("@IsBannedList", objBeneficiary.IsBannedList);
-                        command.Parameters.AddWithValue("@BannedListCreatedOn", objBeneficiary.BannedListCreatedOn);
-                        command.Parameters.AddWithValue("@BannedListClearedBy", objBeneficiary.BannedListClearedBy);
-                        command.Parameters.AddWithValue("@TransFastInfo", objBeneficiary.TransFastInfo);
-                        command.Parameters.AddWithValue("@UID", objBeneficiary.UID);
-                        command.Parameters.AddWithValue("@CreatedBy", objBeneficiary.CreatedBy);
-                        command.Parameters.AddWithValue("@CreatedOn", objBeneficiary.CreatedOn);
-                        command.Parameters.AddWithValue("@CreatedIp", objBeneficiary.CreatedIp);
-                        command.Parameters.AddWithValue("@UpdatedBy", objBeneficiary.UpdatedBy);
-                        command.Parameters.AddWithValue("@UpdatedOn", objBeneficiary.UpdatedOn);
-                        command.Parameters.AddWithValue("@UpdatedIp", objBeneficiary.UpdatedIp);
-                        command.Parameters.AddWithValue("@Prod_Beneficiary_Id", objBeneficiary.Prod_Beneficiary_Id);
-                        command.Parameters.AddWithValue("@Remittance_Purpose_Detail", objBeneficiary.Remittance_Purpose_Detail);
-                        command.Parameters.AddWithValue("@Remitter_Relation", objBeneficiary.Remitter_Relation);
-                        command.Parameters.AddWithValue("@Remitter_Relation_Detail", objBeneficiary.Remitter_Relation_Detail);
-                        command.Parameters.AddWithValue("@Source_Of_Income", objBeneficiary.Source_Of_Income);
-                        command.Parameters.AddWithValue("@Source_Of_Income_Detail", objBeneficiary.Source_Of_Income_Detail);
-                        command.Parameters.AddWithValue("@Nationality_Id", objBeneficiary.Nationality_Id);
-                        command.Parameters.AddWithValue("@Bank_Account_Title", objBeneficiary.Bank_Account_Title);
-
-                        SqlParameter beneficiaryIdParam = new SqlParameter("@BeneficiaryId", SqlDbType.Int);
-                        beneficiaryIdParam.Direction = ParameterDirection.Output;
-                        command.Parameters.Add(beneficiaryIdParam);
-
-                        command.ExecuteNonQuery();
-
-                        beneficiaryId = Convert.ToInt32(beneficiaryIdParam.Value);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                
-            }
-
-            return beneficiaryId;
         }
         public int CheckBeneficiaryExistence(string fullName)
         {

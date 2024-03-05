@@ -38,6 +38,12 @@ namespace DataAccessLayer.Recources
         /// </summary>
         public static string CreatedSuccessfully => "insert_success";
 
+
+        /// <summary>
+        /// "Created Failed."
+        /// </summary>
+        public static string CreatedFailed => "insert_failed";
+
         /// <summary>
         /// "Requested object does not exists in database."
         /// </summary>
@@ -62,6 +68,11 @@ namespace DataAccessLayer.Recources
         /// "Cannot update user."
         /// </summary>
         public static string UserUpdationFailed => "user_updation_failed";
+
+        /// <summary>
+        /// "Cannot update."
+        /// </summary>
+        public static string UpdationFailed => "updation_failed";
 
         /// <summary>
         /// "Data you requested is not active."

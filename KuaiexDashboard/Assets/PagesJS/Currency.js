@@ -206,7 +206,6 @@ var LoadGridData = function () {
             {
                 "data": "UID",
                 "render": function (data, type, row) {
-                    console.log(data);
                     return '<button id=' + data + ' class="btn btn-warning btn-block btn-xs btn-edit" style="width: 80px;">' +
                         '<i class="fa fa-edit"></i>' +
                         ' Edit' +

@@ -4,80 +4,73 @@
 
 
 var LoadGridData = function () {
-    $.ajax({
-        type: "GET",
-        cache: false,
-        url: "../RemittanceTransaction/LoadGrid",
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            data = JSON.parse(data);
-            $('#tblRemitterTransaction').DataTable().destroy();
-            var html = '';
-            for (var i = 0; i < data.length; i++) {
-                var obj = data[i];
-
-                html += '<tr>';
-
-                html += '<td class="hidden">' + obj.Remittance_Id  + '</td>';
-
-                if (obj.FullName != null) {
-                    html += '<td>' + obj.Remitter_Name  + '</td>';
-                }
-                else {
-                    html += '<td>-</td>';
-                }
-                if (obj.Customer_Name != null) {
-                    html += '<td>' + obj.Country_Name  + '</td>';
-                }
-                else {
-                    html += '<td>-</td>';
-                }
-                if (obj.Birth_Date != null) {
-                    html += '<td>' + obj.Remittance_Date  + '</td>';
-                }
-                else {
-                    html += '<td>-</td>';
-                }
-
-                if (obj.Address_Line3 != null) {
-                    html += '<td>' + obj.Beneficiary_Name   + '</td>';
-                }
-                else {
-                    html += '<td>-</td>';
-                }
-                if (obj.Branch_Address_Line3 != null) {
-                    html += '<td>' + obj.Identification_Number  + '</td>';
-                }
-                else {
-                    html += '<td>-</td>';
-                }
-                if (obj.Branch_Address_Line3 != null) {
-                    html += '<td>' + obj.DD_Number  + '</td>';
-                }
-                else {
-                    html += '<td>-</td>';
-                }
-
-                if (obj.Country_Name != null) {
-                    html += '<td>' + obj.Bank_Name  + '</td>';
-                }
-                else {
-                    html += '<td>-</td>';
-                }
-
-                if (obj.Currency != null) {
-                    html += '<td>' + obj.Customer_Name + '</td>';
-                }
-                else {
-                    html += '<td>-</td>';
-                }
-
-                
-                html += '</tr>'
+    $('#tblRemitterTransaction').DataTable({
+        "destroy": true,
+        "lengthMenu": [10, 25, 50, 75],
+        "sAjaxSource": "../RemittanceTransaction/LoadGrid",
+        "bServerSide": true,
+        "bProcessing": true,
+        "paging": true,
+        "order": [[1, 'asc']],
+        "language": {
+            "emptyTable": "No record found."
+        },
+        "columns": [
+            {
+                "data": "Remitter_Name",
+                "autoWidth": true,
+                "searchable": true
+            },
+            {
+                "data": "Address_Line3",
+                "autoWidth": true,
+                "searchable": true
+            },
+            {
+                "data": "Identification_Number",    
+                "autoWidth": true,
+                "searchable": true
             }
-            $("#tblbody").append(html);
-            $('#tblRemitterTransaction').DataTable().draw();
-        }
+            ,
+            {
+                "data": "Beneficiary_Name",
+                "autoWidth": true,
+                "searchable": true
+            }
+            ,
+             {
+                 "data": "Remittance_Date",
+                "render": function (data, type, row) {
+                    var timestamp = parseInt(data.match(/\d+/)[0]);
+                    var date = new Date(timestamp);
+                    return date.toLocaleDateString();
+                },
+                "autoWidth": true,
+                "searchable": true
+            },
+            {
+                "data": "DD_Number",
+                "autoWidth": true,
+                "searchable": true
+            }
+            ,
+            {
+                "data": "Bank_Name",
+                "autoWidth": true,
+                "searchable": true
+            }
+            ,
+            {
+                "data": "Amount_FC",
+                "autoWidth": true,
+                "searchable": true
+            }
+            ,
+            {
+                "data": "Amount_LC",
+                "autoWidth": true,
+                "searchable": true
+            }
+        ]
     });
-}
+};

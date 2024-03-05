@@ -5,6 +5,7 @@ using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.Repository.Impl;
 using KuaiexDashboard.Repository;
 using System;
+using System.Collections.Generic;
 
 
 namespace KuaiexDashboard.Services.CurrencyServices.Impl
@@ -54,22 +55,19 @@ namespace KuaiexDashboard.Services.CurrencyServices.Impl
             return currency;
         }
 
+   
+
         public string UpdateCurrency(Currency currency)
         {
             int currencyId = currency.Id;
             Currency currencyExist = _currencyRepository.FindBy(x => x.Id == currencyId);
             if (currencyExist != null)
             {
-
-                currency.UpdatedOn = DateTime.Now;
-                currency.TT_Min_Rate = currency.DD_Rate;
-                currency.TT_Rate = currency.DD_Rate;
-                currency.IsBaseCurrency = currencyExist.Id == 1 ? 1 : 0;
-                currency.Display_Order = 1;
-                currency.CreatedOn = currencyExist.CreatedOn;
-                currency.UID = currencyExist.UID;
-                currency.Status = currency.Status != null ? "A" : "N";
-                _currencyRepository.Update(currency, $" Id = {currency.Id} ");
+                currencyExist.UpdatedOn = DateTime.Now;
+                currencyExist.TT_Min_Rate = currency.DD_Rate;
+                currencyExist.TT_Rate = currency.DD_Rate;
+                currencyExist.Status = currency.Status != null ? "A" : "N";
+                _currencyRepository.Update(currencyExist, $" Id = {currency.Id} ");
                 return MsgKeys.UpdatedSuccessfully;
             }
             return MsgKeys.Error;

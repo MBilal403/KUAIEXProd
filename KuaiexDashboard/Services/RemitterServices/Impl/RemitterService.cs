@@ -54,6 +54,9 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.Identification_Expiry_Date = customerDto.Identification_Expiry_Date;
                     customer.Date_Of_Birth = customerDto.Date_Of_Birth;
                     customer.Occupation = customerDto.Occupation;
+                    customer.IsBlocked = 0;
+                    customer.Block_Count = 0;
+                    customer.InvalidTryCount = 0;
                     customer.Nationality = string.IsNullOrEmpty(customerDto.Nationality) ? null : customerDto.Nationality;
                     customer.Mobile_No = customerDto.Mobile_No;
                     customer.Area = customerDto.Area;
@@ -152,7 +155,6 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
 
         public string EditRemitter(CustomerDTO customerDto)
         {
-
             try
             {
                 RemitterDAL objRemitterDal = new RemitterDAL();
@@ -161,49 +163,29 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                 List<Individual_KYC> individual_KYCs;
                 if (customer != null)
                 {
-                    customer.Agency_Id = Convert.ToInt32(ConfigurationManager.AppSettings["Agency_Id"].ToString());
-                    customer.Agency_Branch_Id = Convert.ToInt32(ConfigurationManager.AppSettings["Agency_Branch_Id"].ToString());
                     customer.Name = customerDto.Name;
-                    customer.Employer = customerDto.Employer;
-                    //  customer.Gender = 0;
-                    customer.Identification_Type = customerDto.Identification_Type;
-                    customer.Identification_Number = customerDto.Identification_Number;
-                    customer.Identification_Expiry_Date = customerDto.Identification_Expiry_Date;
-                    customer.Date_Of_Birth = customerDto.Date_Of_Birth;
                     customer.Occupation = customerDto.Occupation;
-                    customer.Nationality = string.IsNullOrEmpty(customerDto.Nationality) ? null : customerDto.Nationality;
-                    customer.Mobile_No = customerDto.Mobile_No;
-                    //  customer.Email_Address = "";
+                    customer.Employer = customerDto.Employer;
+                    customer.IsReviwed = customerDto.IsReviwed == null ? false : true;
                     customer.Area = customerDto.Area;
                     customer.Block = customerDto.Block;
                     customer.Street = customerDto.Street;
                     customer.Building = customerDto.Building;
                     customer.Floor = customerDto.Floor;
                     customer.Flat = customerDto.Flat;
-                    customer.Login_Id = customerDto.Identification_Number;
-                    // customer.Device_Key = "e537487483sj";
-                    customer.UID = Guid.NewGuid();
-                    customer.CreatedBy = 1;
-                    customer.UID_Token = Guid.NewGuid();
-                    customer.CreatedOn = DateTime.Now;
-                    customer.CreatedIp = "127.0.0.1";
-                    customer.UpdatedBy = 1;
-                    customer.UpdatedOn = DateTime.Now;
-                    customer.UpdatedIp = "127.0.0.1";
-                    customer.IsBlocked = customerDto.IsBlocked ?? customer.IsBlocked;
-                    customer.Block_Count = customerDto.Block_Count ?? customer.Block_Count;
-                    customer.InvalidTryCount = customerDto.InvalidTryCount ?? customer.InvalidTryCount;
-                    customer.Civil_Id_Front = customerDto.Civil_Id_Front;
-                    customer.Civil_Id_Back = customerDto.Civil_Id_Back;
-                    // customer.Pep_Status = false;
-                    // customer.Pep_Description = "";
+                    customer.Identification_Type = customerDto.Identification_Type;
+                    customer.Identification_Number = customerDto.Identification_Number;
+                    customer.Identification_Expiry_Date = customerDto.Identification_Expiry_Date;
                     customer.Identification_Additional_Detail = customerDto.Identification_Additional_Detail;
                     customer.Residence_Type = customerDto.Residence_Type;
+                    customer.Mobile_No = customerDto.Mobile_No;
                     customer.Telephone_No = customerDto.Telephone_No;
+                    customer.Nationality = customerDto.Nationality;
+                    customer.Date_Of_Birth = customerDto.Date_Of_Birth;
                     customer.Birth_Place = customerDto.Birth_Place;
                     customer.Birth_Country = customerDto.Birth_Country;
-                    customer.Monthly_Income = customerDto.Monthly_Income;
                     customer.Expected_Monthly_Trans_Count = customerDto.Expected_Monthly_Trans_Count;
+                    customer.Monthly_Income = customerDto.Monthly_Income;
                     customer.Other_Income = customerDto.Other_Income;
                     customer.Other_Income_Detail = customerDto.Other_Income_Detail;
                     customer.Monthly_Trans_Limit = customerDto.Monthly_Trans_Limit;
@@ -212,24 +194,16 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.Compliance_Trans_Count = customerDto.Compliance_Trans_Count;
                     customer.Compliance_Limit_Expiry = customerDto.Compliance_Limit_Expiry;
                     customer.Compliance_Comments = customerDto.Compliance_Comments;
-                    customer.IsVerified = customerDto.IsReviwed == null ? 0 : 1;
-                    customer.IsReviwed = customerDto.IsReviwed == null ? false : true;
-                    // customer.Prod_Remitter_Id = 100;
-                    // customer.Is_Profile_Completed = 1;
+                    customer.Civil_Id_Front = customerDto.Civil_Id_Front;
+                    customer.Civil_Id_Back = customerDto.Civil_Id_Back;
+                    customer.UpdatedOn = DateTime.Now;
+                    /////////////////////////////
+
                 }
 
                 // customer.Prod_Remitter_Id = objKuaiex_Prod.GetRemittanceIdByIdentificationNumber(customerDto.Identification_Number);
                 // Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
 
-
-                /*      Customer existingCustomer = objRemitterDal.GetCustomerByIdentificationAndName(customerDto.Identification_Number, customerDto.Name);
-
-                      if (existingCustomer != null)
-                      {
-                          return MsgKeys.DuplicateValueExist;
-                      }
-                      else
-                      {*/
                 _customerRepository.Update(customer, $"  Customer_Id = {customer.Customer_Id} ");
 
                 customerDto.Customer_Id = customer.Customer_Id;
@@ -274,7 +248,7 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     _individual_KYCRepository.Update(individual_KYC, $" Customer_Id = {customerDto.Customer_Id} AND Question_Id = {individual_KYC.Question_Id} ");
                 }
 
-                return MsgKeys.CreatedSuccessfully;
+                return MsgKeys.UpdatedSuccessfully;
 
             }
             catch (Exception ex)

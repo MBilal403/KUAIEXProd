@@ -104,15 +104,11 @@ namespace KuaiexDashboard.Services.CityServices.Impl
                 City existingCity = GetCityIdByCityName(objCity.Name, objCity.Country_Id);
                 if (existingCity != null)
                 {
-                    objCity.Country_Id = objCity.Country_Id;
-                    objCity.Status = objCity.Status != null ? 1 : 0;
-                    objCity.UpdatedOn = DateTime.Now;
-                    objCity.UID = existingCity.UID;
-                    objCity.CreatedOn = existingCity.CreatedOn;
-                    objCity.Prod_City_Id = existingCity.Prod_City_Id;
+                    existingCity.Country_Id = objCity.Country_Id;
+                    existingCity.UpdatedOn = DateTime.Now;
                     //objCity.Prod_City_Id = objKuaiex_Prod.GetCityIdByCityName(objCity.Name);
 
-                    _cityRepository.Update(objCity, $" UID = '{objCity.UID}' ");
+                    _cityRepository.Update(existingCity, $" UID = '{objCity.UID}' ");
                     return MsgKeys.UpdatedSuccessfully;
                 }
 

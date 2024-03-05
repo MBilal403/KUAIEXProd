@@ -16,5 +16,6 @@ namespace KuaiexDashboard.Services.CountryCurrencyServices
         PagedResult<GetCountryCurrencyList_Result> GetAllCountryCurrency(JqueryDatatableParam param);
         string AddCountryCurrency(CountryCurrency countryCurrency);
         string UpdateCountryCurrency(CountryCurrency countryCurrency);
+        List<Currency_Result> GetCurrencyByCountry(int id);
     }
 }

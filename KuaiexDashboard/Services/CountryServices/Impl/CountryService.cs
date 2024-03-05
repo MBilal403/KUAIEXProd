@@ -1,5 +1,4 @@
-﻿using DataAccessLayer;
-using DataAccessLayer.Entities;
+﻿using DataAccessLayer.Entities;
 using DataAccessLayer.Helpers;
 using DataAccessLayer.ProcedureResults;
 using DataAccessLayer.Recources;
@@ -8,20 +7,14 @@ using KuaiexDashboard.Repository;
 using KuaiexDashboard.Repository.Impl;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace KuaiexDashboard.Services.CountryServices.Impl
 {
     public class CountryService : ICountryService
     {
-        private readonly CountryDAL objCountryDal;
-        private readonly Kuaiex_Prod objKuaiex_Prod;
         private readonly IRepository<Country> _countryRepository;
         public CountryService()
         {
-            objCountryDal = new CountryDAL();
-            objKuaiex_Prod = new Kuaiex_Prod();
             _countryRepository = new GenericRepository<Country>();
         }
 
@@ -50,13 +43,16 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
                     {
                         return MsgKeys.CreatedSuccessfully;
                     }
-                    return MsgKeys.Error;
+                    else
+                    {
+                        throw new Exception(MsgKeys.CreatedFailed);
+                    }
                 }
             }
             catch (Exception ex)
             {
                 // throw the exception to propagate it up the call stack
-                throw new Exception(MsgKeys.SomethingWentWrong);
+                throw;
             }
         }
 
@@ -70,7 +66,7 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
             catch (Exception ex)
             {
                 // throw the exception to propagate it up the call stack
-                throw new Exception(MsgKeys.SomethingWentWrong);
+                throw;
             }
         }
 
@@ -84,7 +80,7 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
             catch (Exception ex)
             {
                 // throw the exception to propagate it up the call stack
-                throw new Exception(MsgKeys.SomethingWentWrong);
+                throw;
             }
         }
 
@@ -103,7 +99,7 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
             catch (Exception ex)
             {
                 // throw the exception to propagate it up the call stack
-                throw new Exception(MsgKeys.SomethingWentWrong);
+                throw;
             }
         }
 
@@ -124,7 +120,7 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
             catch (Exception ex)
             {
                 // throw the exception to propagate it up the call stack
-                throw new Exception(MsgKeys.SomethingWentWrong);
+                throw;
             }
 
         }
@@ -139,7 +135,7 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
             catch (Exception ex)
             {
                 // throw the exception to propagate it up the call stack
-                throw new Exception(MsgKeys.SomethingWentWrong);
+                throw;
             }
         }
         public PagedResult<GetCountryList_Result> GetCountryList(JqueryDatatableParam param)
@@ -153,7 +149,7 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
             catch (Exception ex)
             {
                 // throw the exception to propagate it up the call stack
-                throw new Exception(MsgKeys.SomethingWentWrong);
+                throw;
             }
         }
 
@@ -166,31 +162,38 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
 
                 if (existingCountry != null)
                 {
-                    objCountry.UpdatedOn = DateTime.Now;
-                    objCountry.Id = existingCountry.Id;
-                    objCountry.CreatedOn = existingCountry.CreatedOn;
-                    objCountry.UID = existingCountry.UID;
-                    objCountry.Prod_Country_Id = existingCountry.Prod_Country_Id;
-                    objCountry.Status = objCountry.Status != null ? "A" : "N";
-                    if (_countryRepository.Update(objCountry, $" Id = {objCountry.Id} ") > 0)
+                    existingCountry.UpdatedOn = DateTime.Now;
+                    existingCountry.Alpha_2_Code = objCountry.Alpha_2_Code;
+                    existingCountry.Alpha_3_Code = objCountry.Alpha_3_Code;
+                    existingCountry.Country_Dialing_Code = objCountry.Country_Dialing_Code;
+                    existingCountry.City_Id = objCountry.City_Id;
+                    existingCountry.Comission = objCountry.Comission;
+                    existingCountry.Status = objCountry.Status != null ? "A" : "N";
+                    if (_countryRepository.Update(existingCountry, $" Id = {existingCountry.Id} ") > 0)
                     {
                         return MsgKeys.UpdatedSuccessfully;
                     }
-                    return MsgKeys.Error;
+                    else
+                    {
+                        throw new Exception(MsgKeys.UpdationFailed);
+                    }
                 }
-                return MsgKeys.Error;
-
-                /*    if (obj.Prod_Country_Id == null || obj.Prod_Country_Id <= 0)
-                      {
-                          Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                          obj.Prod_Country_Id = objKuaiex_Prod.GetCountryIdByCountryName(obj.Name);
-                      }*/
+                else
+                {
+                    throw new Exception(MsgKeys.ObjectNotExists);
+                }
             }
             catch (Exception ex)
             {
                 // throw the exception to propagate it up the call stack
-                throw new Exception(MsgKeys.SomethingWentWrong);
+                throw;
             }
         }
+
+        /*    if (obj.Prod_Country_Id == null || obj.Prod_Country_Id <= 0)
+              {
+                  Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
+                  obj.Prod_Country_Id = objKuaiex_Prod.GetCountryIdByCountryName(obj.Name);
+              }*/
     }
 }

@@ -1,4 +1,6 @@
 ﻿using DataAccessLayer.Entities;
+using DataAccessLayer.Helpers;
+using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.DTO;
 using KuaiexDashboard.Filters;
 using KuaiexDashboard.Repository;
@@ -27,23 +29,30 @@ namespace KuaiexDashboard.Controllers
         {
             return View();
         }
-        public ActionResult LoadGrid()
+        [HttpGet]
+        public ActionResult LoadGrid(JqueryDatatableParam param)
         {
-            string status = "error";
-
             try
             {
-                List<Remittance_TrnDetailDTO> result = _remitterTransactionService.GetRemitterTransactionList();
+                PagedResult<Remittance_TrnDetailDTO> list = _remitterTransactionService.GetRemitterTransactionList(param);
 
-                status = JsonConvert.SerializeObject(result);
+                var result = new
+                {
+                    draw = param.sEcho,
+                    recordsTotal = list.TotalSize,
+                    recordsFiltered = list.FilterRecored,
+                    data = list.Data
+                };
+
+                return Json(result, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
                 Log.Error(@"{Message}: {e}", ex.Message, ex);
-                status = "error";
+                return Json("Error", JsonRequestBehavior.AllowGet);
             }
 
-            return Content(status);
+
         }
     }
 }

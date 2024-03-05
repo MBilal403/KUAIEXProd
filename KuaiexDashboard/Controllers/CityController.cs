@@ -86,7 +86,7 @@ namespace KuaiexDashboard.Controllers
                 {
                     draw = param.sEcho,
                     recordsTotal = list.TotalSize,
-                    recordsFiltered = list.FilterRecored,
+                    recordsFiltered = list.FilterRecored, 
                     data = list.Data
                 };
 

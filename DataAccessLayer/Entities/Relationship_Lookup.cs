@@ -11,7 +11,7 @@ namespace DataAccessLayer.Entities
     {
         [Key]
         public int Relationship_Id { get; set; }
-        public int Status { get; set; }
+        public Nullable<int> Status { get; set; }
         public string Name { get; set; }
     }
 }

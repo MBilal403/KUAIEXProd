@@ -1,4 +1,6 @@
-﻿using KuaiexDashboard.DTO;
+﻿using DataAccessLayer.Helpers;
+using DataAccessLayer.Repository.Impl;
+using KuaiexDashboard.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,6 @@ namespace KuaiexDashboard.Services.RemitterTransactionService
 {
     interface IRemitterTransactionService
     {
-        List<Remittance_TrnDetailDTO> GetRemitterTransactionList();
+        PagedResult<Remittance_TrnDetailDTO> GetRemitterTransactionList(JqueryDatatableParam param);
     }
 }

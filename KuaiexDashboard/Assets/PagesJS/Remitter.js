@@ -59,7 +59,7 @@ var LoadGridData = function () {
             {
                 "data": "Identification_Expiry_Date",
                 "render": function (data, type, row) {
-                    var timestamp = parseInt(data.match(/\d+/)[0]); 
+                    var timestamp = parseInt(data.match(/\d+/)[0]);
                     var date = new Date(timestamp);
                     return date.toLocaleDateString();
                 },
@@ -69,8 +69,9 @@ var LoadGridData = function () {
             {
                 "data": "IsReviwed",
                 "render": function (data, type, row) {
+                    var statusLabel = data == 1 ? '<span class="label label-success label-xs" style="display: inline-block; text-align: center; ">Active</span>' : '<span class="label label-danger label-xs" style="display: inline-block; text-align: center; width: 100px;">In Active</span>';
 
-                    return data == 1 ? '<span class="label label-success label-xs">Active</span>' : '<span class="label label-danger label-xs">In Active</span>';
+                    return statusLabel;
                 },
                 "autoWidth": true,
                 "searchable": true
@@ -78,28 +79,17 @@ var LoadGridData = function () {
             {
                 "data": "UID",
                 "render": function (data, type, row) {
-                    console.log(data);
-                    return '<button id=' + data + ' class="btn btn-warning btn-block btn-xs btn-edit" style="width: 60px;">' +
-                        '<i class="fa fa-edit"></i>' +
-                        ' Edit' +
-                        '</button>';
+                    return '<div class="btn-group">' +
+                        '<button id=' + data + ' class="btn btn-warning btn-xs btn-edit">' +
+                        '<i class="fa fa-edit"></i> Edit' +
+                        '</button>' +
+                        '<button id=' + data + ' class="btn btn-warning btn-xs btn-bene" style="margin-top: 5px;">' +
+                        '<i class="fa fa-edit"></i> Beneficiaries' +
+                        '</button>' +
+                        '</div>';
                 },
-
-                "autoWidth": true
-            },
-            {
-                "data": "UID",
-                "render": function (data, type, row) {
-                    console.log(data);
-                    return '<button id=' + data + ' class="btn btn-warning btn-block btn-xs btn-bene" style="width: 60px;">' +
-                        '<i class="fa fa-edit"></i>' +
-                        ' Beneficiaries' +
-                        '</button>';
-                },
-
                 "autoWidth": true
             }
-           
 
         ]
     });

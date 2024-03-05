@@ -6,14 +6,16 @@ using KuaiexDashboard.DTO.Beneficiary;
 using KuaiexDashboard.Filters;
 using KuaiexDashboard.Services.BeneficiaryServices;
 using KuaiexDashboard.Services.BeneficiaryServices.Impl;
+using KuaiexDashboard.Services.CountryCurrencyServices;
+using KuaiexDashboard.Services.CountryCurrencyServices.Impl;
+using KuaiexDashboard.Services.CountryServices;
+using KuaiexDashboard.Services.CountryServices.Impl;
 using KuaiexDashboard.Services.RemitterServices;
 using KuaiexDashboard.Services.RemitterServices.Impl;
 using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 
 namespace KuaiexDashboard.Controllers
@@ -23,12 +25,16 @@ namespace KuaiexDashboard.Controllers
     {
         IBeneficiaryService _beneficiaryService;
         IRemitterService _remitterService;
+        ICountryService _countryService;
+        ICountryCurrencyService _countryCurrencyService;
         BeneficiaryDAL objBeneficiaryDAL = new BeneficiaryDAL();
 
         public BeneficiaryController()
         {
             _beneficiaryService = new BeneficiaryService();
             _remitterService = new RemitterService();
+            _countryService = new CountryService();
+            _countryCurrencyService = new CountryCurrencyService();
         }
         public ActionResult Index(Guid UID)
         {
@@ -51,7 +57,7 @@ namespace KuaiexDashboard.Controllers
             string status = "0:{choose}";
             try
             {
-                List<GetCountryList_Result> lstCountries = objBeneficiaryDAL.GetCountryList();
+                List<GetCountryList_Result> lstCountries = _countryService.GetCountryList();
                 status = JsonConvert.SerializeObject(lstCountries);
             }
             catch (Exception ex)
@@ -69,7 +75,8 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                List<Currency_Result> lstcurrency = objBeneficiaryDAL.GetCurrencyByCountry(CountryId);
+                List<Currency_Result> lstcurrency = _countryCurrencyService.GetCurrencyByCountry(CountryId);
+
                 status = JsonConvert.SerializeObject(lstcurrency);
             }
             catch (Exception ex)
@@ -87,9 +94,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                BeneficiaryDAL objBeneficiaryDAL = new BeneficiaryDAL();
-
-                List<GetCountryList_Result> lstCountries = objBeneficiaryDAL.GetCountryList();
+                List<GetCountryList_Result> lstCountries = _countryService.GetCountryList();
 
                 status = JsonConvert.SerializeObject(lstCountries);
             }
@@ -342,9 +347,19 @@ namespace KuaiexDashboard.Controllers
 
             return Content(status);
         }
-        public ActionResult AddBeneficiary()
+        public ActionResult Add(Guid UID)
         {
-            return View();
+            var user = _remitterService.GetCustomerByUID(UID);
+            if (user != null)
+            {
+                ViewBag.UserName = $" {user.Identification_Number} -  {user.Name} ";
+                return View();
+            }
+            else
+            {
+                Session.Clear();
+                return RedirectToAction("Login", "Authentication");
+            }
         }
         public ActionResult AddBeneficiary(BeneficiaryDTO objBeneficiary)
         {
@@ -365,7 +380,6 @@ namespace KuaiexDashboard.Controllers
                 status = "error";
             }
 
-
             return Content(status);
         }
         public ActionResult Edit(Guid UID)
@@ -373,8 +387,6 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                /*           BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL();
-                           Beneficiary obj = objBeneficiaryDal.GetBeneficiaryByUID(UID);*/
                 BeneficiaryDTO beneficiaryDto = _beneficiaryService.GetBeneficiaryByUID(UID);
                 status = JsonConvert.SerializeObject(beneficiaryDto);
             }

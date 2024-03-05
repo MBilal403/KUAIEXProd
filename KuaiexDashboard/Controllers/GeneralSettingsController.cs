@@ -1,6 +1,12 @@
 ﻿
 using DataAccessLayer;
+using DataAccessLayer.Entities;
+using DataAccessLayer.Helpers;
+using DataAccessLayer.Recources;
+using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.Filters;
+using KuaiexDashboard.Services.RelationshipServices;
+using KuaiexDashboard.Services.RelationshipServices.Impl;
 using Newtonsoft.Json;
 using Serilog;
 using System;
@@ -15,6 +21,12 @@ namespace KuaiexDashboard.Controllers
     public class GeneralSettingsController : Controller
     {
         GeneralSettingsDAL objGeneralSettingsDal = new GeneralSettingsDAL();
+        private readonly IRelationshipService _relationshipService;
+        public GeneralSettingsController()
+        {
+            _relationshipService = new RelationshipService();
+        }
+
         // GET: GeneralSettings
         public ActionResult Index()
         {
@@ -261,7 +273,82 @@ namespace KuaiexDashboard.Controllers
             }
             return Content(status);
         }
+        public ActionResult Relationships()
+        {
+            return View();
+        }
 
+        public ActionResult AddRelationship(Relationship_Lookup relationship_Lookup)
+        {
+            string status = "error";
+            try
+            {
+               
+                    status = _relationshipService.AddRelationship(relationship_Lookup);
+             
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
+            return Content(status);
+
+
+        }
+
+        public ActionResult LoadGridRelationship()
+        {
+            string status = "error";
+            try
+            {
+                List<Relationship_Lookup> list = _relationshipService.GetActiveRelationships();
+
+                status = JsonConvert.SerializeObject(list);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
+            return Content(status);
+        }
+        public ActionResult GetRelationship(int Id)
+        {
+            string status = "error";
+            try
+            {
+                Relationship_Lookup obj = _relationshipService.GetRelatioshipById(Id);
+                status = JsonConvert.SerializeObject(obj);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
+            return Content(status);
+        }
+        public ActionResult EditRelationship(Relationship_Lookup objRelationship)
+        {
+            string status = "";
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    status = _relationshipService.UpdateRelationship(objRelationship);
+                }
+                else
+                {
+                    throw new InvalidOperationException(MsgKeys.InvalidInputParameters);
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
+            return Content(status);
+        }
 
 
 
