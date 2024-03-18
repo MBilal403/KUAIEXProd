@@ -8,6 +8,7 @@ using BusinessLogicLayer.DomainEntities;
 using System.Data;
 using System.Data.SqlClient;
 using KuaiexDashboard;
+using DataAccessLayer.Entities;
 
 namespace DataAccessLayer
 {

@@ -8,6 +8,7 @@ using DataAccessLayer;
 using KuaiexDashboard.DAL;
 using KuaiexDashboard.Filters;
 using Serilog;
+using DataAccessLayer.Entities;
 namespace KuaiexDashboard.Controllers
 {
     [AuthorizeFilter]

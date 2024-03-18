@@ -26,7 +26,7 @@ $(document).on('click', '.btn-edit', function () {
 var LoadGridData = function () {
     $('#tblUsers').DataTable({
         "destroy": true,
-        "lengthMenu": [5, 25, 50, 75, 100],
+        "lengthMenu": [10, 25, 50, 100],
         "sAjaxSource": "../Remitter/LoadGrid",
         "bServerSide": true,
         "bProcessing": true,
@@ -82,14 +82,21 @@ var LoadGridData = function () {
                     return '<div class="btn-group">' +
                         '<button id=' + data + ' class="btn btn-warning btn-xs btn-edit">' +
                         '<i class="fa fa-edit"></i> Edit' +
-                        '</button>' +
-                        '<button id=' + data + ' class="btn btn-warning btn-xs btn-bene" style="margin-top: 5px;">' +
+                        '</button>';
+                },
+                "autoWidth": true
+            },
+            {
+                "data": "UID",
+                "render": function (data, type, row) {
+                    return '<button id=' + data + ' class="btn btn-warning btn-xs btn-bene">' +
                         '<i class="fa fa-edit"></i> Beneficiaries' +
                         '</button>' +
                         '</div>';
                 },
                 "autoWidth": true
             }
+
 
         ]
     });

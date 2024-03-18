@@ -51,9 +51,9 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
                     beneficiary.UID = Guid.NewGuid();
                     beneficiary.CreatedOn = DateTime.Now;
                     beneficiary.IsBannedList = default;
-                    beneficiary.Remittance_Purpose = string.Join(",", beneficiaryDto.Remittance_Purpose.Select(x => x.ToString()));
-                    beneficiary.Source_Of_Income = string.Join(",", beneficiaryDto.Source_Of_Income.Select(x => x.ToString()));
-                    beneficiary.Remitter_Relation = string.Join(",", beneficiaryDto.Remitter_Relation.Select(x => x.ToString()));
+                    beneficiary.Remittance_Purpose = string.Join(",", beneficiaryDto.Remittance_Purpose.Reverse().Select(x => x.ToString()));
+                    beneficiary.Source_Of_Income = string.Join(",", beneficiaryDto.Source_Of_Income.Reverse().Select(x => x.ToString()));
+                    beneficiary.Remitter_Relation = string.Join(",", beneficiaryDto.Remitter_Relation.Reverse().Select(x => x.ToString()));
 
 
                     Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
@@ -167,6 +167,65 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             {
                 // throw the exception to propagate it up the call stack
                 throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
+        }
+
+        public string Updatebeneficiary(BeneficiaryDTO beneficiary)
+        {
+            try
+            {
+                Guid beneficiaryUID = beneficiary.UID;
+                Beneficiary existingBeneficiary = _beneficiaryRepository.FindBy(x => x.UID == beneficiaryUID);
+
+                if (existingBeneficiary != null)
+                {
+                    existingBeneficiary.FullName = beneficiary.FullName;
+                    existingBeneficiary.Country_Id = beneficiary.Country_Id;
+                    existingBeneficiary.Currency_Id = beneficiary.Currency_Id;
+                    existingBeneficiary.Nationality_Id = beneficiary.Nationality_Id;
+                    existingBeneficiary.Remittance_Purpose = string.Join(",", beneficiary.Remittance_Purpose.Select(x => x.ToString()));
+                    existingBeneficiary.Source_Of_Income = string.Join(",", beneficiary.Source_Of_Income.Select(x => x.ToString()));
+                    existingBeneficiary.Remitter_Relation = string.Join(",", beneficiary.Remitter_Relation.Select(x => x.ToString()));
+                    existingBeneficiary.Remittance_Type_Id = beneficiary.Remittance_Type_Id;
+                    existingBeneficiary.Mobile_No = beneficiary.Mobile_No;
+                    existingBeneficiary.Bank_Id = beneficiary.Bank_Id;
+                    existingBeneficiary.Bank_Code = beneficiary.Bank_Code;
+                    existingBeneficiary.Branch_Id = beneficiary.Branch_Id;
+                    existingBeneficiary.Branch_Number = beneficiary.Branch_Number;
+                    existingBeneficiary.Bank_Account_No = beneficiary.Bank_Account_No;
+                    existingBeneficiary.Remittance_Purpose_Detail = beneficiary.Remittance_Purpose_Detail;
+                    existingBeneficiary.Remitter_Relation_Detail = beneficiary.Remitter_Relation_Detail;
+                    existingBeneficiary.Source_Of_Income_Detail = beneficiary.Source_Of_Income_Detail;
+                    existingBeneficiary.Remittance_Subtype_Id = beneficiary.Remittance_Subtype_Id;
+                    existingBeneficiary.UpdatedOn = DateTime.Now;
+
+
+
+                    /*     if (obj.Prod_Beneficiary_Id == null || obj.Prod_Beneficiary_Id <= 0)
+                         {
+                             Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
+                             obj.Prod_Beneficiary_Id = objKuaiex_Prod.GetBeneficiaryIdByIdentificationNumber(obj.Identification_No);
+                         }*/
+                    // obj.Remitter_Relation_Id = objBeneficiary.Remitter_Relation_Id;
+
+                    if (_beneficiaryRepository.Update(existingBeneficiary, $" Beneficiary_Id = {existingBeneficiary.Beneficiary_Id} ") > 0)
+                    {
+                        return MsgKeys.UpdatedSuccessfully;
+                    }
+                    else
+                    {
+                        throw new Exception(MsgKeys.UpdationFailed);
+                    }
+                }
+                else
+                {
+                    throw new Exception(MsgKeys.ObjectNotExists);
+                }
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw;
             }
         }
     }

@@ -19,5 +19,8 @@ namespace KuaiexDashboard.Services.RemitterServices
         PagedResult<GetRemitterList_Result> GetRemitterList(JqueryDatatableParam param);
         List<Customer_Security_Questions> GetCustomerSecurityQuestions(int id);
         List<Individual_KYC> GetCustomerLoadKYCIndividuals(int id);
+        List<Residency_Type> GetResidencyTypes();
+        List<IdentificationTypeLookup> GetAllIdentificationTypes();
+        List<Transaction_Count_Lookup> GetAllTransactionCountLookup();
     }
 }

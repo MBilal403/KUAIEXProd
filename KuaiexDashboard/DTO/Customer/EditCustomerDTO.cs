@@ -35,7 +35,7 @@ namespace KuaiexDashboard.DTO.Customer
         public Nullable<int> Security_Question_Id_3 { get; set; }
         public string Security_Answer_3 { get; set; }
         public string Device_Key { get; set; }
-        public Nullable<System.Guid> UID { get; set; }
+        public Guid UID { get; set; }
         public Nullable<System.Guid> UID_Token { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }

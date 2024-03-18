@@ -60,7 +60,7 @@ namespace DataAccessLayer.Entities
         public Nullable<DateTime> BannedListCreatedOn { get; set; }
         public Nullable<int> BannedListClearedBy { get; set; }
         public string TransFastInfo { get; set; }
-        public Nullable<Guid> UID { get; set; }
+        public Guid UID { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<DateTime> CreatedOn { get; set; }
         public string CreatedIp { get; set; }

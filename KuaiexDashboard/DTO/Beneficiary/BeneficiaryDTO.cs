@@ -61,7 +61,7 @@ namespace KuaiexDashboard.DTO.Beneficiary
         public Nullable<System.DateTime> BannedListCreatedOn { get; set; }
         public Nullable<int> BannedListClearedBy { get; set; }
         public string TransFastInfo { get; set; }
-        public Nullable<System.Guid> UID { get; set; }
+        public Guid UID { get; set; }
         public Nullable<int> CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedOn { get; set; }
         public string CreatedIp { get; set; }

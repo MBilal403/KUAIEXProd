@@ -5,55 +5,34 @@ var SourceOfIncome;
 
 $(document).ready(function () {
 
-
-    var urlParams = new URLSearchParams(window.location.search);
-    var uid = urlParams.get('UID');
-    if (uid !== null) {
-        console.log(uid);
-        $('#CUID').val(uid);
-        console.log($('#CUID').val());
-    } else {
-        window.location.href = "../Beneficiary/Index";
-    }
-
-    
     $('.dvRemittance_Purpose_Detail').hide();
     $('.dvSource_Of_Income_Detail').hide();
     $('.dvRemitter_Relation_Detail').hide();
-
-    LoadRemittancePurpose();
-    LoadRemitterRelation();
-    LoadSourceOfIncome();
-
-    LoadRemittanceType();
-
-
-    LoadCountry();
     $('#Currency_Id').chosen();
     LoadNationality();
 
 
     RemittancePurpose = new SlimSelect({
         select: '#Remittance_Purpose',
-        placeholder: 'Select Remittance Purpose',
+        settings: {
+            placeholderText: 'Select Remittance Purpose',
+        },
         showSearch: true, // shows search field
         searchText: 'Sorry No Record Found.',
         hideSelectedOption: false,
-        closeOnSelect: false,
-        onChange: function () {
-            RemittancePurpose_OnChange();
-        }
+        closeOnSelect: false
     });
+    $('#Remittance_Purpose').on('change', function () {
+        RemittancePurpose_OnChange();
+    });
+
     SourceOfIncome = new SlimSelect({
         select: '#Source_Of_Income',
         placeholder: 'Select Source Of Income',
         showSearch: true, // shows search field
         searchText: 'Sorry No Record Found.',
         hideSelectedOption: false,
-        closeOnSelect: true,
-        onChange: function () {
-            SourceOfIncome_OnChange();
-        }
+        closeOnSelect: true
     });
     RemitterRelation = new SlimSelect({
         select: '#Remitter_Relation',
@@ -62,21 +41,37 @@ $(document).ready(function () {
         searchText: 'Sorry No Record Found.',
         hideSelectedOption: false,
         closeOnSelect: false,
-        limit: 1,
-        onChange: function () {
-            RemitterRelation_OnChange();
-        }
+        limit: 1
     });
+    $('#Source_Of_Income').on('change', function () {
+        SourceOfIncome_OnChange();
+    });
+    $('#Remitter_Relation').on('change', function () {
+        RemitterRelation_OnChange();
+    });
+
+    LoadRemittancePurpose();
+    LoadRemitterRelation();
+    LoadSourceOfIncome();
+    LoadRemittanceType();
+    LoadCountry();
 
     $('#Bank_Id').chosen();
     $('#Branch_Id').chosen();
     $('#Remittance_Subtype_Id').chosen();
 
+    var urlParams = new URLSearchParams(window.location.search);
+    var uid = urlParams.get('UID');
+    var cuid = urlParams.get('CUID');
+    $('#UID').val(uid);
+    if (uid !== null && cuid !== null) {
+        $('#CUID').val(cuid);
+
+        editUserByUId(uid);
+    }
+
+
     handleStaff();
-
-
-    //LoadRoutingBanksDefault();
-    //LoadRoutingBankBranchesDefault();
 
     $('#data_2 .input-group.date').datepicker({
         startView: 1,
@@ -204,6 +199,7 @@ var LoadRemittancePurpose = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Beneficiary/LoadRemittancePurpose",
         processData: false,
         contentType: false,
@@ -221,6 +217,7 @@ var LoadRemittancePurpose = function () {
             }
 
             RemittancePurpose.setData(data);
+            Console.log(RemittancePurpose.getSelected());
         }
     });
 };
@@ -264,8 +261,8 @@ function loadEdit() {
 
 
 var RemittancePurpose_OnChange = function () {
-    var rem_selected = RemittancePurpose.selected();
-    if ($.inArray("3", rem_selected) !== -1) {
+    var rem_selected = RemittancePurpose.getSelected();
+    if ($.inArray(3, rem_selected) !== -1) {
         $('.dvRemittance_Purpose_Detail').show();
     }
     else {
@@ -277,6 +274,7 @@ var LoadSourceOfIncome = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Beneficiary/LoadSourceOfIncome",
         processData: false,
         contentType: false,
@@ -296,9 +294,8 @@ var LoadSourceOfIncome = function () {
 };
 
 var SourceOfIncome_OnChange = function () {
-    var rem_selected = SourceOfIncome.selected();
-    console.log(rem_selected);
-    if ($.inArray("3", rem_selected) !== -1) {
+    var rem_selected = SourceOfIncome.getSelected();
+    if ($.inArray(3, rem_selected) !== -1) {
         $('.dvSource_Of_Income_Detail').show();
     }
     else {
@@ -310,6 +307,7 @@ var LoadRemitterRelation = function () {
     $.ajax({
         type: "POST",
         cache: false,
+        async: false,
         url: "../Beneficiary/LoadRemitterRelation",
         processData: false,
         contentType: false,
@@ -330,9 +328,9 @@ var LoadRemitterRelation = function () {
 };
 
 var RemitterRelation_OnChange = function () {
-    var rem_selected = RemitterRelation.selected();
+    var rem_selected = RemitterRelation.getSelected();
     //console.log(rem_selected);
-    if ($.inArray("7", rem_selected) !== -1) {
+    if ($.inArray(7, rem_selected) !== -1) {
         $('.dvRemitter_Relation_Detail').show();
     }
     else {
@@ -564,8 +562,6 @@ var handleStaff = function () {
         submitHandler: function (form) {
             $('#btn-save').attr('disabled', 'true');
             $(".frmAddUsers :disabled").removeAttr('disabled');
-
-            console.log($(".frmAddUsers").serialize());
             if (!IsEditMode) {
                 $.post(
                     "../Beneficiary/AddBeneficiary",
@@ -584,7 +580,7 @@ var handleStaff = function () {
                             resetForm();
                             return;
                         }
-                        if (value != 'error') {
+                        if (value == 'insert_success') {
                             swal(
                                 'Success',
                                 'Beneficiary Saved Successfully!',
@@ -592,7 +588,6 @@ var handleStaff = function () {
                             )
                             resetForm();
                             $('#btn-save').removeAttr('disabled');
-                            window.location.href = "../Beneficiary/Index";
 
                         }
                         else {
@@ -608,7 +603,7 @@ var handleStaff = function () {
                     "../Beneficiary/EditBeneficiary",
                     $(".frmAddUsers").serialize(),
                     function (value) {
-                        if (value == 'exist') {
+                        if (value == 'duplicate_value_exist') {
                             swal(
                                 'Warning',
                                 'Customer Name Already Exist!',
@@ -616,7 +611,7 @@ var handleStaff = function () {
                             )
                             return;
                         }
-                        if (value != 'error') {
+                        if (value === 'update_success') {
                             swal(
                                 'Success',
                                 'Beneficiary Updated Successfully!',
@@ -625,7 +620,7 @@ var handleStaff = function () {
                             resetForm();
                             $('#btn-save').removeAttr('disabled');
 
-                            $('#tblUsers').DataTable().clear().draw;
+                            window.location.href = "../Remitter/Index";
                         }
                         else {
                             swal("Error", "Data not updated!!", "error")
@@ -660,8 +655,7 @@ var handleStaff = function () {
 }
 
 //edit method
-$(document).on('click', '.btn-edit', function () {
-    var uid = $(this).attr('id');
+function editUserByUId(uid) {
     var data = new FormData();
     data.append("UID", uid);
     $.ajax({
@@ -677,7 +671,6 @@ $(document).on('click', '.btn-edit', function () {
                 console.log(obj);
                 $('#UID').val(obj.UID);
                 $('#DD_Beneficiary_Name').val(obj.DD_Beneficiary_Name);
-
                 $('#Customer_Id').val(obj.Customer_Id).prop('Enable', 'true').trigger("chosen:updated");
                 $('#FullName').val(obj.FullName);
                 $('#Gender').val(obj.Gender).prop('Enable', 'true').trigger("chosen:updated");
@@ -727,12 +720,15 @@ $(document).on('click', '.btn-edit', function () {
                 $('#Routing_Bank_Id').val(obj.Routing_Bank_Id).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Routing_Bank_Id').trigger("change");
                 $('#Routing_Bank_Branch_Id').val(obj.Routing_Bank_Branch_Id).prop('Enable', 'true').trigger("chosen:updated");
-
-                $('#Remittance_Subtype_Id').val(obj.Remittance_Subtype_Id).prop('Enable', 'true').trigger("chosen:updated");
+                if (obj.Remittance_Subtype_Id !== null) {
+                    $('.dvRemittance_Subtype_Id').show();
+                    $('#Remittance_Subtype_Id').val(obj.Remittance_Subtype_Id).prop('Enable', 'true').trigger("chosen:updated");
+                }
                 $('#Birth_Place').val(obj.Birth_Place);
                 $('#TransFastInfo').val(obj.TransFastInfo);
-                SetRemittance_Purpose(obj.Remittance_Purpose);
-
+                RemittancePurpose.setSelected(obj.Remittance_Purpose);
+                SourceOfIncome.setSelected(obj.Source_Of_Income);
+                RemitterRelation.setSelected(obj.Remitter_Relation);
                 $('#btn-save').html("<i class='fa fa-save'></i> Update");
                 IsEditMode = true;
             }
@@ -744,7 +740,7 @@ $(document).on('click', '.btn-edit', function () {
         error: function (e) {
         }
     });
-});
+};
 
 
 $('#btn-refresh').click(function () {
@@ -758,10 +754,6 @@ function resetForm() {
 
     LoadCountry();
 
-
-
-
-
     $('#Customer_Id').val('');
     $('#FullName').val('');
 
@@ -770,12 +762,7 @@ function resetForm() {
 
     $('#Remittance_Purpose').val('');
     $('#Remittance_Type_Id').val('');
-
-
     $('#Mobile_No').val('');
-
-
-
     $('#Bank_Id').val('');
     $('#Branch_Id').val('');
 
@@ -785,9 +772,7 @@ function resetForm() {
 
     $('#Bank_Code').val('');
 
-
     $('#Remittance_Subtype_Id').val('');
-
 
     $("#IsActive").iCheck('uncheck');
 

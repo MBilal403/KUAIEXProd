@@ -169,7 +169,7 @@ var handleStaff = function () {
 var LoadGridData = function () {
     $('#tblUsers').DataTable({
         "destroy": true,
-        "lengthMenu": [5, 10, 25, 50, 100],
+        "lengthMenu": [10, 25, 50, 100],
         "sAjaxSource": "../Currency/LoadGrid",
         "bServerSide": true,
         "bProcessing": true,

@@ -17,6 +17,10 @@
     {
       "library": "slim.js@4.0.7",
       "destination": "lib/slim.js/"
+    },
+    {
+      "library": "slim-select@2.8.2",
+      "destination": "lib/slim-select/"
     }
   ]
 }

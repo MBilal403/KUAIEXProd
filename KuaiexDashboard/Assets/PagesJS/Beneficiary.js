@@ -10,7 +10,7 @@ $(document).ready(function () {
     LoadGridData(uid);
     $(document).on('click', '.btn-edit', function () {
         var id = $(this).attr('id');
-        window.location = "../Beneficiary/Add?UID=" + id;
+        window.location = "../Beneficiary/EditBene?UID=" + id + "&CUID=" + uid;
     });
 
 
@@ -23,14 +23,10 @@ $(document).ready(function () {
             window.location.href = "../Remitter/Index";
         }
     });
-
-
-
-
+    
 });
 //load grid
 var LoadGridData = function (uid) {
-    alert(uid);
     $.ajax({
         type: "GET",
         cache: false,
@@ -40,7 +36,6 @@ var LoadGridData = function (uid) {
         contentType: false,
         success: function (data) {
             data = JSON.parse(data);
-            console.log(data);
             $('#tblUsers').DataTable().destroy();
             var html = '';
             for (var i = 0; i < data.length; i++) {

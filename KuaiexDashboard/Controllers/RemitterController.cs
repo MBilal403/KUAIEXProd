@@ -6,6 +6,8 @@ using DataAccessLayer.ProcedureResults;
 using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.DTO.Customer;
 using KuaiexDashboard.Filters;
+using KuaiexDashboard.Services.CityServices;
+using KuaiexDashboard.Services.CityServices.Impl;
 using KuaiexDashboard.Services.CountryServices;
 using KuaiexDashboard.Services.CountryServices.Impl;
 using KuaiexDashboard.Services.RemitterServices;
@@ -16,9 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Web;
-using System.Web.Http.Results;
 using System.Web.Mvc;
 
 namespace KuaiexDashboard.Controllers
@@ -28,10 +28,12 @@ namespace KuaiexDashboard.Controllers
     {
         private readonly IRemitterService _remitterService;
         private readonly ICountryService _countryService;
+        private readonly ICityService _cityService;
         public RemitterController()
         {
             _remitterService = new RemitterService();
             _countryService = new CountryService();
+            _cityService = new CityService();
         }
         // GET: Remittance
         public ActionResult Index()
@@ -44,9 +46,8 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                RemitterDAL objRemitterDal = new RemitterDAL();
 
-                List<IdentificationTypeLookup> lstIdentification = objRemitterDal.GetAllIdentificationTypes();
+                List<IdentificationTypeLookup> lstIdentification = _remitterService.GetAllIdentificationTypes();
 
                 status = JsonConvert.SerializeObject(lstIdentification);
             }
@@ -64,10 +65,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                RemitterDAL objRemitterDal = new RemitterDAL();
-
-                List<Residency_Type> lstResidencyTypes = objRemitterDal.GetResidencyTypes();
-
+                List<Residency_Type> lstResidencyTypes = _remitterService.GetResidencyTypes();
                 status = JsonConvert.SerializeObject(lstResidencyTypes);
             }
             catch (Exception ex)
@@ -102,9 +100,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                RemitterDAL objRemitterDal = new RemitterDAL();
-
-                List<City> lstCities = objRemitterDal.GetActiveCities();
+                List<City> lstCities = _cityService.GetActiveCities();
 
                 status = JsonConvert.SerializeObject(lstCities);
             }
@@ -142,9 +138,8 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                RemitterDAL objRemitterDal = new RemitterDAL();
-
-                List<Transaction_Count_Lookup> lstTransactionCounts = objRemitterDal.GetAllTransactionCountLookup();
+         
+                List<Transaction_Count_Lookup> lstTransactionCounts = _remitterService.GetAllTransactionCountLookup();
 
                 status = JsonConvert.SerializeObject(lstTransactionCounts);
             }
@@ -184,8 +179,6 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                RemitterDAL objRemitterDal = new RemitterDAL();
-                //  List<Customer_Security_Questions> SecurityQuestions = objRemitterDal.GetCustomerSecurityQuestions(Customer_Id);
                 List<Customer_Security_Questions> SecurityQuestions = _remitterService.GetCustomerSecurityQuestions(Customer_Id);
 
                 status = JsonConvert.SerializeObject(SecurityQuestions);
@@ -205,9 +198,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                RemitterDAL objRemitterDal = new RemitterDAL();
-                //  List<Customer_Security_Questions> SecurityQuestions = objRemitterDal.GetCustomerSecurityQuestions(Customer_Id);
-                List<Individual_KYC> individual_KYCs = _remitterService.GetCustomerLoadKYCIndividuals(Customer_Id);
+            List<Individual_KYC> individual_KYCs = _remitterService.GetCustomerLoadKYCIndividuals(Customer_Id);
 
                 status = JsonConvert.SerializeObject(individual_KYCs);
             }
@@ -326,14 +317,14 @@ namespace KuaiexDashboard.Controllers
             }
             return Content(status);
         }
-        public ActionResult UnBlockCustomer(Customer objcustomer)
+/*        public ActionResult UnBlockCustomer(Customer objcustomer)
         {
             string status = "";
             try
             {
                 RemitterDAL objRemitterDal = new RemitterDAL();
 
-                Customer obj = objRemitterDal.GetCustomerByUID(objcustomer.UID);
+                EditCustomerDTO obj = _remitterService.GetCustomerByUID(objcustomer.UID);
 
                 if (obj != null)
                 {
@@ -355,7 +346,7 @@ namespace KuaiexDashboard.Controllers
                 status = "error";
             }
             return Content(status);
-        }
+        }*/
         public ActionResult EditCustomer(string Civil_Id_Back, string Civil_Id_Front, CustomerDTO editCustomerDto)
         {
             string status = "";

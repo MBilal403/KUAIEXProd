@@ -292,6 +292,48 @@
     <Content Include="Images\logo-96-96.png" />
     <Content Include="Images\logo.png" />
     <Content Include="Images\processing.gif" />
+    <Content Include="lib\jquery\jquery.js" />
+    <Content Include="lib\jquery\jquery.min.js" />
+    <Content Include="lib\jquery\jquery.slim.js" />
+    <Content Include="lib\jquery\jquery.slim.min.js" />
+    <Content Include="lib\slim-select\slimselect.cjs.js" />
+    <Content Include="lib\slim-select\slimselect.cjs.min.js" />
+    <Content Include="lib\slim-select\slimselect.css" />
+    <Content Include="lib\slim-select\slimselect.es.js" />
+    <Content Include="lib\slim-select\slimselect.es.min.js" />
+    <Content Include="lib\slim-select\slimselect.global.js" />
+    <Content Include="lib\slim-select\slimselect.global.min.js" />
+    <Content Include="lib\slim-select\slimselect.js" />
+    <Content Include="lib\slim-select\slimselect.min.css" />
+    <Content Include="lib\slim-select\slimselect.min.js" />
+    <Content Include="lib\slim-select\slimselect.umd.js" />
+    <Content Include="lib\slim-select\slimselect.umd.min.js" />
+    <Content Include="lib\slim.js\Decorators.js" />
+    <Content Include="lib\slim.js\Decorators.min.js" />
+    <Content Include="lib\slim.js\directives\all.js" />
+    <Content Include="lib\slim.js\directives\all.min.js" />
+    <Content Include="lib\slim.js\directives\all.nomodule.js" />
+    <Content Include="lib\slim.js\directives\all.nomodule.min.js" />
+    <Content Include="lib\slim.js\directives\bind-attr.js" />
+    <Content Include="lib\slim.js\directives\bind-attr.min.js" />
+    <Content Include="lib\slim.js\directives\bind-attr.nomodule.js" />
+    <Content Include="lib\slim.js\directives\bind-attr.nomodule.min.js" />
+    <Content Include="lib\slim.js\directives\if.js" />
+    <Content Include="lib\slim.js\directives\if.min.js" />
+    <Content Include="lib\slim.js\directives\if.nomodule.js" />
+    <Content Include="lib\slim.js\directives\if.nomodule.min.js" />
+    <Content Include="lib\slim.js\directives\repeat.js" />
+    <Content Include="lib\slim.js\directives\repeat.min.js" />
+    <Content Include="lib\slim.js\directives\repeat.nomodule.js" />
+    <Content Include="lib\slim.js\directives\repeat.nomodule.min.js" />
+    <Content Include="lib\slim.js\directives\switch-case.js" />
+    <Content Include="lib\slim.js\directives\switch-case.min.js" />
+    <Content Include="lib\slim.js\directives\switch-case.nomodule.js" />
+    <Content Include="lib\slim.js\directives\switch-case.nomodule.min.js" />
+    <Content Include="lib\slim.js\Slim.js" />
+    <Content Include="lib\slim.js\Slim.min.js" />
+    <Content Include="lib\slim.js\Slim.nomodule.js" />
+    <Content Include="lib\slim.js\Slim.nomodule.min.js" />
     <Content Include="Plugins\appendGrid\images\ui-bg_diagonals-thick_90_eeeeee_40x40.png" />
     <Content Include="Plugins\appendGrid\images\ui-bg_flat_15_cd0a0a_40x100.png" />
     <Content Include="Plugins\appendGrid\images\ui-bg_glass_100_e4f1fb_1x400.png" />
@@ -837,6 +879,8 @@
     <Compile Include="Services\RemitterServices\IRemitterService.cs" />
     <Compile Include="Services\RemittanceTransactionServices\Impl\RemittanceTransactionSerevice.cs" />
     <Compile Include="Services\RemittanceTransactionServices\IRemittanceTransactionService.cs" />
+    <Compile Include="Services\SecurityQuestionServices\Impl\SecurityQuestionService.cs" />
+    <Compile Include="Services\SecurityQuestionServices\ISecurityQuestionService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -875,6 +919,9 @@
     <Content Include="Chat\assets\webfonts\inter\fonts\inter-semibold.woff" />
     <Content Include="Chat\assets\webfonts\inter\fonts\inter-semibold.woff2" />
     <Content Include="libman.json" />
+    <Content Include="lib\jquery\jquery.min.map" />
+    <Content Include="lib\jquery\jquery.slim.min.map" />
+    <Content Include="lib\slim-select\slimselect.css.map" />
     <None Include="packages.config" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
@@ -938,6 +985,10 @@
       <Project>{78D13C7E-7A4D-4AA1-8A67-C68E419A622A}</Project>
       <Name>DataAccessLayer</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="lib\slim.js\Decorators.d.ts" />
+    <TypeScriptCompile Include="lib\slim.js\Slim.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

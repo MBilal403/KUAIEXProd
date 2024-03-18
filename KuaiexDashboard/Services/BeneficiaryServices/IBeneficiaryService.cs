@@ -18,5 +18,6 @@ namespace KuaiexDashboard.Services.BeneficiaryServices
         List<LoadBeneficiaryDTO> GetBeneficiariesByCustomerID(int CustomerId);
         List<Bank_Mst> GetBanksByCountry(int CountryId);
         BeneficiaryDTO GetBeneficiaryByUID(Guid UID);
+        string Updatebeneficiary(BeneficiaryDTO beneficiary);
     }
 }

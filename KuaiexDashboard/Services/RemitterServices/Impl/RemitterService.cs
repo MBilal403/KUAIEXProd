@@ -20,11 +20,17 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
         IRepository<Customer> _customerRepository;
         IRepository<Customer_Security_Questions> _customerSecurityQuestionRepository;
         IRepository<Individual_KYC> _individual_KYCRepository;
+        IRepository<Residency_Type> _residencyTypeRepository;
+        IRepository<IdentificationTypeLookup> _identificationTypeRepository;
+        IRepository<Transaction_Count_Lookup> _transaction_CountRepository;
         public RemitterService()
         {
             _customerRepository = new GenericRepository<Customer>();
             _individual_KYCRepository = new GenericRepository<Individual_KYC>();
             _customerSecurityQuestionRepository = new GenericRepository<Customer_Security_Questions>();
+            _residencyTypeRepository = new GenericRepository<Residency_Type>();
+            _identificationTypeRepository = new GenericRepository<IdentificationTypeLookup>();
+            _transaction_CountRepository = new GenericRepository<Transaction_Count_Lookup>();
         }
         public string CreateRemitter(CustomerDTO customerDto)
         {
@@ -259,6 +265,34 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
 
         }
 
+        public List<IdentificationTypeLookup> GetAllIdentificationTypes()
+        {
+            try
+            {
+                List<IdentificationTypeLookup> identificationTypes = _identificationTypeRepository.GetAll();
+                return identificationTypes;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
+        }
+
+        public List<Transaction_Count_Lookup> GetAllTransactionCountLookup()
+        {
+            try
+            {
+                List<Transaction_Count_Lookup> transactionCount = _transaction_CountRepository.GetAll(x => x.Id != 3);
+                return transactionCount;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
+        }
+
         public EditCustomerDTO GetCustomerByUID(Guid customerId)
         {
             try
@@ -268,8 +302,9 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                 string LocalStoragePath = ConfigurationManager.AppSettings["LocalStoragePath"].ToString();
                 Customer obj = objRemitterDal.GetCustomerByUID(customerId);
                 customerDTO = AutoMapper.Mapper.Map<EditCustomerDTO>(obj);
-                customerDTO.Civil_Id_Front = string.Concat(LocalStoragePath, customerDTO.Civil_Id_Front);
-                customerDTO.Civil_Id_Back = string.Concat(LocalStoragePath, customerDTO.Civil_Id_Back);
+
+                customerDTO.Civil_Id_Front = customerDTO.Civil_Id_Front ?? string.Concat(LocalStoragePath, customerDTO.Civil_Id_Front);
+                customerDTO.Civil_Id_Back = customerDTO.Civil_Id_Back ?? string.Concat(LocalStoragePath, customerDTO.Civil_Id_Back);
                 return customerDTO;
             }
             catch (Exception ex)
@@ -312,6 +347,20 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                 PagedResult<GetRemitterList_Result> obj = _customerRepository.GetPagedDataFromSP<GetRemitterList_Result>("GetRemitterListWithPagination", param.iDisplayStart + 1, param.iDisplayLength, param.sSearch);
 
                 return obj;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
+        }
+
+        public List<Residency_Type> GetResidencyTypes()
+        {
+            try
+            {
+                List<Residency_Type> residency_Types = _residencyTypeRepository.GetAll(x => x.Id != 3);
+                return residency_Types;
             }
             catch (Exception ex)
             {

@@ -32,8 +32,6 @@ namespace KuaiexDashboard.Controllers
             _countryService = new CountryService();
         }
 
-        CityDAL objCityDal = new CityDAL();
-
         public ActionResult Index()
         {
             return View();

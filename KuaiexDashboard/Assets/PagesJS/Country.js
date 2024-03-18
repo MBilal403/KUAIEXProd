@@ -205,7 +205,7 @@ var handleStaff = function () {
     var LoadGridData = function () {
         $('#tblUsers').DataTable({
             "destroy": true,
-            "lengthMenu": [5, 25, 50, 75, 100],
+            "lengthMenu": [10, 25, 50, 100],
             "sAjaxSource": "../country/LoadGrid",
             "bServerSide": true,
             "bProcessing": true,

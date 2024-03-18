@@ -34,6 +34,9 @@
     <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
       <HintPath>..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.3.1.1\lib\netstandard2.0\Serilog.dll</HintPath>
     </Reference>
@@ -64,6 +67,25 @@
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.4\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.4\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.4\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -78,7 +100,6 @@
     <Compile Include="BeneficiaryValidationDAL.cs" />
     <Compile Include="BranchesDAL.cs" />
     <Compile Include="ChatDAL.cs" />
-    <Compile Include="CityDAL.cs" />
     <Compile Include="CountryDAL.cs" />
     <Compile Include="DashboardDAL.cs" />
     <Compile Include="Entities\Bank_Branch_Mst.cs" />
@@ -90,13 +111,19 @@
     <Compile Include="Entities\Currency.cs" />
     <Compile Include="Entities\Customer.cs" />
     <Compile Include="Entities\Customer_Security_Questions.cs" />
+    <Compile Include="Entities\IdentificationTypeLookup.cs" />
     <Compile Include="Entities\Individual_KYC.cs" />
     <Compile Include="Entities\Relationship_Lookup.cs" />
     <Compile Include="Entities\Remittance_SubType_Mst.cs" />
     <Compile Include="Entities\Remittance_Trn.cs" />
+    <Compile Include="Entities\Residency_Type.cs" />
+    <Compile Include="Entities\SecurityQuestions.cs" />
     <Compile Include="Entities\Source_Of_Income_Lookup.cs" />
+    <Compile Include="Entities\Terms_and_Privacy.cs" />
+    <Compile Include="Entities\Transaction_Count_Lookup.cs" />
     <Compile Include="GeneralSettingsDAL.cs" />
     <Compile Include="Helpers\ConditionToWhereClauseConverter.cs" />
+    <Compile Include="Helpers\CustomHtmlHelpers.cs" />
     <Compile Include="Helpers\JqueryDatatableParam.cs" />
     <Compile Include="Kuaiex_Prod.cs" />
     <Compile Include="ProcedureResults\Currency_Result.cs" />
