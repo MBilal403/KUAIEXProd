@@ -28,7 +28,9 @@ $(document).ready(function () {
 
     SourceOfIncome = new SlimSelect({
         select: '#Source_Of_Income',
-        placeholder: 'Select Source Of Income',
+        settings: {
+            placeholderText: 'Select Source Of Income',
+        },
         showSearch: true, // shows search field
         searchText: 'Sorry No Record Found.',
         hideSelectedOption: false,
@@ -36,7 +38,9 @@ $(document).ready(function () {
     });
     RemitterRelation = new SlimSelect({
         select: '#Remitter_Relation',
-        placeholder: 'Select Relation With Remitter',
+        settings: {
+            placeholderText: 'Select Remitter Relation',
+        },
         showSearch: true, // shows search field
         searchText: 'Sorry No Record Found.',
         hideSelectedOption: false,
@@ -264,9 +268,13 @@ var RemittancePurpose_OnChange = function () {
     var rem_selected = RemittancePurpose.getSelected();
     if ($.inArray(3, rem_selected) !== -1) {
         $('.dvRemittance_Purpose_Detail').show();
+        $('#Remittance_Purpose_Detail').val('');
+
     }
     else {
         $('.dvRemittance_Purpose_Detail').hide();
+        $('#Remittance_Purpose_Detail').val('');
+
     }
 };
 
@@ -297,9 +305,12 @@ var SourceOfIncome_OnChange = function () {
     var rem_selected = SourceOfIncome.getSelected();
     if ($.inArray(3, rem_selected) !== -1) {
         $('.dvSource_Of_Income_Detail').show();
+        $('#Source_Of_Income_Detail').val('');
     }
     else {
         $('.dvSource_Of_Income_Detail').hide();
+        $('#Source_Of_Income_Detail').val('');
+
     }
 };
 
@@ -332,9 +343,11 @@ var RemitterRelation_OnChange = function () {
     //console.log(rem_selected);
     if ($.inArray(7, rem_selected) !== -1) {
         $('.dvRemitter_Relation_Detail').show();
+        $('#Remitter_Relation_Detail').val('');
     }
     else {
         $('.dvRemitter_Relation_Detail').hide();
+        $('#Remitter_Relation_Detail').val('');
     }
 };
 
@@ -525,41 +538,10 @@ $("#Status").on('ifUnchecked', function (event) {
 
 //handle stuff
 var handleStaff = function () {
-    $('.frmAddUsers').validate({
-        errorElement: 'span', //default input error message container
-        errorClass: 'help-block', // default input error message class
-        focusInvalid: false, // do not focus the last invalid input
-        ignore: "",
-        rules: {
-            Name: {
-                required: true,
-                maxlength: 200
-            },
-        },
+    $(".frmAddUsers").submit(function (event) {
+        event.preventDefault();
 
-        invalidHandler: function (event, validator) { //display error alert on form submit
-
-        },
-
-        highlight: function (element) { // hightlight error inputs            
-            $(element)
-                .closest('.form-group').addClass('has-error'); // set error class to the control group
-        },
-
-        success: function (label) {
-            label.closest('.form-group').removeClass('has-error');
-            label.remove();
-        },
-
-        errorPlacement: function (error, element) {
-            if (element.closest('.input-icon').size() === 1) {
-                error.insertAfter(element.closest('.input-icon'));
-            } else {
-                error.insertAfter(element);
-            }
-        },
-
-        submitHandler: function (form) {
+        if (validateForm()) {
             $('#btn-save').attr('disabled', 'true');
             $(".frmAddUsers :disabled").removeAttr('disabled');
             if (!IsEditMode) {
@@ -630,11 +612,59 @@ var handleStaff = function () {
                     "text"
                 );
             }
-            return false;
 
         }
 
     });
+
+    function validateForm() {
+
+        var requiredFields = [
+            { field: "FullName" },
+            { field: "Country_Id" },
+            { field: "Currency_Id" },
+            { field: "Currency_Id" },
+            { field: "Nationality_Id" },
+            { field: "Remittance_Type_Id" },
+            { field: "Mobile_No" },
+            { field: "Bank_Id" }
+
+            // Add more required fields as needed
+        ];
+        let IsValid = true;
+        // Loop through the required fields and check for validation
+        for (var i = 0; i < requiredFields.length; i++) {
+            var fieldId = requiredFields[i].field;
+            var fieldValue = $("#" + fieldId).val();
+
+            // Check if the field is empty
+            if (fieldValue === '' || fieldValue === undefined || (fieldValue === '0' && $('#' + fieldName).is('select'))) {
+                $("#Val" + fieldId).text("required");
+                IsValid = false;
+            }
+            else {
+                $("#Val" + fieldId).text("");
+            }
+        }
+        var rem_selected = RemittancePurpose.getSelected();
+        if ($.inArray(3, rem_selected) !== -1) {
+            fieldId = 'Remittance_Purpose_Detail';
+            fieldValue = $('Remittance_Purpose_Detail').val();
+            if (fieldValue === '' || fieldValue === undefined || (fieldValue === '0' && $('#' + fieldName).is('select'))) {
+                $("#Val" + fieldId).text("required");
+                IsValid = false;
+            }
+            else {
+                $("#Val" + fieldId).text("");
+            }
+
+        }
+
+
+        return IsValid;
+
+    }
+
     $('.frmAddUsers').keypress(function (e) {
         if (e.which == 13) {
 
@@ -682,7 +712,6 @@ function editUserByUId(uid) {
                 LoadBank(obj.Country_Id);
                 $('#Nationality_Id').val(obj.Nationality_Id).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Birth_Date').val(obj.Birth_Date);
-
                 $('#Currency_Id').val(obj.Currency_Id).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Remittance_Purpose').val(obj.Remittance_Purpose);
                 $('#Remittance_Type_Id').val(obj.Remittance_Type_Id).prop('Enable', 'true').trigger("chosen:updated");
@@ -724,11 +753,15 @@ function editUserByUId(uid) {
                     $('.dvRemittance_Subtype_Id').show();
                     $('#Remittance_Subtype_Id').val(obj.Remittance_Subtype_Id).prop('Enable', 'true').trigger("chosen:updated");
                 }
+
                 $('#Birth_Place').val(obj.Birth_Place);
                 $('#TransFastInfo').val(obj.TransFastInfo);
                 RemittancePurpose.setSelected(obj.Remittance_Purpose);
                 SourceOfIncome.setSelected(obj.Source_Of_Income);
                 RemitterRelation.setSelected(obj.Remitter_Relation);
+                $('#Source_Of_Income_Detail').val(obj.Source_Of_Income_Detail);
+                $('#Remittance_Purpose_Detail').val(obj.Remittance_Purpose_Detail);
+                $('#Remitter_Relation_Detail').val(obj.Remitter_Relation_Detail);
                 $('#btn-save').html("<i class='fa fa-save'></i> Update");
                 IsEditMode = true;
             }
@@ -753,41 +786,44 @@ function resetForm() {
     LoadRemittanceType();
 
     LoadCountry();
-
     $('#Customer_Id').val('');
     $('#FullName').val('');
-
-    $('#Country_Id').val('');
-    $('#Currency_Id').val('');
-
-    $('#Remittance_Purpose').val('');
-    $('#Remittance_Type_Id').val('');
+    $('#Country_Id').val('').trigger("chosen:updated");
+    $('#Currency_Id').val('').trigger("chosen:updated");
     $('#Mobile_No').val('');
     $('#Bank_Id').val('');
     $('#Branch_Id').val('');
-
     $('#Branch_Number').val('');
-
     $('#Bank_Account_No').val('');
-
     $('#Bank_Code').val('');
-
-    $('#Remittance_Subtype_Id').val('');
-
-    $("#IsActive").iCheck('uncheck');
-
+    $('#Remittance_Subtype_Id').val('').trigger("chosen:updated");
     $('#btn-save').html("<i class='fa fa-save'></i> Save");
-    $('#Customer_Id').val("").trigger("chosen:updated");
-    $('#Country_Id').val("").trigger("chosen:updated");
-    $('#Currency_Id').val("").trigger("chosen:updated");
+    $('#Nationality_Id').val("").trigger("chosen:updated");
     $('#Remittance_Type_Id').val("").trigger("chosen:updated");
-
     $('#Bank_Id').val("").trigger("chosen:updated");
-
-
     $('#Remittance_Type_Id').val("").trigger("chosen:updated");
     $('#Remittance_Subtype_Id').val("").trigger("chosen:updated");
     $('#btn-save').removeAttr('disabled');
+
+
+    var requiredFields = [
+        { field: "FullName" },
+        { field: "Country_Id" },
+        { field: "Currency_Id" },
+        { field: "Currency_Id" },
+        { field: "Nationality_Id" },
+        { field: "Remittance_Type_Id" },
+        { field: "Mobile_No" },
+        { field: "Bank_Id" }
+
+        // Add more required fields as needed
+    ];
+    // Loop through the required fields and check for validation
+    for (var i = 0; i < requiredFields.length; i++) {
+        var fieldId = requiredFields[i].field;
+        $("#Val" + fieldId).text("");
+
+    }
 }
 
 $(".DigitOnly").keypress(function (e) {

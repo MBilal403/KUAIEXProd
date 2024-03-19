@@ -51,12 +51,23 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
                     beneficiary.UID = Guid.NewGuid();
                     beneficiary.CreatedOn = DateTime.Now;
                     beneficiary.IsBannedList = default;
-                    beneficiary.Remittance_Purpose = string.Join(",", beneficiaryDto.Remittance_Purpose.Reverse().Select(x => x.ToString()));
-                    beneficiary.Source_Of_Income = string.Join(",", beneficiaryDto.Source_Of_Income.Reverse().Select(x => x.ToString()));
-                    beneficiary.Remitter_Relation = string.Join(",", beneficiaryDto.Remitter_Relation.Reverse().Select(x => x.ToString()));
+                    if (beneficiaryDto.Remittance_Purpose != null)
+                    {
+                        beneficiary.Remittance_Purpose = string.Join(",", beneficiaryDto.Remittance_Purpose.Reverse().Select(x => x.ToString()));
 
+                    }
+                    if (beneficiaryDto.Source_Of_Income != null)
+                    {
+                        beneficiary.Source_Of_Income = string.Join(",", beneficiaryDto.Source_Of_Income.Reverse().Select(x => x.ToString()));
 
-                    Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
+                    }
+                    if (beneficiaryDto.Remitter_Relation != null)
+                    {
+                        beneficiary.Remitter_Relation = string.Join(",", beneficiaryDto.Remitter_Relation.Reverse().Select(x => x.ToString()));
+
+                    }
+
+                    //Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
                     // beneficiary.Prod_Beneficiary_Id = objKuaiex_Prod.GetBeneficiaryIdByIdentificationNumber(beneficiary.Identification_No);
                     if (_beneficiaryRepository.Insert(beneficiary) > 0)
                     {
@@ -157,9 +168,21 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             {
                 Beneficiary beneficiary = _beneficiaryRepository.FindBy(x => x.UID == UID);
                 var beneficiarydto = AutoMapper.Mapper.Map<BeneficiaryDTO>(beneficiary);
-                beneficiarydto.Remittance_Purpose = Array.ConvertAll(beneficiary.Remittance_Purpose.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
-                beneficiarydto.Remitter_Relation = Array.ConvertAll(beneficiary.Remitter_Relation.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
-                beneficiarydto.Source_Of_Income = Array.ConvertAll(beneficiary.Source_Of_Income.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
+                if (!string.IsNullOrEmpty(beneficiary.Source_Of_Income))
+                {
+                    beneficiarydto.Source_Of_Income = Array.ConvertAll(beneficiary.Source_Of_Income.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
+
+                }
+                if (!string.IsNullOrEmpty(beneficiary.Remitter_Relation))
+                {
+                    beneficiarydto.Remitter_Relation = Array.ConvertAll(beneficiary.Remitter_Relation.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
+
+                }
+                if (!string.IsNullOrEmpty(beneficiary.Remittance_Purpose))
+                {
+                    beneficiarydto.Remittance_Purpose = Array.ConvertAll(beneficiary.Remittance_Purpose.Split(','), s => string.IsNullOrEmpty(s) ? (int?)null : int.Parse(s));
+
+                }
 
                 return beneficiarydto;
             }

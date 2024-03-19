@@ -392,7 +392,6 @@ var handleStaff = function () {
 
         var requiredFields = [
             { field: "Name" },
-            { field: "Occupation" },
             { field: "Employer" },
             { field: "Identification_Type" },
             { field: "Identification_Number" },
@@ -509,25 +508,26 @@ function resetForm() {
 
     $('#Name').val('');
     $('#Employer').val('');
-    $('#Identification_Type').val('');
+    $('#Identification_Type').val('').trigger("chosen:updated");
     $('#Identification_Number').val('');
-    $('#Nationality').val('');
+    $('#Nationality').val('').trigger("chosen:updated");
     $('#Date_Of_Birth').val('');
     $('#Identification_Expiry_Date').val('');
     $('#Occupation').val('');
     $('#Mobile_No').val('');
-    $('#Area').val('');
+    $('#Area').val('').trigger("chosen:updated");
+
     $('#Block').val('');
     $('#Street').val('');
     $('#Building').val('');
     $('#Floor').val('');
     $('#Flat').val('');
     $('#Identification_Additional_Detail').val('');
-    $('#Residence_Type').val('');
+    $('#Residence_Type').val('').trigger("chosen:updated");
     $('#Telephone_No').val('');
     $('#Birth_Place').val('');
-    $('#Birth_Country').val('');
-    $('#Expected_Monthly_Trans_Count').val('');
+    $('#Birth_Country').val('').trigger("chosen:updated");
+    $('#Expected_Monthly_Trans_Count').val('').trigger("chosen:updated");
     $('#Other_Income').val('');
     $('#Email_Address').val('');
     $('#Civil_Id_Front').val('');
@@ -544,11 +544,11 @@ function resetForm() {
     $('#Compliance_Comments').val('');
     $('#Compliance_Limit_Expiry').val('');
 
-    $('#Security_Question_Id_1').val('');
+    $('#Security_Question_Id_1').val('').trigger("chosen:updated");
     $('#Answer1').val('');
-    $('#Security_Question_Id_2').val('');
+    $('#Security_Question_Id_2').val('').trigger("chosen:updated");
     $('#Answer2').val('');
-    $('#Security_Question_Id_3').val('');
+    $('#Security_Question_Id_3').val('').trigger("chosen:updated");
     $('#Answer3').val('');
 
 

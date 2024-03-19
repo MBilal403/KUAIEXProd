@@ -37,25 +37,28 @@
                         <div class="col-lg-3 col-md-3 col-sm-3">
                             <div class="form-group">
                                 <label>Name<span style="color:red">*</span></label>
-                                <small><span class="text-danger required-text" id="ValCountry_Id"></span></small>
+                                <small><span class="text-danger required-text" id="ValFullName"></span></small>
                                 <input type="text" id="FullName" placeholder="Enter Beneficiary Name" class="form-control" name="FullName">
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-3">
                             <div class="form-group">
                                 <label>Country<span style="color:red">*</span></label>
+                                <small><span class="text-danger required-text" id="ValCountry_Id"></span></small>
                                 <select class="form-control chzn" id="Country_Id" name="Country_Id"></select>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-3">
                             <div class="form-group">
                                 <label>Currency<span style="color:red">*</span></label>
+                                <small><span class="text-danger required-text" id="ValCurrency_Id"></span></small>
                                 <select class="form-control chzn" id="Currency_Id" name="Currency_Id"></select>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-3">
                             <div class="form-group">
                                 <label>Nationality<span style="color:red">*</span></label>
+                                <small><span class="text-danger required-text" id="ValNationality_Id"></span></small>
                                 <select class="form-control chzn" id="Nationality_Id" name="Nationality_Id"></select>
                             </div>
                         </div>
@@ -63,13 +66,15 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="form-group">
-                                <label>Remittance Purpose</label>
+                                <label>Remittance Purpose<span style="color:red">*</span></label>
+                                <small><span class="text-danger required-text" id="ValRemittance_Purpose"></span></small>
                                 <select id="Remittance_Purpose" name="Remittance_Purpose[]" multiple="multiple"></select>
                             </div>
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6 dvRemittance_Purpose_Detail">
                             <div class="form-group">
-                                <label>Remittance Purpose Detail</label>
+                                <label>Remittance Purpose Detail<span style="color:red">*</span></label>
+                                <small><span class="text-danger required-text" id="ValRemittance_Purpose_Detail"></span></small>
                                 <input type="text" id="Remittance_Purpose_Detail" placeholder="In Case Of Other" class="form-control" name="Remittance_Purpose_Detail" />
                             </div>
                         </div>
@@ -106,12 +111,14 @@
                         <div class="col-lg-3 col-md-3 col-sm-3">
                             <div class="form-group">
                                 <label>Remittance Type<span style="color:red">*</span></label>
+                                <small><span class="text-danger required-text" id="ValRemittance_Type_Id"></span></small>
                                 <select class="form-control chzn" id="Remittance_Type_Id" name="Remittance_Type_Id"></select>
                             </div>
                         </div>
                         <div class="col-lg-3 col-md-3 col-sm-3">
                             <div class="form-group">
                                 <label>Mobile No<span style="color:red">*</span></label>
+                                <small><span class="text-danger required-text" id="ValMobile_No"></span></small>
                                 <input type="text" id="Mobile_No" placeholder="Enter Mobile No" class="form-control" name="Mobile_No">
                             </div>
                         </div>
@@ -119,7 +126,8 @@
                     <div class="row">
                         <div class="col-lg-3 col-md-3 col-sm-3">
                             <div class="form-group">
-                                <label>Bank</label>
+                                <label>Bank<span style="color:red">*</span></label>
+                                <small><span class="text-danger required-text" id="ValBank_Id"></span></small>
                                 <select class="form-control chzn" id="Bank_Id" name="Bank_Id"></select>
                             </div>
                         </div>
