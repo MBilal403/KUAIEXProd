@@ -25,12 +25,12 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
         private readonly IRepository<Bank_Mst> _bank_MstRepository;
         public BeneficiaryService()
         {
-            _beneficiaryRepository = new GenericRepository<Beneficiary>();
-            _bank_Branch_MstRepository = new GenericRepository<Bank_Branch_Mst>();
-            _remittance_SubType_MstRepository = new GenericRepository<Remittance_SubType_Mst>();
-            _relationship_LookupRepository = new GenericRepository<Relationship_Lookup>();
-            _source_Of_Income_LookupRepository = new GenericRepository<Source_Of_Income_Lookup>();
-            _bank_MstRepository = new GenericRepository<Bank_Mst>();
+            _beneficiaryRepository = new GenericRepository<Beneficiary>(DatabasesName.KUAIEXEntities);
+            _bank_Branch_MstRepository = new GenericRepository<Bank_Branch_Mst>(DatabasesName.KUAIEXEntities);
+            _remittance_SubType_MstRepository = new GenericRepository<Remittance_SubType_Mst>(DatabasesName.KUAIEXEntities);
+            _relationship_LookupRepository = new GenericRepository<Relationship_Lookup>(DatabasesName.KUAIEXEntities);
+            _source_Of_Income_LookupRepository = new GenericRepository<Source_Of_Income_Lookup>(DatabasesName.KUAIEXEntities);
+            _bank_MstRepository = new GenericRepository<Bank_Mst>(DatabasesName.KUAIEXEntities);
         }
 
         public string AddBeneficiary(BeneficiaryDTO beneficiaryDto)

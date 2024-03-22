@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Entities;
 using DataAccessLayer.Helpers;
 using DataAccessLayer.Recources;
+using DataAccessLayer.Repository;
 using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.DTO;
 using KuaiexDashboard.Repository;
@@ -17,7 +18,7 @@ namespace KuaiexDashboard.Services.RemitterTransactionService.Impl
         IRepository<Remittance_Trn> _remittance_TrnRepository;
         public RemitterTransactionSerevice()
         {
-            _remittance_TrnRepository = new GenericRepository<Remittance_Trn>();
+            _remittance_TrnRepository = new GenericRepository<Remittance_Trn>(DatabasesName.KUAIEXEntities);
         }
 
         public PagedResult<Remittance_TrnDetailDTO> GetRemitterTransactionList(JqueryDatatableParam param)

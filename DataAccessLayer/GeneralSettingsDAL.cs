@@ -14,7 +14,7 @@ namespace DataAccessLayer
 {
     public class GeneralSettingsDAL
     {
-        private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXProdEntities"].ConnectionString;
+        private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXEntities"].ConnectionString;
         public List<GetTermsConditions_Result> GetTermsConditions()
         {
             List<GetTermsConditions_Result> termsList = new List<GetTermsConditions_Result>();

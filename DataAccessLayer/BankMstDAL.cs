@@ -9,7 +9,7 @@ namespace KuaiexDashboard.DAL
 {
     public class BankMstDAL
     {
-        private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXProdEntities"].ConnectionString;
+        private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXEntities"].ConnectionString;
 
         public List<Currency> GetCurrency()
         {

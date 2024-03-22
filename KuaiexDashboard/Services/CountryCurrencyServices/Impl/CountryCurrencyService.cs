@@ -2,6 +2,7 @@
 using DataAccessLayer.Helpers;
 using DataAccessLayer.ProcedureResults;
 using DataAccessLayer.Recources;
+using DataAccessLayer.Repository;
 using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.Repository;
 using KuaiexDashboard.Repository.Impl;
@@ -16,7 +17,7 @@ namespace KuaiexDashboard.Services.CountryCurrencyServices.Impl
         private readonly IRepository<CountryCurrency> _countryCurrencyRepository;
         public CountryCurrencyService()
         {
-            _countryCurrencyRepository = new GenericRepository<CountryCurrency>();
+            _countryCurrencyRepository = new GenericRepository<CountryCurrency>(DatabasesName.KUAIEXEntities);
         }
 
         public string AddCountryCurrency(CountryCurrency countryCurrency)

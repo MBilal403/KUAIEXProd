@@ -13,7 +13,7 @@ namespace DataAccessLayer
 {
    public class BranchesDAL
     {
-        private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXProdEntities"].ConnectionString;
+        private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXEntities"].ConnectionString;
         public List<GetCityList_Result> GetCityList()
         {
             List<GetCityList_Result> cities = new List<GetCityList_Result>();

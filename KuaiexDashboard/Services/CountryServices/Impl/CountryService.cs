@@ -2,6 +2,7 @@
 using DataAccessLayer.Helpers;
 using DataAccessLayer.ProcedureResults;
 using DataAccessLayer.Recources;
+using DataAccessLayer.Repository;
 using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.Repository;
 using KuaiexDashboard.Repository.Impl;
@@ -15,7 +16,7 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
         private readonly IRepository<Country> _countryRepository;
         public CountryService()
         {
-            _countryRepository = new GenericRepository<Country>();
+            _countryRepository = new GenericRepository<Country>(DatabasesName.KUAIEXEntities);
         }
 
         public string AddCountry(Country objCountry)

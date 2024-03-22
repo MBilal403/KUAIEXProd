@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Entities;
 using DataAccessLayer.Recources;
+using DataAccessLayer.Repository;
 using KuaiexDashboard.Repository;
 using KuaiexDashboard.Repository.Impl;
 using System;
@@ -14,7 +15,7 @@ namespace KuaiexDashboard.Services.SecurityQuestionServices.Impl
         private readonly IRepository<SecurityQuestions> _securityQuestionRepository;
         public SecurityQuestionService()
         {
-            _securityQuestionRepository = new GenericRepository<SecurityQuestions>();
+            _securityQuestionRepository = new GenericRepository<SecurityQuestions>(DatabasesName.KUAIEXEntities);
         }
         public string AddSecurityQuestion(SecurityQuestions securityQuestions)
         {

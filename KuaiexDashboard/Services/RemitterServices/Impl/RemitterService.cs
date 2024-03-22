@@ -3,6 +3,7 @@ using DataAccessLayer.Entities;
 using DataAccessLayer.Helpers;
 using DataAccessLayer.ProcedureResults;
 using DataAccessLayer.Recources;
+using DataAccessLayer.Repository;
 using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.DTO.Beneficiary;
 using KuaiexDashboard.DTO.Customer;
@@ -25,12 +26,12 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
         IRepository<Transaction_Count_Lookup> _transaction_CountRepository;
         public RemitterService()
         {
-            _customerRepository = new GenericRepository<Customer>();
-            _individual_KYCRepository = new GenericRepository<Individual_KYC>();
-            _customerSecurityQuestionRepository = new GenericRepository<Customer_Security_Questions>();
-            _residencyTypeRepository = new GenericRepository<Residency_Type>();
-            _identificationTypeRepository = new GenericRepository<IdentificationTypeLookup>();
-            _transaction_CountRepository = new GenericRepository<Transaction_Count_Lookup>();
+            _customerRepository = new GenericRepository<Customer>(DatabasesName.KUAIEXEntities);
+            _individual_KYCRepository = new GenericRepository<Individual_KYC>(DatabasesName.KUAIEXEntities);
+            _customerSecurityQuestionRepository = new GenericRepository<Customer_Security_Questions>(DatabasesName.KUAIEXEntities);
+            _residencyTypeRepository = new GenericRepository<Residency_Type>(DatabasesName.KUAIEXEntities);
+            _identificationTypeRepository = new GenericRepository<IdentificationTypeLookup>(DatabasesName.KUAIEXEntities);
+            _transaction_CountRepository = new GenericRepository<Transaction_Count_Lookup>(DatabasesName.KUAIEXEntities);
         }
         public string CreateRemitter(CustomerDTO customerDto)
         {

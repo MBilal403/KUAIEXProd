@@ -13,7 +13,7 @@ namespace DataAccessLayer
 {
     public class SequrityQuesDAL
     {
-        private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXProdEntities"].ConnectionString;
+        private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXEntities"].ConnectionString;
         public SecurityQuestions GetSecurityQuestionByQuestion(string question)
         {
             try

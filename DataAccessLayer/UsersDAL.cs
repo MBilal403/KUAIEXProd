@@ -8,7 +8,7 @@ namespace KuaiexDashboard.DAL
 {
     public class UsersDAL
     {
-        private readonly string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXProdEntities"].ConnectionString;
+        private readonly string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXEntities"].ConnectionString;
 
         public List<GetUsersList_Result> GetUsersList()
         {

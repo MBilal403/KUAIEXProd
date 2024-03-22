@@ -14,7 +14,7 @@ namespace DataAccessLayer
 {
     public class CountryDAL
     {
-        private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXProdEntities"].ConnectionString;
+        private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXEntities"].ConnectionString;
       
 
         public Country GetCountryByUID(Guid? UID)

@@ -25,6 +25,9 @@
                     <li class="@Html.IsSelected(controller: "Country", action: "Index")">
                         <a href="@Url.Action("Index", "Country")"><i class="fa fa-building"></i><span class="nav-label">Country</span></a>
                     </li>
+                    <li class="@Html.IsSelected(controller: "City", action: "Index")">
+                        <a href="@Url.Action("Index", "City")"><i class="fa fa-building"></i><span class="nav-label">City</span></a>
+                    </li>
                     <li class="@Html.IsSelected(controller: "CountryCurrency", action: "Index")">
                         <a href="@Url.Action("Index", "CountryCurrency")"><i class="fa fa-building"></i><span class="nav-label">Country Currency</span></a>
                     </li>

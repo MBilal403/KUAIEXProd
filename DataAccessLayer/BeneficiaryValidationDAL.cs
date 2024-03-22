@@ -8,7 +8,7 @@ namespace KuaiexDashboard.DAL
 {
     public class BeneficiaryValidationDAL
     {
-        private readonly string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXProdEntities"].ConnectionString;
+        private readonly string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXEntities"].ConnectionString;
 
         public BeneficiaryValidation GetBeneficiaryValidationByRemittanceTypeId(int remittanceTypeId)
         {

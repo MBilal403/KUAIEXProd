@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Entities;
 using DataAccessLayer.Helpers;
 using DataAccessLayer.Recources;
+using DataAccessLayer.Repository;
 using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.Repository;
 using KuaiexDashboard.Repository.Impl;
@@ -16,7 +17,7 @@ namespace KuaiexDashboard.Services.RelationshipServices.Impl
         private readonly IRepository<Relationship_Lookup> _relationshipRepository;
         public RelationshipService()
         {
-            _relationshipRepository = new GenericRepository<Relationship_Lookup>();
+            _relationshipRepository = new GenericRepository<Relationship_Lookup>(DatabasesName.KUAIEXEntities);
         }
         public string AddRelationship(Relationship_Lookup objRelationship)
         {

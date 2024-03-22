@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Entities;
 using DataAccessLayer.Helpers;
 using DataAccessLayer.Recources;
+using DataAccessLayer.Repository;
 using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.Repository;
 using KuaiexDashboard.Repository.Impl;
@@ -14,7 +15,7 @@ namespace KuaiexDashboard.Services.CityServices.Impl
         private readonly IRepository<City> _cityRepository;
         public CityService()
         {
-            _cityRepository = new GenericRepository<City>();
+            _cityRepository = new GenericRepository<City>(DatabasesName.KUAIEXEntities);
         }
 
         public string AddCity(City objCity)

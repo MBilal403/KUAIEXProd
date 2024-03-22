@@ -12,7 +12,7 @@ namespace DataAccessLayer
 {
    public class AgencyBranchesDAL
     {
-        private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXProdEntities"].ConnectionString;
+        private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXEntities"].ConnectionString;
         public BranchesInfo GetBranchesInfoByName(string name)
         {
             try

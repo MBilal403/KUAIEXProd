@@ -12,7 +12,7 @@ namespace DataAccessLayer
 {
    public class DashboardDAL
    {
-        private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXProdEntities"].ConnectionString;
+        private string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXEntities"].ConnectionString;
         public List<GetCurrencyRate_Result> GetCurrencyRates()
         {
             try

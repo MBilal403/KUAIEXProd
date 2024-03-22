@@ -6,6 +6,7 @@ using KuaiexDashboard.Repository.Impl;
 using KuaiexDashboard.Repository;
 using System;
 using System.Collections.Generic;
+using DataAccessLayer.Repository;
 
 
 namespace KuaiexDashboard.Services.CurrencyServices.Impl
@@ -15,7 +16,7 @@ namespace KuaiexDashboard.Services.CurrencyServices.Impl
         private readonly IRepository<Currency> _currencyRepository;
         public CurrencyService()
         {
-            _currencyRepository = new GenericRepository<Currency>();
+            _currencyRepository = new GenericRepository<Currency>(DatabasesName.KUAIEXEntities);
         }
 
         public string AddCurrency(Currency currency)

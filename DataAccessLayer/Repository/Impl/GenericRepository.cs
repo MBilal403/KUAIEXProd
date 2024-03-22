@@ -18,9 +18,9 @@ namespace KuaiexDashboard.Repository.Impl
         private readonly ConditionToWhereClauseConverter<T> Converter;
 
 
-        public GenericRepository()
+        public GenericRepository(string Dbname)
         {
-            connectionHandler = new SqlConnectionHandler();
+            connectionHandler = new SqlConnectionHandler(Dbname);
             Converter = new ConditionToWhereClauseConverter<T>();
         }
 
