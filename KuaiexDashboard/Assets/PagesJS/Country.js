@@ -3,8 +3,7 @@
 $(document).ready(function () {
     handleStaff();
     LoadGridData();
-    LoadCountry();
-
+    $("#btn-save").addClass("disabled").attr("disabled", true);
     $(document).ajaxStart(function () {
 
         $("#wait").css("display", "block");
@@ -15,33 +14,6 @@ $(document).ready(function () {
     });
 });
 
-$(".DigitOnly").keypress(function (e) {
-    e = e || window.event;
-    var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
-    if (!charCode || charCode == 8 /* Backspace */) {
-        return;
-    }
-
-    var typedChar = String.fromCharCode(charCode);
-
-    if (typedChar != "2" && this.value == "9") {
-        return false;
-    }
-
-    if (typedChar != "9" && this.value == "") {
-        return false;
-    }
-
-    if (/\d/.test(typedChar)) {
-        return;
-    }
-
-    if (typedChar == "-" && this.value == "") {
-        return;
-    }
-
-    return false;
-});
 
 // Edit method
 $(document).on('click', '.btn-edit', function () {
@@ -62,15 +34,26 @@ $(document).on('click', '.btn-edit', function () {
 
                 $('#UID').val(obj.UID);
                 $('#Name').val(obj.Name);
+                $('#Name').prop('disabled', true);
                 $('#Nationality').val(obj.Nationality);
+                $('#Nationality').prop('disabled', true);
                 $('#Alpha_2_Code').val(obj.Alpha_2_Code);
+                $('#Alpha_2_Code').prop('disabled', true);
                 $('#Alpha_3_Code').val(obj.Alpha_3_Code);
                 $('#Country_Dialing_Code').val(obj.Country_Dialing_Code);
-                $('#Comission').val(obj.Comission);
-                $('#City_Id').val(obj.City_Id).prop('Enable', 'true').trigger("chosen:updated");
-                $('#btn-save').html("<i class='fa fa-save'></i> Update");
                 IsEditMode = true;
+                $("#btn-save").removeClass("disabled").removeAttr("disabled");
 
+                if (obj.Under_Review_Status === "A") {
+                    $("#Under_Review_Status").iCheck('check');
+                } else {
+                    $("#Under_Review_Status").iCheck('uncheck');
+                }
+                if (obj.High_Risk_Status === "A") {
+                    $("#High_Risk_Status").iCheck('check');
+                } else {
+                    $("#Status").iCheck('uncheck');
+                }
                 if (obj.Status === "A") {
                     $("#Status").iCheck('check');
                 } else {
@@ -80,7 +63,6 @@ $(document).on('click', '.btn-edit', function () {
                 $(window).scrollTop(0);
             } else {
                 ShowErrorAlert("Error", "Some Error Occurred!");
-                $('#btn-validate').removeAttr('disabled');
             }
         },
         error: function (e) {
@@ -102,7 +84,7 @@ var handleStaff = function () {
     $(".frmAddUsers").submit(function (event) {
         event.preventDefault();
         if (validateForm()) {
-            $('#btn-save').attr('disabled', 'true');
+         
             $(".frmAddUsers :disabled").removeAttr('disabled');
             if (!IsEditMode) {
                 $.post(
@@ -122,12 +104,12 @@ var handleStaff = function () {
                             );
                             resetForm();
                             $('#btn-save').removeAttr('disabled');
-                            $('#tblUsers').DataTable().clear().draw;
+                            $('#tblCountry').DataTable().clear().draw;
                             LoadGridData();
                         }
                         else {
                             swal("Error", "Data Not Saved. Please Refresh & Try Again", "error");
-                            $('#btn-save').removeAttr('disabled');
+                            $("#btn-save").removeClass("disabled").removeAttr("disabled");
                         }
                     },
                     "text"
@@ -152,12 +134,12 @@ var handleStaff = function () {
                                 'success'
                             );
                             resetForm();
-                            $('#btn-save').removeAttr('disabled');
-                            $('#tblUsers').DataTable().clear().draw;
+                       
+                            $('#tblCountry').DataTable().clear().draw;
                             LoadGridData();
                         } else {
                             swal("Error", "Data not updated!!", "error");
-                            $('#btn-save').removeAttr('disabled');
+                            $("#btn-save").removeClass("disabled").removeAttr("disabled");
                         }
                     },
                     "text"
@@ -170,7 +152,7 @@ var handleStaff = function () {
         var isValid = true;
 
         $('.required-text').text('');
-        var fieldsToValidate = ['Comission', 'Alpha_2_Code', 'Nationality', 'Name'];
+        var fieldsToValidate = ['Alpha_2_Code', 'Nationality', 'Name'];
 
         fieldsToValidate.forEach(function (fieldName) {
             var fieldValue = $('#' + fieldName).val().trim();
@@ -203,7 +185,7 @@ var handleStaff = function () {
 
     // Load grid
     var LoadGridData = function () {
-        $('#tblUsers').DataTable({
+        $('#tblCountry').DataTable({
             "destroy": true,
             "lengthMenu": [10, 25, 50, 100],
             "sAjaxSource": "../country/LoadGrid",
@@ -233,12 +215,34 @@ var handleStaff = function () {
                 {
                     "data": "City",
                     "autoWidth": true,
+                    "searchable": true,
+                    "render": function (data, type, row) {
+                        
+                        if (!data) {
+                            return "<span style='display: block; text-align: center;'>-</span>"; 
+                        }
+                        return data; 
+                    }
+                },
+                {
+                    "data": "High_Risk_Status",
+                    "render": function (data, type, row) {
+                        return data === 'A' ? '<span class="label label-success label-xs">Active</span>' : '<span class="label label-danger label-xs">In Active</span>';
+                    },
+                    "autoWidth": true,
+                    "searchable": true
+                },
+                {
+                    "data": "Under_Review_Status",
+                    "render": function (data, type, row) {
+                        return data === 'A' ? '<span class="label label-success label-xs">Active</span>' : '<span class="label label-danger label-xs">In Active</span>';
+                    },
+                    "autoWidth": true,
                     "searchable": true
                 },
                 {
                     "data": "Status",
                     "render": function (data, type, row) {
-                        console.log(data);
                         return data === 'A' ? '<span class="label label-success label-xs">Active</span>' : '<span class="label label-danger label-xs">In Active</span>';
                     },
                     "autoWidth": true,
@@ -247,7 +251,6 @@ var handleStaff = function () {
                 {
                     "data": "UID",
                     "render": function (data, type, row) {
-                        console.log(data);
                         return '<button id=' + data + ' class="btn btn-warning btn-block btn-xs btn-edit" style="width: 80px;">' +
                             '<i class="fa fa-edit"></i>' +
                             ' Edit' +
@@ -262,59 +265,25 @@ var handleStaff = function () {
     // Reset values
     function resetForm() {
         IsEditMode = false;
-        LoadCountry();
         $('#Name').val('');
-        $('#City_Id').val('');
         $('#Country_Dialing_Code').val('');
         $('#Alpha_3_Code').val('');
         $('#Alpha_2_Code').val('');
         $('#Nationality').val('');
-        $('#Comission').val('');
+        $("#High_Risk_Status").iCheck('uncheck');
+        $("#Under_Review_Status").iCheck('uncheck');
         $("#Status").iCheck('uncheck');
-        $('#btn-save').html("<i class='fa fa-save'></i> Save");
-        $('#City_Id').val("").trigger("chosen:updated");
-        $('#btn-save').removeAttr('disabled');
+        $("#btn-save").addClass("disabled").attr("disabled", true);
+        $('#Name').prop('disabled', false);
+        $('#Nationality').prop('disabled', false);
+        $('#Alpha_2_Code').prop('disabled', false);
+
     }
 
     $('#btn-refresh').click(function () {
         resetForm();
     });
 
-    // For number validation
-    function CellNumberValidator(CellNo) {
-        var phoneno = /^[9]{1}[2]{1}[0-9]{10}$/;
-        if (CellNo.match(phoneno)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // Load City
-    var LoadCountry = function () {
-        $.ajax({
-            type: "POST",
-            cache: false,
-            url: "../Country/LoadCity",
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                var sch = JSON.parse(data);
-                var $el = $('#City_Id');
-                $el.empty();
-                if (sch.length > 0) {
-                    $el.append('<option value="">' + "Select City" + '</option>');
-                    $.each(sch, function (idx, obj) {
-                        $el.append('<option value="' + obj.Id + '">' + obj.Name + '</option>');
-                    });
-                } else {
-                    $el.append('<option value="">' + "Select City" + '</option>');
-                }
-                $el.trigger("liszt:updated");
-                $el.chosen();
-            }
-        });
-    }
 
     $('#btn-sync').on('click', function () {
         $.ajax({
@@ -324,6 +293,8 @@ var handleStaff = function () {
             processData: false,
             contentType: false,
             success: function (data) {
+                console.log(data);
+                LoadGridData();
                 swal(
                     'Success',
                     data + ' Records Synchronized Successfully.',

@@ -23,11 +23,8 @@ namespace KuaiexDashboard.Controllers
     [AuthorizeFilter]
     public class CountryController : Controller
     {
-        CountryDAL objCountryDal = new CountryDAL();
         private readonly ICountryService _countryService;
         private readonly ICityService _cityService;
-
-
 
         public CountryController()
         {
@@ -145,31 +142,13 @@ namespace KuaiexDashboard.Controllers
         public ActionResult SynchronizeRecords()
         {
             int status = 0;
-            int Counter = 0;
             try
             {
-                List<Country> lst = objCountryDal.GetAllCountries();
-                foreach (var item in lst)
-                {
-                    Country obj = objCountryDal.GetCountryByUID(item.UID);
-                    if (obj.Prod_Country_Id <= 0)
-                    {
-                        Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                        obj.Prod_Country_Id = objKuaiex_Prod.GetCountryIdByCountryName(obj.Name);
-
-                        if (obj.Prod_Country_Id > 0)
-                        {
-                            objCountryDal.UpdateCountry_ProdCountryId(obj.Prod_Country_Id, item.Id);
-                            Counter++;
-                        }
-                    }
-                }
-
+                status = _countryService.SynchronizeRecords();
             }
             catch (Exception ex)
             {
                 Log.Error(@"{Message}: {e}", ex.Message, ex);
-                status = Counter;
             }
             return Content(status.ToString());
         }

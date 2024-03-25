@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Entities;
+using DataAccessLayer.ProcedureResults;
 using KuaiexDashboard;
 using System;
 using System.Collections.Generic;
@@ -40,7 +41,7 @@ namespace DataAccessLayer
                                     UID = (Guid)row["UID"],
                                     Name = row["Name"].ToString(),
                                     Status = row["Status"] == DBNull.Value ? 0 : Convert.ToInt32(row["Status"]),
-                                    Country = row["Country"].ToString()
+                                    CountryName = row["Country"].ToString()
                                 };
 
                                 cities.Add(city);

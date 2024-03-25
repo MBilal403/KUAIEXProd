@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace KuaiexDashboard.Services.CountryServices
 {
@@ -20,6 +21,7 @@ namespace KuaiexDashboard.Services.CountryServices
         string UpdateCountry(Country country);
         string AddCountry(Country country);
         List<GetCountryList_Result> GetActiveCountryList();
+        int SynchronizeRecords();
 
 
 

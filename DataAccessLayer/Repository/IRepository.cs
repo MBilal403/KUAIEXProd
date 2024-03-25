@@ -12,9 +12,11 @@ namespace KuaiexDashboard.Repository
     public interface IRepository<T> where T : class
     {
         T FindBy(Expression<Func<T, bool>> condition);
+        bool Any(Expression<Func<T, bool>> condition);
         List<T> GetAll(Expression<Func<T, bool>> condition = null, params Expression<Func<T, object>>[] columns);
         T GetbyId(int id, params Expression<Func<T, object>>[] columns);
         int Insert(T entity);
+        int InsertRange(List<T> entities);
         int Update(T entity, string whereClause);
         void Delete(object id);
         PagedResult<T> GetPagedDataFromSP<T>(string storedProcedureName, int page = 1, int pageSize = 10, string searchString = null ) where T : class;

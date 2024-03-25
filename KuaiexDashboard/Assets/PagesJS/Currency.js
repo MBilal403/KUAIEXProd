@@ -42,7 +42,7 @@ $(document).on('click', '.btn-edit', function () {
                 }
                 $('#btn-save').html("<i class='fa fa-save'></i> Update");
                 IsEditMode = true;
-                $('#Name').prop('disabled', true);
+                $('#Name').prop('disabled', true);  
                 $('#Code').prop('disabled', true);
                 $(window).scrollTop(0);
             } else {

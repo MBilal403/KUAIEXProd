@@ -1,5 +1,7 @@
 ﻿using DataAccessLayer.Entities;
 using DataAccessLayer.Helpers;
+using DataAccessLayer.ProcedureResults;
+using DataAccessLayer.ProdEntities;
 using DataAccessLayer.Recources;
 using DataAccessLayer.Repository;
 using DataAccessLayer.Repository.Impl;
@@ -13,9 +15,14 @@ namespace KuaiexDashboard.Services.CityServices.Impl
     public class CityService : ICityService
     {
         private readonly IRepository<City> _cityRepository;
+        private readonly IRepository<City_Mst> _cityProdRepository;
+        private readonly IRepository<Country> _countryRepository;
+
         public CityService()
         {
             _cityRepository = new GenericRepository<City>(DatabasesName.KUAIEXEntities);
+            _countryRepository = new GenericRepository<Country>(DatabasesName.KUAIEXEntities);
+            _cityProdRepository = new GenericRepository<City_Mst>(DatabasesName.KUAIEXProdEntities);
         }
 
         public string AddCity(City objCity)
@@ -44,7 +51,7 @@ namespace KuaiexDashboard.Services.CityServices.Impl
             catch (Exception ex)
             {
                 // throw the exception to propagate it up the call stack
-                throw new Exception(MsgKeys.SomethingWentWrong ,ex);
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
             return MsgKeys.Error;
         }
@@ -83,10 +90,11 @@ namespace KuaiexDashboard.Services.CityServices.Impl
                 throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
         }
-        public PagedResult<GetCityList_Result> GetActiveCities(JqueryDatatableParam param)
+        public PagedResult<GetCityList_Result> GetActiveCities(JqueryDatatableParam param, int countryId)
         {
             try
             {
+                param.sSearch = string.Join("|", param.sSearch ?? "", countryId.ToString() ?? "");
                 PagedResult<GetCityList_Result> list = _cityRepository.GetPagedDataFromSP<GetCityList_Result>("GetCitiesWithPagination", param.iDisplayStart + 1, param.iDisplayLength, param.sSearch);
                 return list;
             }
@@ -95,7 +103,7 @@ namespace KuaiexDashboard.Services.CityServices.Impl
                 // throw the exception to propagate it up the call stack
                 throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
-          
+
         }
 
         public string UpdateCity(City objCity)
@@ -105,12 +113,16 @@ namespace KuaiexDashboard.Services.CityServices.Impl
                 City existingCity = GetCityIdByCityName(objCity.Name, objCity.Country_Id);
                 if (existingCity != null)
                 {
-                    existingCity.Country_Id = objCity.Country_Id;
+                    existingCity.Status = objCity.Status != null ? 1 : 0;
                     existingCity.UpdatedOn = DateTime.Now;
-                    //objCity.Prod_City_Id = objKuaiex_Prod.GetCityIdByCityName(objCity.Name);
-
-                    _cityRepository.Update(existingCity, $" UID = '{objCity.UID}' ");
-                    return MsgKeys.UpdatedSuccessfully;
+                    if (_cityRepository.Update(existingCity, $" UID = '{objCity.UID}' ") > 0)
+                    {
+                        return MsgKeys.UpdatedSuccessfully;
+                    }
+                    else
+                    {
+                        throw new Exception(MsgKeys.UpdationFailed);
+                    }
                 }
 
                 return MsgKeys.Error;
@@ -135,6 +147,48 @@ namespace KuaiexDashboard.Services.CityServices.Impl
                 // throw the exception to propagate it up the call stack
                 throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
+        }
+
+        public int SynchronizeRecords()
+        {
+            int count = 0;
+            try
+            {
+                List<City_Mst> prodCities = _cityProdRepository.GetAll();
+
+                foreach (var item in prodCities)
+                {
+                    string CityName = Strings.EscapeSingleQuotes(item.English_Name);
+                    int CountryId = item.Country_Id;
+                    int id = _countryRepository.FindBy(x => x.Prod_Country_Id == CountryId).Id;
+
+                    if (!_cityRepository.Any(x => x.Name == CityName && x.Country_Id == id))
+                    {
+                        City city = new City();
+                        city.Name = item.English_Name;
+                        city.Status = item.Record_Status == "A" ? 1 : 0;
+                        city.Prod_City_Id = item.City_Id;
+                        city.Country_Id = id;
+                        city.UID = Guid.NewGuid();
+                        city.CreatedOn = DateTime.Now;
+                        if (_cityRepository.Insert(city) > 0)
+                        {
+                            count++;
+                        }
+                        else
+                        {
+                            throw new Exception(MsgKeys.SomethingWentWrong);
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw;
+            }
+            return count;
         }
     }
 }

@@ -12,14 +12,10 @@ namespace KuaiexDashboard.Repository
     {
         private SqlConnection connection;
 
-        public SqlConnectionHandler(string DbName)
-        {
-            connection = new SqlConnection(ConfigurationManager.ConnectionStrings[DbName].ConnectionString);
-        }
 
-        public SqlConnection OpenConnection()
+        public SqlConnection OpenConnection(string connectionString)
         {
-           
+            connection = new SqlConnection(connectionString);
             if (connection.State != System.Data.ConnectionState.Open)
             {
                 connection.Open();

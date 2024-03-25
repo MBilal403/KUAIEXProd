@@ -90,7 +90,6 @@
     <Compile Include="DomainEntities\GetBranchesList1_Result.cs" />
     <Compile Include="DomainEntities\GetBranchesListbyCountryBank_Result.cs" />
     <Compile Include="DomainEntities\GetBranchesList_Result.cs" />
-    <Compile Include="DomainEntities\GetCityList_Result.cs" />
     <Compile Include="DomainEntities\GetContactUs_Result.cs" />
     <Compile Include="DomainEntities\GetCurrencyRate_Result.cs" />
     <Compile Include="DomainEntities\GetCustomerQueries_Result.cs" />

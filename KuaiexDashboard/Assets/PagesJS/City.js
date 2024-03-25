@@ -3,49 +3,14 @@
 $(document).ready(function () {
     handleStaff();
     LoadGridData();
-
     LoadCountry();
-
+    $("#btn-save").addClass("disabled").attr("disabled", true);
     $(document).ajaxStart(function () {
         $("#wait").css("display", "block");
     });
     $(document).ajaxComplete(function () {
         $("#wait").css("display", "none");
     });
-});
-
-$(".DigitOnly").keypress(function (e) {
-    e = e || window.event;
-    var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
-    // Allow non-printable keys
-    if (!charCode || charCode == 8 /* Backspace */) {
-        return;
-    }
-
-    var typedChar = String.fromCharCode(charCode);
-
-    // Allow the minus sign () if the user enters it first
-    if (typedChar != "2" && this.value == "9") {
-        return false;
-    }
-    // Allow the minus sign (9) if the user enters it first
-    if (typedChar != "9" && this.value == "") {
-        return false;
-    }
-    // Allow numeric characters
-    if (/\d/.test(typedChar)) {
-        return;
-    }
-
-    // Allow the minus sign (-) if the user enters it first
-    if (typedChar == "-" && this.value == "") {
-        return;
-    }
-
-
-
-    // In all other cases, suppress the event
-    return false;
 });
 
 //edit method
@@ -66,8 +31,10 @@ $(document).on('click', '.btn-edit', function () {
                 $('#UID').val(obj.UID);
                 $('#Name').val(obj.Name);
                 $('#Country_Id').val(obj.Country_Id).trigger("chosen:updated");
-                $('#btn-save').html("<i class='fa fa-save'></i> Update");
+                $("#btn-save").removeClass("disabled").removeAttr("disabled");
+                $('#Country_Id').prop('disabled', true).trigger('chosen:updated');
                 IsEditMode = true;
+                $('#Name').prop('disabled', true);
                 if (obj.Status) {
                     $("#Status").iCheck('check');
                 }
@@ -215,12 +182,11 @@ var handleStaff = function () {
 
 
 
-//load grid
 var LoadGridData = function () {
-    $('#tblUsers').DataTable({
+    var dataTable = $('#tblUsers').DataTable({
         "destroy": true,
         "lengthMenu": [10, 25, 50, 100],
-        "sAjaxSource": "../City/LoadGrid",
+        "sAjaxSource": "../City/LoadGrid?CountryId=" + 0,
         "bServerSide": true,
         "bProcessing": true,
         "paging": true,
@@ -235,14 +201,13 @@ var LoadGridData = function () {
                 "searchable": true
             },
             {
-                "data": "Country",
+                "data": "CountryName",
                 "autoWidth": true,
                 "searchable": true
             },
             {
                 "data": "Status",
                 "render": function (data, type, row) {
-
                     return data == 1 ? '<span class="label label-success label-xs">Active</span>' : '<span class="label label-danger label-xs">In Active</span>';
                 },
                 "autoWidth": true,
@@ -251,7 +216,6 @@ var LoadGridData = function () {
             {
                 "data": "UID",
                 "render": function (data, type, row) {
-                    console.log(data);
                     return '<button id=' + data + ' class="btn btn-warning btn-block btn-xs btn-edit" style="width: 80px;">' +
                         '<i class="fa fa-edit"></i>' +
                         ' Edit' +
@@ -261,7 +225,12 @@ var LoadGridData = function () {
             }
         ]
     });
+    $('#btnsearch').on('click', function () {
+        var CountryId = $("#CountrySearch").val();
+        dataTable.ajax.url("../City/LoadGrid?CountryId=" + CountryId).load();
+    });
 };
+
 
 
 //reset values
@@ -285,24 +254,40 @@ var LoadCountry = function () {
         contentType: false,
         success: function (data) {
             var sch = JSON.parse(data);
-
-            var $el = $('#Country_Id');
-            $el.empty();
-            if (sch.length > 0) {
-                $el.append('<option value="0">' + "Select Country" + '</option>');
-                $.each(sch, function (idx, obj) {
-                    $el.append('<option value="' + obj.Id + '">' + obj.Name + '</option>');
-                });
-            }
-            else {
-                $el.append('<option value="0">' + "Select Country" + '</option>');
-            }
-            $el.trigger("liszt:updated");
-            $el.chosen();
+            PopulateCountry(sch);
+        
         }
     });
 }
 // Ensure that the "Country_Id" is included in the serialized form data
+
+function PopulateCountry(data) {
+    var $el = $('#Country_Id');
+    var $CountrySearch = $('#CountrySearch');
+
+    $el.empty();
+    if (data.length > 0) {
+        $el.append('<option value="0">' + "Select Country" + '</option>');
+        $CountrySearch.append('<option value="0">' + "Select Country" + '</option>');
+        $.each(data, function (idx, obj) {
+            $el.append('<option value="' + obj.Id + '">' + obj.Name + '</option>');
+            $CountrySearch.append('<option value="' + obj.Id + '">' + obj.Name + '</option>');
+        });
+    }
+    else {
+        $el.append('<option value="0">' + "Select Country" + '</option>');
+        $CountrySearch.append('<option value="0">' + "Select Country" + '</option>');
+    }
+    $el.trigger("liszt:updated");
+    $CountrySearch.trigger("liszt:updated");
+    $el.chosen();
+    $CountrySearch.chosen();
+
+}
+
+
+
+
 
 
 function Reset() {
@@ -311,10 +296,11 @@ function Reset() {
     $('#Name').val('');
     $('#Country_Id').val('');
     $("#Status").iCheck('uncheck');
-
-    $('#btn-save').html("<i class='fa fa-save'></i> Save");
-    $('#Country_Id').val("").trigger("chosen:updated");
-    $('#btn-save').removeAttr('disabled');
+    $("#btn-save").addClass("disabled").attr("disabled", true);
+    $('#CountrySearch').val("").trigger("chosen:updated");
+    $('#Name').prop('disabled', false);
+    $('#Country_Id').prop('disabled', false).trigger('chosen:updated');
+   
 }
 
 $('#btn-sync').on('click', function () {

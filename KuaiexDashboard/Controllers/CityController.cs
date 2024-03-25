@@ -74,11 +74,11 @@ namespace KuaiexDashboard.Controllers
         }
 
         [HttpGet]
-        public ActionResult LoadGrid(JqueryDatatableParam param)
+        public ActionResult LoadGrid(JqueryDatatableParam param,int countryId)
         {
             try
             {
-                PagedResult<GetCityList_Result> list = _cityService.GetActiveCities(param);
+                PagedResult<GetCityList_Result> list = _cityService.GetActiveCities(param, countryId);
 
                 var result = new
                 {
@@ -133,37 +133,19 @@ namespace KuaiexDashboard.Controllers
             return Content(status);
         }
 
-        /*    public ActionResult SynchronizeRecords()
+        public ActionResult SynchronizeRecords()
+        {
+            int status = 0;
+            try
             {
-                int status = 0;
-                int Counter = 0;
-                try
-                {
-                    List<City> lst = objCityDal.GetAllCities();
-
-                    foreach (var item in lst)
-                    {
-                        City obj = objCityDal.GetCityByUID(item.UID);
-                        if (obj.Prod_City_Id == null || obj.Prod_City_Id <= 0)
-                        {
-                            Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                            obj.Prod_City_Id = objKuaiex_Prod.GetCityIdByCityName(obj.Name);
-
-                            if (obj.Prod_City_Id > 0)
-                            {
-                                objCityDal.UpdateCity_ProdCityId(obj.Prod_City_Id, item.Id);
-                                Counter++;
-                            }
-                        }
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    status = Counter;
-                }
-                return Content(status.ToString());
-            }*/
+                status = _cityService.SynchronizeRecords();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+            }
+            return Content(status.ToString());
+        }
 
     }
 }

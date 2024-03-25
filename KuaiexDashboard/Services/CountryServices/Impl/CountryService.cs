@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Entities;
 using DataAccessLayer.Helpers;
 using DataAccessLayer.ProcedureResults;
+using DataAccessLayer.ProdEntities;
 using DataAccessLayer.Recources;
 using DataAccessLayer.Repository;
 using DataAccessLayer.Repository.Impl;
@@ -8,15 +9,19 @@ using KuaiexDashboard.Repository;
 using KuaiexDashboard.Repository.Impl;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.Metrics;
+using System.Security.Cryptography;
 
 namespace KuaiexDashboard.Services.CountryServices.Impl
 {
     public class CountryService : ICountryService
     {
         private readonly IRepository<Country> _countryRepository;
+        private readonly IRepository<Country_Mst> _countryProdRepository;
         public CountryService()
         {
             _countryRepository = new GenericRepository<Country>(DatabasesName.KUAIEXEntities);
+            _countryProdRepository = new GenericRepository<Country_Mst>(DatabasesName.KUAIEXProdEntities);
         }
 
         public string AddCountry(Country objCountry)
@@ -36,7 +41,6 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
                     objCountry.High_Risk_Status = "A";
                     objCountry.CreatedOn = DateTime.Now;
                     objCountry.CreatedIp = "127.0.0.1";
-                    objCountry.UpdatedIp = "127.0.0.1";
                     objCountry.UID = Guid.NewGuid();
                     // objCountry.Prod_Country_Id = objKuaiex_Prod.GetCountryIdByCountryName(objCountry.Name);
 
@@ -154,11 +158,58 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
             }
         }
 
+        public int SynchronizeRecords()
+        {
+            int count = 0;
+            try
+            {
+                List<Country_Mst> prodContries = _countryProdRepository.GetAll();
+
+                foreach (var item in prodContries)
+                {
+                    string CountryName = Strings.EscapeSingleQuotes(item.English_Name);
+                    string NationalityName = item.English_Nationality;
+                  
+                    if (!_countryRepository.Any(x => x.Name == CountryName && x.Nationality == NationalityName))
+                    {
+
+                        Country country = new Country();
+                        country.Name = item.English_Name;
+                        country.Nationality = item.English_Nationality; 
+                        country.Status = item.Record_Status;
+                        country.Alpha_2_Code = item.Country_Code;
+                        country.Remittance_Status = item.Remittance_Status;
+                        country.City_Id = item.Any_City_Id;
+                        country.High_Risk_Status = item.High_Risk_Status;
+                        country.Under_Review_Status = item.Under_Review_Status;
+                        country.Prod_Country_Id = item.Country_Id;
+                        country.UID = Guid.NewGuid();
+                        country.CreatedOn = DateTime.Now;
+                        if (_countryRepository.Insert(country) > 0)
+                        {
+                            count++;
+                        }
+                        else
+                        {
+                            throw new Exception(MsgKeys.SomethingWentWrong);
+                        }
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw;
+            }
+            return count;
+        }
+
         public string UpdateCountry(Country objCountry)
         {
             try
             {
-                Guid guid = objCountry.UID ?? Guid.NewGuid();
+                Guid guid = objCountry.UID;
                 Country existingCountry = _countryRepository.FindBy(x => x.UID == guid);
 
                 if (existingCountry != null)
@@ -167,9 +218,9 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
                     existingCountry.Alpha_2_Code = objCountry.Alpha_2_Code;
                     existingCountry.Alpha_3_Code = objCountry.Alpha_3_Code;
                     existingCountry.Country_Dialing_Code = objCountry.Country_Dialing_Code;
-                    existingCountry.City_Id = objCountry.City_Id;
-                    existingCountry.Comission = objCountry.Comission;
                     existingCountry.Status = objCountry.Status != null ? "A" : "N";
+                    existingCountry.Under_Review_Status = objCountry.Under_Review_Status != null ? "A" : "N";
+                    existingCountry.High_Risk_Status = objCountry.High_Risk_Status != null ? "A" : "N";
                     if (_countryRepository.Update(existingCountry, $" Id = {existingCountry.Id} ") > 0)
                     {
                         return MsgKeys.UpdatedSuccessfully;
@@ -191,10 +242,6 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
             }
         }
 
-        /*    if (obj.Prod_Country_Id == null || obj.Prod_Country_Id <= 0)
-              {
-                  Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                  obj.Prod_Country_Id = objKuaiex_Prod.GetCountryIdByCountryName(obj.Name);
-              }*/
+
     }
 }

@@ -4,11 +4,13 @@ using DataAccessLayer.Repository.Impl;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
+using System.Xml.Linq;
 
 namespace KuaiexDashboard.Repository.Impl
 {
@@ -16,17 +18,19 @@ namespace KuaiexDashboard.Repository.Impl
     {
         private readonly SqlConnectionHandler connectionHandler;
         private readonly ConditionToWhereClauseConverter<T> Converter;
+        private string ConnectionString;
 
 
-        public GenericRepository(string Dbname)
+        public GenericRepository(string DbName)
         {
-            connectionHandler = new SqlConnectionHandler(Dbname);
+            connectionHandler = new SqlConnectionHandler();
             Converter = new ConditionToWhereClauseConverter<T>();
+            ConnectionString = ConfigurationManager.ConnectionStrings[DbName].ConnectionString;
         }
 
         public List<TResult> GetAllWithJoins<TResult>(List<JoinInfo> joins, Func<TResult, bool> condition = null, string columns = null) where TResult : class
         {
-            using (var connection = connectionHandler.OpenConnection())
+            using (var connection = connectionHandler.OpenConnection(ConnectionString))
             {
                 try
                 {
@@ -74,7 +78,7 @@ namespace KuaiexDashboard.Repository.Impl
         }
         public List<T> GetAll(Expression<Func<T, bool>> condition = null, params Expression<Func<T, object>>[] columns)
         {
-            using (var connection = connectionHandler.OpenConnection())
+            using (var connection = connectionHandler.OpenConnection(ConnectionString))
             {
                 try
                 {
@@ -112,7 +116,7 @@ namespace KuaiexDashboard.Repository.Impl
         }
         public T GetbyId(int id, params Expression<Func<T, object>>[] columns)
         {
-            using (var connection = connectionHandler.OpenConnection())
+            using (var connection = connectionHandler.OpenConnection(ConnectionString))
             {
                 try
                 {
@@ -142,7 +146,7 @@ namespace KuaiexDashboard.Repository.Impl
         }
         public PagedResult<T> GetPagedData(int page, int pageSize)
         {
-            using (var connection = connectionHandler.OpenConnection())
+            using (var connection = connectionHandler.OpenConnection(ConnectionString))
             {
                 try
                 {
@@ -193,7 +197,7 @@ namespace KuaiexDashboard.Repository.Impl
         }
         public T FindBy(Expression<Func<T, bool>> condition)
         {
-            using (var connection = connectionHandler.OpenConnection())
+            using (var connection = connectionHandler.OpenConnection(ConnectionString))
             {
                 try
                 {
@@ -221,7 +225,7 @@ namespace KuaiexDashboard.Repository.Impl
                                     {
                                         var columnValue = reader[property.Name];
 
-                                        if (columnValue is string stringValue )
+                                        if (columnValue is string stringValue)
                                         {
 
                                             property.SetValue(result, stringValue.ToString());
@@ -259,9 +263,76 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
+        public bool Any(Expression<Func<T, bool>> condition)
+        {
+            using (var connection = connectionHandler.OpenConnection(ConnectionString))
+            {
+                try
+                {
+                    var tableName = typeof(T).Name;
+
+                    var query = $"SELECT COUNT(*) FROM {tableName} ";
+
+                    var whereClause = Converter.ConvertToWhereClause(condition);
+                    if (!string.IsNullOrEmpty(whereClause))
+                        query += $" WHERE {whereClause}";
+
+                    using (var command = new SqlCommand(query, connection))
+                    {
+                        var count = (int)command.ExecuteScalar();
+                        return count > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle the exception (log, rethrow, etc.)
+                    throw;
+                }
+                finally
+                {
+                    connection.Dispose(); // Ensure connection is always disposed
+                }
+            }
+        }
+        public int InsertRange(List<T> entities)
+        {
+            using (var connection = connectionHandler.OpenConnection(ConnectionString))
+            {
+                SqlTransaction transaction = null;
+                try
+                {
+                    transaction = connection.BeginTransaction();
+                    var insertedIds = new List<int>();
+
+                    foreach (var entity in entities)
+                    {
+                        int insertedId = Insert(entity);
+                        insertedIds.Add(insertedId);
+                    }
+
+                    transaction.Commit();
+                    return insertedIds.Count > 0 ? insertedIds.First() : -1;
+                }
+                catch (Exception ex)
+                {
+                    // Rollback the transaction if an exception occurs
+                    transaction?.Rollback();
+                    // Handle the exception (log, rethrow, etc.)
+                    throw;
+                }
+                finally
+                {
+                    // Ensure transaction and connection are disposed
+                    transaction?.Dispose();
+                    connection.Dispose();
+                }
+            }
+        }
+
+
         public int Insert(T entity)
         {
-            using (var connection = connectionHandler.OpenConnection())
+            using (var connection = connectionHandler.OpenConnection(ConnectionString))
             {
                 try
                 {
@@ -285,7 +356,7 @@ namespace KuaiexDashboard.Repository.Impl
                             {
                                 value = string.IsNullOrWhiteSpace(stringValue) ? null : stringValue.Trim();
                             }
-                            // Add parameters dynamically based on entity properties
+                            // Add parameters dynamically based on entity properties    
                             command.Parameters.AddWithValue($"@{property.Name}", value ?? DBNull.Value);
                         }
 
@@ -307,12 +378,12 @@ namespace KuaiexDashboard.Repository.Impl
         }
         public int Update(T entity, string whereClause)
         {
-            using (var connection = connectionHandler.OpenConnection())
+            using (var connection = connectionHandler.OpenConnection(ConnectionString))
             {
                 try
                 {
                     var tableName = typeof(T).Name;
-                    var properties = typeof(T).GetProperties().Where(p => !Attribute.IsDefined(p, typeof(KeyAttribute)) );
+                    var properties = typeof(T).GetProperties().Where(p => !Attribute.IsDefined(p, typeof(KeyAttribute)));
 
                     // Create SET clause for update
                     var updateColumns = string.Join(", ", properties.Select(p => $"{p.Name} = @{p.Name}"));
@@ -350,7 +421,7 @@ namespace KuaiexDashboard.Repository.Impl
 
         public void Delete(object id)
         {
-            using (var connection = connectionHandler.OpenConnection())
+            using (var connection = connectionHandler.OpenConnection(ConnectionString))
             {
                 try
                 {
@@ -375,7 +446,7 @@ namespace KuaiexDashboard.Repository.Impl
         }
         public PagedResult<T> GetPagedDataFromSP<T>(string storedProcedureName, int page = 1, int pageSize = 10, string searchString = null) where T : class
         {
-            using (var connection = connectionHandler.OpenConnection())
+            using (var connection = connectionHandler.OpenConnection(ConnectionString))
             {
                 try
                 {
@@ -392,7 +463,7 @@ namespace KuaiexDashboard.Repository.Impl
 
                         command.Parameters.AddWithValue("@StartRow", startRow);
                         command.Parameters.AddWithValue("@EndRow", endRow);
-                        command.Parameters.AddWithValue("@searchString", "%" + searchString + "%");
+                        command.Parameters.AddWithValue("@searchString", searchString ?? "" );
 
                         // Add output parameter for total record count
                         var totalRecordsParameter = new SqlParameter
@@ -449,7 +520,7 @@ namespace KuaiexDashboard.Repository.Impl
         }
         public List<TResult> GetDataFromSP<TResult>(string storedProcedureName, Nullable<int> SPId = null) where TResult : class
         {
-            using (var connection = connectionHandler.OpenConnection())
+            using (var connection = connectionHandler.OpenConnection(ConnectionString))
             {
                 try
                 {
