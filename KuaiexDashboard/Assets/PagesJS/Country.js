@@ -293,7 +293,6 @@ var handleStaff = function () {
             processData: false,
             contentType: false,
             success: function (data) {
-                console.log(data);
                 LoadGridData();
                 swal(
                     'Success',

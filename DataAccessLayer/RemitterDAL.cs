@@ -206,34 +206,6 @@ namespace DataAccessLayer
 
             return customer;
         }
-        public void UnblockCustomer(Guid? UID)
-        {
-            try
-            {
-                if (UID.HasValue)
-                {
-                    using (SqlConnection connection = new SqlConnection(connectionString))
-                    {
-                        using (SqlCommand command = new SqlCommand("API_UnblockCustomer", connection))
-                        {
-                            command.CommandType = CommandType.StoredProcedure;
-                            command.Parameters.AddWithValue("@UID", UID.Value);
-
-                            connection.Open();
-                            command.ExecuteNonQuery();
-                        }
-                    }
-                }
-                else
-                {
-                    throw new ArgumentNullException(nameof(UID), "UID cannot be null");
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         public void UpdateRemitter(Customer updatedCustomer)
         {
             try

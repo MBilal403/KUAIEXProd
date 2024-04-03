@@ -376,7 +376,7 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
-        public int Update(T entity, string whereClause)
+        public bool Update(T entity, string whereClause)
         {
             using (var connection = connectionHandler.OpenConnection(ConnectionString))
             {
@@ -404,7 +404,7 @@ namespace KuaiexDashboard.Repository.Impl
                             command.Parameters.AddWithValue($"@{property.Name}", value ?? DBNull.Value);
                         }
                         int rowsAffected = command.ExecuteNonQuery();
-                        return rowsAffected;
+                        return rowsAffected > 0;
                     }
                 }
                 catch (Exception ex)
@@ -426,7 +426,7 @@ namespace KuaiexDashboard.Repository.Impl
                 try
                 {
                     var tableName = typeof(T).Name;
-                    var query = $"DELETE FROM {tableName} WHERE Id = @Id";
+                    var query = $"DELETE FROM {tableName} WHERE UID = @Id";
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.AddWithValue("@Id", id);

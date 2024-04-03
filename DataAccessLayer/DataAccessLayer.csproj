@@ -105,6 +105,7 @@
     <Compile Include="Entities\Bank_Mst.cs" />
     <Compile Include="Entities\Beneficiary.cs" />
     <Compile Include="Entities\City.cs" />
+    <Compile Include="Entities\Comparison_Lookup.cs" />
     <Compile Include="Entities\Country.cs" />
     <Compile Include="Entities\CountryCurrency.cs" />
     <Compile Include="Entities\Currency.cs" />
@@ -113,6 +114,8 @@
     <Compile Include="Entities\IdentificationTypeLookup.cs" />
     <Compile Include="Entities\Individual_KYC.cs" />
     <Compile Include="Entities\Relationship_Lookup.cs" />
+    <Compile Include="Entities\Remittance_Currency_Limit.cs" />
+    <Compile Include="Entities\Remittance_Currency_Limit_Log.cs" />
     <Compile Include="Entities\Remittance_SubType_Mst.cs" />
     <Compile Include="Entities\Remittance_Trn.cs" />
     <Compile Include="Entities\Residency_Type.cs" />
@@ -131,8 +134,11 @@
     <Compile Include="ProcedureResults\GetCountryCurrencyList_Result.cs" />
     <Compile Include="ProcedureResults\GetCountryList_Result.cs" />
     <Compile Include="ProcedureResults\GetRemitterList_Result.cs" />
+    <Compile Include="ProcedureResults\RemittanceCurrencyLimitResult.cs" />
     <Compile Include="ProdEntities\City_Mst.cs" />
+    <Compile Include="ProdEntities\CountryCurrency.cs" />
     <Compile Include="ProdEntities\Country_Mst.cs" />
+    <Compile Include="ProdEntities\Currency_Mst.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Recources\MsgKeys.cs" />
     <Compile Include="RemitterDAL.cs" />

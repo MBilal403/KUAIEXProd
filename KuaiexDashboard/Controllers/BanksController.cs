@@ -3,6 +3,8 @@ using DataAccessLayer.Entities;
 using DataAccessLayer.ProcedureResults;
 using KuaiexDashboard.DAL;
 using KuaiexDashboard.Filters;
+using KuaiexDashboard.Services.CountryServices;
+using KuaiexDashboard.Services.CountryServices.Impl;
 using Newtonsoft.Json;
 using Serilog;
 using System;
@@ -17,6 +19,12 @@ namespace KuaiexDashboard.Controllers
     public class BanksController : Controller
     {
         BankMstDAL objBankDal = new BankMstDAL();
+        private readonly ICountryService _countryService;
+        public BanksController()
+        {
+            _countryService = new CountryService();
+        }
+
         // GET: Banks
         public ActionResult Index()
         {
@@ -31,9 +39,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                BeneficiaryDAL objBeneficiaryDAL = new BeneficiaryDAL();
-
-                List<GetCountryList_Result> lstCountries = objBeneficiaryDAL.GetCountryList();
+                List<GetCountryList_Result> lstCountries = _countryService.GetCountryList();
 
                 status = JsonConvert.SerializeObject(lstCountries);
             }
@@ -108,43 +114,7 @@ namespace KuaiexDashboard.Controllers
 
             return Content(status);
         }
-        //public ActionResult AddBranchess(Bank_Branch_Mst objBank)
-        //{
-        //    string status = "error";
-        //    //if (Authenticated)
-        //    //{
-        //    try
-        //    {
-        //        Bank_Mst obj = db.Bank_Mst.Where(x => x.English_Name == objBank.English_Name).FirstOrDefault();
-
-        //        if (obj != null)
-        //        {
-        //            status = "exist";
-        //        }
-        //        else
-        //        {
-        //            if (objBank.Record_Status != null)
-        //                objBank.Record_Status = "Active";
-        //            else
-        //                objBank.Record_Status = "In Active";
-
-        //            objBank.UID = Guid.NewGuid();
-
-        //            db.Bank_Mst.Add(objBank);
-
-        //            if (db.SaveChanges() > 0)
-        //            {
-        //                status = "success";
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        status = "error";
-        //    }
-        //    //}
-        //    return Content(status);
-        //}
+       
         public ActionResult Edit(Guid UID)
         {
             string status = "error";

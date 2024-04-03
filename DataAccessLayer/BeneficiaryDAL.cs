@@ -12,41 +12,6 @@ namespace KuaiexDashboard
     public class BeneficiaryDAL
     {
         private readonly string connectionString = ConfigurationManager.ConnectionStrings["KUAIEXProdEntities"].ConnectionString;
-        public List<GetBeneficiaryList_Result> GetBeneficiaryList()
-        {
-            List<GetBeneficiaryList_Result> beneficiaries = new List<GetBeneficiaryList_Result>();
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                using (SqlCommand command = new SqlCommand("GetBeneficiaryList", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    DataSet ds = new DataSet();
-                    adapter.Fill(ds, "Beneficiary");
-
-                    foreach (DataRow row in ds.Tables["Beneficiary"].Rows)
-                    {
-                        GetBeneficiaryList_Result beneficiary = new GetBeneficiaryList_Result
-                        {
-                            UID = row.Field<Guid?>("UID"),
-                            FullName = row.Field<string>("FullName"),
-                            Birth_Date = row.Field<DateTime?>("Birth_Date"),
-                            Address_Line3 = row.Field<string>("Address_Line3"),
-                            Branch_Address_Line3 = row.Field<string>("Branch_Address_Line3"),
-                            Country_Name = row.Field<string>("Country_Id"),
-                            Currency = row.Field<string>("Currency_Id"),
-                            Bank_Name = row.Field<string>("Bank_Id"),
-                            Customer_Name = row.Field<string>("Customer_Id")
-                        };
-
-                        beneficiaries.Add(beneficiary);
-                    }
-                }
-            }
-
-            return beneficiaries;
-        }
         public List<Beneficiary> GetAllBeneficiary()
         {
             List<Beneficiary> beneficiaries = new List<Beneficiary>();
@@ -231,40 +196,7 @@ namespace KuaiexDashboard
 
             return beneficiary;
         }
-        public List<Currency_Result> GetCurrencyByCountry(int countryId)
-        {
-            List<Currency_Result> currencyList = new List<Currency_Result>();
-
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            using (SqlCommand command = new SqlCommand("GetCurrencyByCountry", connection))
-            {
-                command.CommandType = CommandType.StoredProcedure;
-                command.Parameters.AddWithValue("@CountryId", countryId);
-
-                SqlDataAdapter adapter = new SqlDataAdapter(command);
-                DataSet dataSet = new DataSet();
-
-                connection.Open();
-                adapter.Fill(dataSet);
-
-                if (dataSet.Tables.Count > 0)
-                {
-                    foreach (DataRow row in dataSet.Tables[0].Rows)
-                    {
-                        Currency_Result currency = new Currency_Result
-                        {
-                            CurrencyId = Convert.ToInt32(row["CurrencyId"]),
-                            CurrencyName = row["CurrencyName"].ToString(),
-                            CurrencyCode = row["CurrencyCode"].ToString()
-                        };
-
-                        currencyList.Add(currency);
-                    }
-                }
-            }
-
-            return currencyList;
-        }
+ 
     
 
     
@@ -467,60 +399,7 @@ namespace KuaiexDashboard
 
             return branchCities;
         }
-        public List<Bank_Branch_Mst> GetBankBranches(int bankId)
-        {
-            List<Bank_Branch_Mst> bankBranches = new List<Bank_Branch_Mst>();
 
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                using (SqlCommand command = new SqlCommand("GetBankBranches", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add("@BankId", SqlDbType.Int).Value = bankId;
-                    SqlDataAdapter adapter = new SqlDataAdapter(command);
-                    DataSet ds = new DataSet();
-                    adapter.Fill(ds, "Bank_Branch_Mst");
-
-                    foreach (DataRow row in ds.Tables["Bank_Branch_Mst"].Rows)
-                    {
-                        Bank_Branch_Mst bankBranch = new Bank_Branch_Mst
-                        {
-                            Bank_Branch_Id = row.Field<int>("Bank_Branch_Id"),
-                            Bank_Id = row.Field<int>("Bank_Id"),
-                            Branch_Code = row.Field<string>("Branch_Code"),
-                            English_Name = row.Field<string>("English_Name"),
-                            Arabic_Name = row.Field<string>("Arabic_Name"),
-                            City_Id = row.Field<int>("City_Id"),
-                            Country_Id = row.Field<int>("Country_Id"),
-                            Currency_Id = row.Field<int>("Currency_Id"),
-                            Upper_Limit = row.Field<decimal>("Upper_Limit"),
-                            Account_Reference = row.Field<string>("Account_Reference"),
-                            Reference_Location = row.Field<string>("Reference_Location"),
-                            Address_Line1 = row.Field<string>("Address_Line1"),
-                            Address_Line2 = row.Field<string>("Address_Line2"),
-                            Address_Line3 = row.Field<string>("Address_Line3"),
-                            Tel_Number1 = row.Field<string>("Tel_Number1"),
-                            Fax_Number1 = row.Field<string>("Fax_Number1"),
-                            EMail_Address1 = row.Field<string>("EMail_Address1"),
-                            Contact_Person1 = row.Field<string>("Contact_Person1"),
-                            Contact_Title1 = row.Field<string>("Contact_Title1"),
-                            Contact_Person2 = row.Field<string>("Contact_Person2"),
-                            Contact_Title2 = row.Field<string>("Contact_Title2"),
-                            Draft_Status = row.Field<string>("Draft_Status"),
-                            Record_Status = row.Field<string>("Record_Status"),
-                            Option_Status = row.Field<string>("Option_Status"),
-                            Updated_User = row.Field<int?>("Updated_User"),
-                            Updated_Date = row.Field<DateTime?>("Updated_Date"),
-                            Bank_SubAgent_Id = row.Field<int?>("Bank_SubAgent_Id")
-                        };
-
-                        bankBranches.Add(bankBranch);
-                    }
-                }
-            }
-
-            return bankBranches;
-        }
         public List<API_GetBank_MstByCountry_Id_Result> GetBanksByCountryId(int countryId)
         {
             List<API_GetBank_MstByCountry_Id_Result> banks = new List<API_GetBank_MstByCountry_Id_Result>();

@@ -138,7 +138,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-         
+
                 List<Transaction_Count_Lookup> lstTransactionCounts = _remitterService.GetAllTransactionCountLookup();
 
                 status = JsonConvert.SerializeObject(lstTransactionCounts);
@@ -198,7 +198,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-            List<Individual_KYC> individual_KYCs = _remitterService.GetCustomerLoadKYCIndividuals(Customer_Id);
+                List<Individual_KYC> individual_KYCs = _remitterService.GetCustomerLoadKYCIndividuals(Customer_Id);
 
                 status = JsonConvert.SerializeObject(individual_KYCs);
             }
@@ -317,36 +317,36 @@ namespace KuaiexDashboard.Controllers
             }
             return Content(status);
         }
-/*        public ActionResult UnBlockCustomer(Customer objcustomer)
-        {
-            string status = "";
-            try
-            {
-                RemitterDAL objRemitterDal = new RemitterDAL();
-
-                EditCustomerDTO obj = _remitterService.GetCustomerByUID(objcustomer.UID);
-
-                if (obj != null)
+        /*        public ActionResult UnBlockCustomer(Customer objcustomer)
                 {
-                    obj.IsBlocked = objcustomer.IsBlocked;
-                    obj.InvalidTryCount = objcustomer.InvalidTryCount;
+                    string status = "";
+                    try
+                    {
+                        RemitterDAL objRemitterDal = new RemitterDAL();
 
-                    objRemitterDal.UnblockCustomer(obj.UID);
+                        EditCustomerDTO obj = _remitterService.GetCustomerByUID(objcustomer.UID);
 
-                    status = "success";
-                }
-                else
-                {
-                    status = "Customer not found";
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(@"{Message}: {e}", ex.Message, ex);
-                status = "error";
-            }
-            return Content(status);
-        }*/
+                        if (obj != null)
+                        {
+                            obj.IsBlocked = objcustomer.IsBlocked;
+                            obj.InvalidTryCount = objcustomer.InvalidTryCount;
+
+                            objRemitterDal.UnblockCustomer(obj.UID);
+
+                            status = "success";
+                        }
+                        else
+                        {
+                            status = "Customer not found";
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Log.Error(@"{Message}: {e}", ex.Message, ex);
+                        status = "error";
+                    }
+                    return Content(status);
+                }*/
         public ActionResult EditCustomer(string Civil_Id_Back, string Civil_Id_Front, CustomerDTO editCustomerDto)
         {
             string status = "";

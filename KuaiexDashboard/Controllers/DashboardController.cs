@@ -26,7 +26,7 @@ namespace KuaiexDashboard.Controllers
             try
             {
                 List<GetCurrencyRate_Result> result = objDashDal.GetCurrencyRates();
-                status = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+                status = Newtonsoft.Json.JsonConvert.SerializeObject(result.Take(10));
             }
             catch (Exception ex)
             {

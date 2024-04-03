@@ -4,7 +4,7 @@ $(document).ready(function () {
     handleStaff();
     LoadGridData();
     LoadCountry();
-    $('#Currency_Id').chosen();
+    LoadCurrency();
 
     $(document).ajaxStart(function () {
 
@@ -34,33 +34,6 @@ function validateInput(input) {
     }
 }
 
-$(".DigitOnly").keypress(function (e) {
-    e = e || window.event;
-    var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
-    if (!charCode || charCode == 8 /* Backspace */) {
-        return;
-    }
-
-    var typedChar = String.fromCharCode(charCode);
-
-    if (typedChar != "2" && this.value == "9") {
-        return false;
-    }
-
-    if (typedChar != "9" && this.value == "") {
-        return false;
-    }
-
-    if (/\d/.test(typedChar)) {
-        return;
-    }
-
-    if (typedChar == "-" && this.value == "") {
-        return;
-    }
-
-    return false;
-});
 
 // Edit method
 $(document).on('click', '.btn-edit', function () {
@@ -81,7 +54,6 @@ $(document).on('click', '.btn-edit', function () {
                   $('.required-text').text('');
                 $('#Id').val(obj.Id);
                 $('#Country_Id').val(obj.Country_Id).prop('Enable', 'true').trigger("chosen:updated");
-                LoadCurrency(obj.Country_Id);
                 $('#Currency_Id').val(obj.Currency_Id).prop('Enable', 'true').trigger("chosen:updated");
                 $('#CommissionRate1').val(obj.CommissionRate1);
                 $('#CommissionRate2').val(obj.CommissionRate2);
@@ -301,7 +273,6 @@ function resetForm() {
     $('#Currency_Id').chosen();
 
     var $el = $('#Currency_Id');
-    $el.chosen('destroy');
     $el.empty();
 
 
@@ -339,31 +310,26 @@ var LoadCountry = function () {
         }
     });
 }
-$('#Country_Id').on('change', function () {
-    var Id = $('#Country_Id').val();
-    LoadCurrency(Id);
-});
 
-var LoadCurrency = function (Id) {
+var LoadCurrency = function () {
     $("#wait").css("display", "block");
     $.ajax({
         type: "POST",
         cache: false,
         async: false,
-        url: "../CountryCurrency/LoadCurrency?CountryId=" + Id,
+        url: "../CountryCurrency/LoadCurrency",
         processData: false,
         contentType: false,
         async: false,
         success: function (data) {
             var sch = JSON.parse(data);
-
+            console.log(sch);
             var $el = $('#Currency_Id');
-            $el.chosen('destroy');
             $el.empty();
             if (sch.length > 0) {
                 $el.append('<option value="">' + "Select Currency" + '</option>');
                 $.each(sch, function (idx, obj) {
-                    $el.append('<option value="' + obj.CurrencyId + '">' + obj.CurrencyName + ' ' + obj.CurrencyCode + '</option>');
+                    $el.append('<option value="' + obj.Id + '">' + obj.Name + ' ' + obj.Code + '</option>');
                 });
             }
             else {
@@ -377,4 +343,24 @@ var LoadCurrency = function (Id) {
         }
     });
 };
+
+$('#btn-sync').on('click', function () {
+    $.ajax({
+        type: "POST",
+        cache: false,
+        url: "../CountryCurrency/SynchronizeRecords",
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            LoadGridData();
+            swal(
+                'Success',
+                data + ' Records Synchronized Successfully.',
+                'success'
+            );
+
+        }
+    });
+});
+
 

@@ -15,8 +15,6 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Http.Results;
 using System.Web.Mvc;
 
 namespace KuaiexDashboard.Controllers
@@ -38,7 +36,7 @@ namespace KuaiexDashboard.Controllers
         }
         public ActionResult LoadCountry()
         {
-            string status = "0:{choose}";
+            string status = "error";
             try
             {
                 List<GetCountryList_Result> lstCityCountry = _countryService.GetActiveCountryList();

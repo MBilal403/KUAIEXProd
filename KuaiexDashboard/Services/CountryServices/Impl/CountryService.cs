@@ -221,7 +221,7 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
                     existingCountry.Status = objCountry.Status != null ? "A" : "N";
                     existingCountry.Under_Review_Status = objCountry.Under_Review_Status != null ? "A" : "N";
                     existingCountry.High_Risk_Status = objCountry.High_Risk_Status != null ? "A" : "N";
-                    if (_countryRepository.Update(existingCountry, $" Id = {existingCountry.Id} ") > 0)
+                    if (_countryRepository.Update(existingCountry, $" Id = {existingCountry.Id} ") )
                     {
                         return MsgKeys.UpdatedSuccessfully;
                     }

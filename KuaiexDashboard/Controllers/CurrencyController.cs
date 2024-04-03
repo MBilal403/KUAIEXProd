@@ -10,6 +10,8 @@ using KuaiexDashboard.Services.CurrencyServices;
 using KuaiexDashboard.Services.CurrencyServices.Impl;
 using DataAccessLayer.Recources;
 using Serilog;
+using System.Collections.Generic;
+using DataAccessLayer.ProcedureResults;
 
 namespace KuaiexDashboard.Controllers
 {
@@ -46,7 +48,6 @@ namespace KuaiexDashboard.Controllers
             return Content(status);
         }
 
-
         public ActionResult LoadGrid(JqueryDatatableParam param)
         {
             try
@@ -67,6 +68,23 @@ namespace KuaiexDashboard.Controllers
                 Log.Error(@"{Message}: {e}", ex.Message, ex);
                 return Json(MsgKeys.Error, JsonRequestBehavior.AllowGet);
             }
+        }
+        public ActionResult LoadCurrencyLimits(Guid UID)
+        {
+            string status = "error";
+            Currency currency = _currencyService.GetCurrency(UID);
+            var list = _currencyService.GetAllCurrencylimitByCurrencyId(currency.Id);
+            status = Newtonsoft.Json.JsonConvert.SerializeObject(list);
+
+            return Content(status);
+        }
+        public ActionResult LoadComparisons()
+        {
+            string status = "error";
+            List<Comparison_Lookup> list = _currencyService.GelAllComprison();
+            status = Newtonsoft.Json.JsonConvert.SerializeObject(list);
+
+            return Content(status);
         }
 
         public ActionResult Edit(Guid UID)
@@ -98,6 +116,74 @@ namespace KuaiexDashboard.Controllers
                 status = "error";
             }
             return Content(status);
+        }
+
+        public ActionResult Limits(Guid UID)
+        {
+            Currency currency = _currencyService.GetCurrency(UID);
+            ViewBag.CurrencyInfo = $" {currency.Name} - {currency.Code} ";
+            return View();
+
+        }
+        public ActionResult Delete(Guid UID)
+        {
+            string status = "";
+            try
+            {
+                status = _currencyService.DeleteCurrencylimit(UID);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
+            return Content(status);
+        }
+        public ActionResult AddLimits(Remittance_Currency_Limit remittance_Currency_Limit, Guid UID)
+        {
+            string status = "";
+            try
+            {
+                Currency currency = _currencyService.GetCurrency(UID);
+                remittance_Currency_Limit.Currency_Id = currency.Id;
+                status = _currencyService.AddCurrencylimit(remittance_Currency_Limit);
+                return Content(status);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
+            return Content(status);
+        }
+        public ActionResult GetAllCurrencylimit(int id)
+        {
+            string status = "error";
+            try
+            {
+                var list = _currencyService.GetAllCurrencylimitByCurrencyId(id);
+                status = Newtonsoft.Json.JsonConvert.SerializeObject(list);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
+            return Content(status);
+        }
+
+        public ActionResult SynchronizeRecords()
+        {
+            int status = 0;
+            try
+            {
+                status = _currencyService.SynchronizeRecords();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+            }
+            return Content(status.ToString());
         }
 
     }

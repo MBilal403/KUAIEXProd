@@ -17,12 +17,14 @@ namespace KuaiexDashboard.Services.CityServices.Impl
         private readonly IRepository<City> _cityRepository;
         private readonly IRepository<City_Mst> _cityProdRepository;
         private readonly IRepository<Country> _countryRepository;
+        private readonly IRepository<Remittance_Currency_Limit> _remittance_Currency_LimitRepository;
 
         public CityService()
         {
             _cityRepository = new GenericRepository<City>(DatabasesName.KUAIEXEntities);
             _countryRepository = new GenericRepository<Country>(DatabasesName.KUAIEXEntities);
             _cityProdRepository = new GenericRepository<City_Mst>(DatabasesName.KUAIEXProdEntities);
+            _remittance_Currency_LimitRepository = new GenericRepository<Remittance_Currency_Limit>(DatabasesName.KUAIEXEntities);
         }
 
         public string AddCity(City objCity)
@@ -115,7 +117,7 @@ namespace KuaiexDashboard.Services.CityServices.Impl
                 {
                     existingCity.Status = objCity.Status != null ? 1 : 0;
                     existingCity.UpdatedOn = DateTime.Now;
-                    if (_cityRepository.Update(existingCity, $" UID = '{objCity.UID}' ") > 0)
+                    if (_cityRepository.Update(existingCity, $" UID = '{objCity.UID}' "))
                     {
                         return MsgKeys.UpdatedSuccessfully;
                     }

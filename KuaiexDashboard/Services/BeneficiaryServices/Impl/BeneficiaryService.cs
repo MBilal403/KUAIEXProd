@@ -231,7 +231,7 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
                          }*/
                     // obj.Remitter_Relation_Id = objBeneficiary.Remitter_Relation_Id;
 
-                    if (_beneficiaryRepository.Update(existingBeneficiary, $" Beneficiary_Id = {existingBeneficiary.Beneficiary_Id} ") > 0)
+                    if (_beneficiaryRepository.Update(existingBeneficiary, $" Beneficiary_Id = {existingBeneficiary.Beneficiary_Id} "))
                     {
                         return MsgKeys.UpdatedSuccessfully;
                     }

@@ -152,6 +152,7 @@
     <Content Include="Assets\PagesJS\Currency.js" />
     <Content Include="Assets\PagesJS\DashoBoard.js" />
     <Content Include="Assets\PagesJS\FAQS.js" />
+    <Content Include="Assets\PagesJS\Limits.js" />
     <Content Include="Assets\PagesJS\PrivacyPolicy.js" />
     <Content Include="Assets\PagesJS\Relationship.js" />
     <Content Include="Assets\PagesJS\Remitter.js" />
@@ -843,10 +844,8 @@
     <Compile Include="Controllers\CurrencyController.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\GeneralSettingsController.cs" />
-    <Compile Include="Controllers\KUAIEX_PROD_Controller.cs" />
     <Compile Include="Controllers\RemitterController.cs" />
     <Compile Include="Controllers\RemittanceTransactionController.cs" />
-    <Compile Include="Controllers\RoutingBankSettingsController.cs" />
     <Compile Include="Controllers\SecurityQuestionsController.cs" />
     <Compile Include="Controllers\UserManagementController.cs" />
     <Compile Include="DTO\Beneficiary\Bank_Branch_MstDTO.cs" />
@@ -863,6 +862,8 @@
     </Compile>
     <Compile Include="Profile\MapperProfile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\BankServices\IBankService.cs" />
+    <Compile Include="Services\BankServices\Impl\BankService.cs" />
     <Compile Include="Services\BeneficiaryServices\IBeneficiaryService.cs" />
     <Compile Include="Services\BeneficiaryServices\Impl\BeneficiaryService.cs" />
     <Compile Include="Services\CityServices\ICityService.cs" />
@@ -881,6 +882,8 @@
     <Compile Include="Services\RemittanceTransactionServices\IRemittanceTransactionService.cs" />
     <Compile Include="Services\SecurityQuestionServices\Impl\SecurityQuestionService.cs" />
     <Compile Include="Services\SecurityQuestionServices\ISecurityQuestionService.cs" />
+    <Compile Include="Services\UserServices\Impl\UserService.cs" />
+    <Compile Include="Services\UserServices\IUserService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\web.config" />
@@ -958,6 +961,7 @@
     <Content Include="Views\Currency\Index.cshtml" />
     <Content Include="Views\Beneficiary\Add.cshtml" />
     <Content Include="Views\GeneralSettings\Relationships.cshtml" />
+    <Content Include="Views\Currency\Limits.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
       <SubType>Designer</SubType>

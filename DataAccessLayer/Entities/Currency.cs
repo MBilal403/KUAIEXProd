@@ -25,6 +25,8 @@ namespace DataAccessLayer.Entities
         public Nullable<int> UpdatedBy { get; set; }
         public Nullable<System.DateTime> UpdatedOn { get; set; }
         public string UpdatedIp { get; set; }
-        public Nullable<System.Guid> UID { get; set; }
+        public Guid UID { get; set; }
+        public int Prod_Currency_Id { get; set; }
+
     }
 }

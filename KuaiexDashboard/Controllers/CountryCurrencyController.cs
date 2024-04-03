@@ -11,7 +11,10 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using KuaiexDashboard.Services.CountryCurrencyServices;
 using KuaiexDashboard.Services.CountryCurrencyServices.Impl;
-using BusinessLogicLayer.DomainEntities;
+using KuaiexDashboard.Services.CurrencyServices;
+using KuaiexDashboard.Services.CurrencyServices.Impl;
+using Serilog;
+using System.Web.Http.Results;
 
 namespace KuaiexDashboard.Controllers
 {
@@ -20,14 +23,16 @@ namespace KuaiexDashboard.Controllers
     {
         private readonly ICountryService _countryService;
         private readonly ICountryCurrencyService _countryCurrencyService;
+        private readonly ICurrencyService _currencyService;
 
         public CountryCurrencyController()
         {
             _countryService = new CountryService();
             _countryCurrencyService = new CountryCurrencyService();
+            _currencyService = new CurrencyService();
         }
 
-        
+
         public ActionResult Index()
         {
             return View();
@@ -42,7 +47,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+
                 status = "error";
             }
             return Content(status);
@@ -58,22 +63,24 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);
         }
-        public ActionResult LoadCurrency(int CountryId)
+        public ActionResult LoadCurrency()
         {
             string status = "0:{choose}";
 
             try
             {
-                BeneficiaryDAL objBeneficiaryDAL = new BeneficiaryDAL();
-                List<Currency_Result> lstcurrency = objBeneficiaryDAL.GetCurrencyByCountry(CountryId);
+
+                List<Currency> lstcurrency = _currencyService.getAllCurrencies();
                 status = JsonConvert.SerializeObject(lstcurrency);
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
 
@@ -82,17 +89,24 @@ namespace KuaiexDashboard.Controllers
 
         public ActionResult LoadGrid(JqueryDatatableParam param)
         {
-            PagedResult<GetCountryCurrencyList_Result> list = _countryCurrencyService.GetAllCountryCurrency(param);
-
-            var result = new
+            try
             {
-                draw = param.sEcho,
-                recordsTotal = list.TotalSize,
-                recordsFiltered = list.FilterRecored,
-                data = list.Data
-            };
+                PagedResult<GetCountryCurrencyList_Result> list = _countryCurrencyService.GetAllCountryCurrency(param);
 
-            return Json(result, JsonRequestBehavior.AllowGet);
+                var result = new
+                {
+                    draw = param.sEcho,
+                    recordsTotal = list.TotalSize,
+                    recordsFiltered = list.FilterRecored,
+                    data = list.Data
+                };
+                return Json(result, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+            }
+            return Json("erroe", JsonRequestBehavior.AllowGet);
 
         }
 
@@ -106,6 +120,7 @@ namespace KuaiexDashboard.Controllers
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "Error";
             }
             return Content(status);
@@ -116,13 +131,27 @@ namespace KuaiexDashboard.Controllers
             string status = "";
             try
             {
-                status =  _countryCurrencyService.UpdateCountryCurrency(countryCurrency);
+                status = _countryCurrencyService.UpdateCountryCurrency(countryCurrency);
             }
             catch (Exception ex)
             {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
             return Content(status);
+        }
+        public ActionResult SynchronizeRecords()
+        {
+            int status = 0;
+            try
+            {
+                status = _countryCurrencyService.SynchronizeRecords();
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+            }
+            return Content(status.ToString());
         }
 
     }

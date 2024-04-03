@@ -3,13 +3,16 @@
 $(document).ready(function () {
     handleStaff();
     LoadGridData();
-    
-    $(document).ajaxStart(function () {
 
+    $(document).ajaxStart(function () {
         $("#wait").css("display", "block");
     });
     $(document).ajaxComplete(function () {
         $("#wait").css("display", "none");
+    });
+    $(document).on('click', '.btn-setLimits', function () {
+        var uid = $(this).attr('id');
+        window.location = "../Currency/Limits?UID=" + uid;
     });
 });
 
@@ -42,7 +45,7 @@ $(document).on('click', '.btn-edit', function () {
                 }
                 $('#btn-save').html("<i class='fa fa-save'></i> Update");
                 IsEditMode = true;
-                $('#Name').prop('disabled', true);  
+                $('#Name').prop('disabled', true);
                 $('#Code').prop('disabled', true);
                 $(window).scrollTop(0);
             } else {
@@ -123,7 +126,7 @@ var handleStaff = function () {
                 );
             }
         }
-       
+
     });
 
     function validateForm() {
@@ -182,7 +185,14 @@ var LoadGridData = function () {
             {
                 "data": "Name",
                 "autoWidth": true,
-                "searchable": true
+                "searchable": true,
+                "render": function (data, type, row) {
+                    if (row.IsBaseCurrency === 1) {
+                        return data + '    <span  class="label label-info label-sm">Is Based</span>';
+                    } else {
+                        return data;
+                    }
+                }
             },
             {
                 "data": "Code",
@@ -206,13 +216,18 @@ var LoadGridData = function () {
             {
                 "data": "UID",
                 "render": function (data, type, row) {
-                    return '<button id=' + data + ' class="btn btn-warning btn-block btn-xs btn-edit" style="width: 80px;">' +
+                    return '<button id="' + data + '" class="btn btn-warning btn-block btn-xs btn-edit" style="width: 80px;">' +
                         '<i class="fa fa-edit"></i>' +
                         ' Edit' +
+                        '</button>' +
+                        '<button id="' + data + '" class="btn btn-primary btn-block btn-xs btn-setLimits" style="width: 80px; margin-top: 5px;">' +
+                        '<i class="fa fa-edit"></i>' +
+                        ' Set Limits ' +
                         '</button>';
                 },
                 "autoWidth": true
             }
+
         ]
     });
 };
@@ -238,15 +253,17 @@ $('#btn-sync').on('click', function () {
     $.ajax({
         type: "POST",
         cache: false,
-        url: "../Country/SynchronizeRecords",
+        url: "../Currency/SynchronizeRecords",
         processData: false,
         contentType: false,
         success: function (data) {
+            LoadGridData();
             swal(
                 'Success',
                 data + ' Records Synchronized Successfully.',
                 'success'
             );
+
         }
     });
 });

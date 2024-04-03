@@ -17,5 +17,6 @@ namespace KuaiexDashboard.Services.CountryCurrencyServices
         string AddCountryCurrency(CountryCurrency countryCurrency);
         string UpdateCountryCurrency(CountryCurrency countryCurrency);
         List<Currency_Result> GetCurrencyByCountry(int id);
+        int SynchronizeRecords();
     }
 }
