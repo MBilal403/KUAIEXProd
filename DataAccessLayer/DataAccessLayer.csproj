@@ -130,11 +130,14 @@
     <Compile Include="Helpers\Strings.cs" />
     <Compile Include="Kuaiex_Prod.cs" />
     <Compile Include="ProcedureResults\Currency_Result.cs" />
+    <Compile Include="ProcedureResults\GetBankDetailsById_Result.cs" />
+    <Compile Include="ProcedureResults\GetBanks_Result.cs" />
     <Compile Include="ProcedureResults\GetCityList_Result.cs" />
     <Compile Include="ProcedureResults\GetCountryCurrencyList_Result.cs" />
     <Compile Include="ProcedureResults\GetCountryList_Result.cs" />
     <Compile Include="ProcedureResults\GetRemitterList_Result.cs" />
     <Compile Include="ProcedureResults\RemittanceCurrencyLimitResult.cs" />
+    <Compile Include="ProdEntities\Bank_Mst.cs" />
     <Compile Include="ProdEntities\City_Mst.cs" />
     <Compile Include="ProdEntities\CountryCurrency.cs" />
     <Compile Include="ProdEntities\Country_Mst.cs" />

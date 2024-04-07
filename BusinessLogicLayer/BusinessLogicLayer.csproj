@@ -84,7 +84,6 @@
     <Compile Include="DomainEntities\Customer_Chat.cs" />
     <Compile Include="DomainEntities\FAQs.cs" />
     <Compile Include="DomainEntities\GetBanksListByCountry_Result.cs" />
-    <Compile Include="DomainEntities\GetBanksList_Result.cs" />
     <Compile Include="DomainEntities\GetBrancheskInfoList_Result.cs" />
     <Compile Include="DomainEntities\GetBranchesListbyCountryBank_Result.cs" />
     <Compile Include="DomainEntities\GetBranchesList_Result.cs" />

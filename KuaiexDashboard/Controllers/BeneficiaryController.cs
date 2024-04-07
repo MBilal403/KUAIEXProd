@@ -424,7 +424,7 @@ namespace KuaiexDashboard.Controllers
 
             return Content(status);
         }
-        public ActionResult SynchronizeRecords()
+       /* public ActionResult SynchronizeRecords()
         {
             int status = 0;
             int Counter = 0;
@@ -456,6 +456,6 @@ namespace KuaiexDashboard.Controllers
             }
 
             return Content(status.ToString());
-        }
+        }*/
     }
 }

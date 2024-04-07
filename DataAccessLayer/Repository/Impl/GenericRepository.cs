@@ -376,6 +376,43 @@ namespace KuaiexDashboard.Repository.Impl
                 }
             }
         }
+
+        public bool ExecuteQuery(string query)
+        {
+            return ExecuteQuery(query, null);
+        }
+
+        public bool ExecuteQuery(string query, SqlParameter[] parameters)
+        {
+            using (var connection = connectionHandler.OpenConnection(ConnectionString))
+            {
+                try
+                {
+                    using (var command = new SqlCommand(query, connection))
+                    {
+                        if (parameters != null)
+                        {
+                            command.Parameters.AddRange(parameters);
+                        }
+
+                        int rowsAffected = command.ExecuteNonQuery();
+                        return rowsAffected > 0;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Handle the exception (log, rethrow, etc.)
+                    throw;
+                }
+                finally
+                {
+                    connection.Dispose(); // Ensure connection is always disposed
+                }
+            }
+        }
+
+
+
         public bool Update(T entity, string whereClause)
         {
             using (var connection = connectionHandler.OpenConnection(ConnectionString))
@@ -459,7 +496,6 @@ namespace KuaiexDashboard.Repository.Impl
                     using (var command = new SqlCommand(storedProcedureName, connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-
 
                         command.Parameters.AddWithValue("@StartRow", startRow);
                         command.Parameters.AddWithValue("@EndRow", endRow);

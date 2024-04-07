@@ -21,6 +21,16 @@
     {
       "library": "slim-select@2.8.2",
       "destination": "lib/slim-select/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "@aicha205/number-to-words-converter@1.0.1",
+      "destination": "lib/aicha205/number-to-words-converter/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "number-to-words@1.2.4",
+      "destination": "lib/number-to-words/"
     }
   ]
 }

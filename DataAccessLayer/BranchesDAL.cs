@@ -264,8 +264,8 @@ namespace DataAccessLayer
                                     Remittance_Sequence_Prefix = reader.IsDBNull(reader.GetOrdinal("Remittance_Sequence_Prefix")) ? null : reader.GetString(reader.GetOrdinal("Remittance_Sequence_Prefix")),
                                     Common_Branch_Id = reader.IsDBNull(reader.GetOrdinal("Common_Branch_Id")) ? null : (int?)reader.GetInt32(reader.GetOrdinal("Common_Branch_Id")),
                                     Column_Demarkation_Char = reader.IsDBNull(reader.GetOrdinal("Column_Demarkation_Char")) ? null : reader.GetString(reader.GetOrdinal("Column_Demarkation_Char")),
-                                    IsDefaultBank = reader.IsDBNull(reader.GetOrdinal("IsDefaultBank")) ? null : (int?)reader.GetInt32(reader.GetOrdinal("IsDefaultBank")),
-                                    UID = reader.IsDBNull(reader.GetOrdinal("UID")) ? null : (Guid?)reader.GetGuid(reader.GetOrdinal("UID")),
+                                    IsDefaultBank = reader.IsDBNull(reader.GetOrdinal("IsDefaultBank")) ? null : (int?)reader.GetInt32(reader.GetOrdinal("IsDefaultBank"))
+                                  //  UID = reader.IsDBNull(reader.GetOrdinal("UID")) ? null : (Guid?)reader.GetGuid(reader.GetOrdinal("UID")),
                                 };
 
                                 return bank;

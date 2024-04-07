@@ -47,7 +47,6 @@ namespace KuaiexDashboard.Services.CurrencyServices.Impl
                 currency.TT_Min_Rate = currency.DD_Rate;
                 currency.TT_Rate = currency.DD_Rate;
                 currency.UID = Guid.NewGuid();
-
                 currency.Status = currency.Status != null ? "A" : "N";
 
                 if (_currencyRepository.Insert(currency) > 0)

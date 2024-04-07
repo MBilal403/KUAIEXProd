@@ -4,6 +4,60 @@
 }
 
 
+
+<style>
+    .toggle {
+        position: relative;
+        display: inline-block;
+        width: 40px; /* Reduced width */
+        height: 20px; /* Reduced height */
+    }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 20px; /* Adjusted border-radius */
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px; /* Reduced height */
+            width: 16px; /* Reduced width */
+            left: 2px; /* Adjusted position */
+            bottom: 2px; /* Adjusted position */
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(20px); /* Adjusted translation */
+    }
+</style>
+
+
+
 <div class="row">
 
 
@@ -19,245 +73,141 @@
 
 </div>
 
-<div class="row hidden">
-    <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="ibox">
-            <div class="ibox-heading">
-                <div class="ibox-title">
-                    <h2><i class="fa fa-users"></i>&nbsp; Add/Edit Bank</h2>
+
+<!-- Modal -->
+<div class="modal fade" id="bankDetailsModal" tabindex="-1" role="dialog" aria-labelledby="bankDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #263949; color: white; ">
+                <h3 id="englishName" class="modal-title"></h3>
+            </div>
+            <div class="modal-body" style="max-height: 300px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #888 #f1f1f1;">
+                <div id="bankDetailsContent">
+                    <p><span class="label-style">Arabic Name:</span> <span class="bank_mst" id="arabicName"></span></p>
+                    <p><span class="label-style">Short bank Name:</span> <span class="bank_mst" id="shortEnglishName"></span></p>
+                    <p><span class="label-style">Short Arabic Name:</span> <span class="bank_mst" id="shortArabicName"></span></p>
+                    <p><span class="label-style">Country Name:</span> <span class="bank_mst" id="countryId"></span></p>
+                    <p><span class="label-style">Currency Name:</span> <span class="bank_mst" id="currencyId"></span></p>
+                    <p><span class="label-style">Full Address:</span> <span class="bank_mst" id="addressLine1"></span></p>
+                    <p><span class="label-style">Telephone Number:</span> <span class="bank_mst" id="telNumber"></span></p>
+                    <p><span class="label-style">Fax Number:</span> <span class="bank_mst" id="faxNumber"></span></p>
+                    <p><span class="label-style">Email Address:</span> <span class="bank_mst" id="emailAddress"></span></p>
+                    <p><span class="label-style">Contact Person 1:</span> <span class="bank_mst" id="contactPerson1"></span></p>
+                    <p><span class="label-style">Contact Title 1:</span> <span class="bank_mst" id="contactTitle1"></span></p>
+                    <p><span class="label-style">Mobile Number 1:</span> <span class="bank_mst" id="mobileNumber1"></span></p>
+                    <p><span class="label-style">Remarks:</span> <span class="bank_mst" id="remarks"></span></p>
+                    <p><span class="label-style">HO Branch 1 ID:</span> <span class="bank_mst" id="hoBranch1Id"></span></p>
+                    <p><span class="label-style">Bank Code:</span> <span class="bank_mst" id="bankCode"></span></p>
                 </div>
             </div>
-            <div class="ibox ibox-content">
-                <form class="form-group frmAddbank">
-                    <div class="row hidden">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>UID<span style="color:red;">*</span></label>
-                                <input type="text" id="UID" class="form-control" name="UID">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>English_Name<span style="color:red;">*</span></label>
-                                <input type="text" id="English_Name" placeholder="Enter Name" class="form-control" name="English_Name">
-                            </div>
-                        </div>
-
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Arabic_Name<span style="color:red">*</span></label>
-                                <input type="text" id="Arabic_Name" placeholder="Enter Name" class="form-control" name="Arabic_Name">
-                                @*<select class="form-control chzn" id="UserTypeId" required="required" name="UserTypeId"></select>*@
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Short_English_Name<span style="color:red;">*</span></label>
-                                <input type="text" id="Short_English_Name" placeholder="Enter  Name" class="form-control" name="Short_English_Name">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Short_Arabic_Name<span style="color:red;">*</span></label>
-                                <input type="text" id="Short_Arabic_Name" placeholder="Short_Arabic_Name" class="form-control" name="Short_Arabic_Name" required="required">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Country</label>
-                                <select class="form-control chzn" id="Country_Id" required="required" name="Country_Id"></select>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Currency </label>
-                                <select class="form-control chzn" id="Currency_Id" required="required" name="Currency_Id"></select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Upper_Limit<span style="color:red;">*</span></label>
-                                <input type="text" id="Upper_Limit" placeholder="Enter  Name" class="form-control" name="Upper_Limit">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Address_Line1<span style="color:red;">*</span></label>
-                                <input type="text" id="Address_Line1" placeholder="Address_Line1" class="form-control" name="Address_Line1" required="required">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Address_Line2<span style="color:red;">*</span></label>
-                                <input type="text" id="Address_Line2" placeholder="Address_Line2" class="form-control" name="Address_Line2">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Address_Line3<span style="color:red;">*</span></label>
-                                <input type="text" id="Address_Line3" placeholder="Address_Line3" class="form-control" name="Address_Line3" required="required">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Tel_Number<span style="color:red;">*</span></label>
-                                <input type="text" id="Tel_Number1" placeholder="Enter  Tel_Number" class="form-control" name="Tel_Number1">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Fax_Number<span style="color:red;">*</span></label>
-                                <input type="text" id="Address_Line1" placeholder="Fax_Number1" class="form-control" name="Fax_Number1">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Email_Address<span style="color:red;">*</span></label>
-                                <input type="text" id="EMail_Address1" placeholder="Enter  Email_Address1" class="form-control" name="EMail_Address1">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Prefix_Draft<span style="color:red;">*</span></label>
-                                <input type="text" id="Prefix_Draft" placeholder="Prefix_Draft" class="form-control" name="Prefix_Draft">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Sufix_Draft<span style="color:red;">*</span></label>
-                                <input type="text" id="Sufix_Draft" placeholder="Enter  Tel_Number" class="form-control" name="Sufix_Draft">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Reimbursement_Text_Status<span style="color:red;">*</span></label>
-                                <input type="text" id="Reimbursement_Text_Status" placeholder="Fax_Number1" class="form-control" name="Reimbursement_Text_Status">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Contact_Person<span style="color:red;">*</span></label>
-                                <input type="text" id="Contact_Person1" placeholder="Enter  EMail_Address1" class="form-control" name="Contact_Person1">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Contact_Title<span style="color:red;">*</span></label>
-                                <input type="text" id="Contact_Title1" placeholder="Contact_Title" class="form-control" name="Contact_Title1">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Mob_Number<span style="color:red;">*</span></label>
-                                <input type="text" id="Mob_Number1" placeholder="Enter  Mob_Number1" class="form-control" name="Mob_Number1">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Contact_Person 2<span style="color:red;">*</span></label>
-                                <input type="text" id="Contact_Person2" placeholder="Contact_Person2" class="form-control" name="Contact_Person2">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Contact_Title2<span style="color:red;">*</span></label>
-                                <input type="text" id="Contact_Title2" placeholder="Enter  Contact_Title2" class="form-control" name="Contact_Title2">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Mob_Number2<span style="color:red;">*</span></label>
-                                <input type="text" id="Mob_Number2" placeholder="Mob_Number2" class="form-control" name="Mob_Number2">
-                            </div>
-                        </div>
-                    </div>
-
-
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-6">
-                            <div class="form-group">
-                                <label>Remarks<span style="color:red;">*</span></label>
-                                <input type="text" id="Remarks" placeholder="Enter  Remarks" class="form-control" name="Remarks">
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-sm-6 col-sm-6">
-                            <div class="form-group">
-                                <label style="margin-top:5px">Record_Status</label>
-                                <div class="i-checks">
-                                    <label>
-                                        <input type="checkbox" class="icheckbox_square-green" id="Record_Status" name="Record_Status" />
-                                        <i></i>
-                                        Is Active
-                                    </label>
-
-                                </div>
-
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12">
-                            <a id="btn-save" name="btn-save" class="btn btn-primary pull-right"><i class="fa fa-save"></i>&nbsp; Save</a>
-                            <a id="btn-refresh" name="btn-refresh" class="btn btn-info pull-right" style="margin-right:5px;"><i class="fa fa-refresh"></i>&nbsp; Reset</a>
-                        </div>
-                    </div>
-                </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
 </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="setBankLimitsModal" tabindex="-1" role="dialog" aria-labelledby="setBankLimitsModal" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header" style="background-color: #263949; color: white;">
+                <h3 class="modal-title" id="modalTitle"></h3>
+            </div>
+
+            <div class="modal-body" style="max-height: 300px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: #888 #f1f1f1;">
+                <div id="bankDetailsContent">
+                    <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12">
+                            <div class="row hidden">
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>UID<span style="color:red;">*</span></label>
+                                        <input type="text" id="UID" class="form-control" name="UID">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Amount Limit<span style="color:red;">*</span></label>
+                                <small><span class="text-danger required-text" id="ValAmountLimit"></span></small>
+                                <input type="Number" id="AmountLimit" placeholder="Enter Amount Limit" class="form-control" name="AmountLimit">
+                            </div>
+                            <div class="form-group">
+                                <label>Amount in Words:</label>
+                                <div id="AmountInWords"></div>
+                            </div>
+                            <div class="form-group">
+                                <label>Number of Transaction<span style="color:red;">*</span></label>
+                                <small><span class="text-danger required-text" id="ValNumberofTransaction"></span></small>
+                                <input type="Number" id="NumberofTransaction" placeholder="Enter Number of Transaction" class="form-control" name="NumberofTransaction" max="1000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <a id="btn-save" name="btn-save" class="btn btn-primary pull-right"><i class="fa fa-save"></i>&nbsp; Update</a>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- CSS for label style -->
+<style>
+    .label-style {
+        color: #263949;
+        font-weight: bold;
+    }
+</style>
+
+<!-- CSS for label style -->
+<style>
+    .label-style {
+        color: #263949;
+        font-weight: bold;
+    }
+</style>
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="ibox ">
             <div class="ibox-title">
-                <h2><i class="fa fa-bank"></i>&nbsp;Bank's List </h2>
-
+                <h2 style="display: inline-block;"><i class="fa fa-users"></i>&nbsp;Bank's List </h2>
+                <button id="setLimitAllBanks" class="btn btn-primary" style="float: right; margin-top:5px;">Set Limit</button>
             </div>
+
+
             <div class="ibox ibox-content">
 
-                <table id="tblbank" class="table table-striped table-bordered table-hover">
+                <table id="tblbank" class="table table-striped table-bordered table-hover" style=" width: 100%;">
                     <thead>
                         <tr>
                             <th class="hidden">UID</th>
                             <th>Bank Name</th>
                             <th>Country</th>
                             <th>Currency</th>
-                            <th>Address</th>
-
-
-                            @*<th></th>*@
+                            <th>Amount Limit</th>
+                            <th>Number Of Transaction</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody id="tblbody"></tbody>
                 </table>
+
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <a id="btn-sync" name="btn-sync" class="btn btn-primary pull-right"><i class="fa fa-reorder"></i>&nbsp; Synchronize Bank Data</a>
+                    </div>
+                </div>
 
             </div>
         </div>

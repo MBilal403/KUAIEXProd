@@ -166,21 +166,6 @@ var handleStaff = function () {
         return isValid;
     }
 
-
-        $('.frmAddUsers').keypress(function (e) {
-            if (e.which == 13) {
-                if ($('.frmAddUsers').validate().form()) {
-                    $('.frmAddUsers').submit();
-                }
-                return false;
-            }
-        });
-
-        jQuery('#btn-save').click(function () {
-            if ($('.frmAddUsers').validate().form()) {
-                $('.frmAddUsers').submit();
-            }
-        });
     }
 
     // Load grid

@@ -2,6 +2,7 @@
 using DataAccessLayer.Repository.Impl;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -18,6 +19,8 @@ namespace KuaiexDashboard.Repository
         int Insert(T entity);
         int InsertRange(List<T> entities);
         bool Update(T entity, string whereClause);
+        bool ExecuteQuery(string query);
+        bool ExecuteQuery(string query, SqlParameter[] parameters);
         void Delete(object id);
         PagedResult<T> GetPagedDataFromSP<T>(string storedProcedureName, int page = 1, int pageSize = 10, string searchString = null ) where T : class;
         PagedResult<T> GetPagedData(int page, int pageSize);
