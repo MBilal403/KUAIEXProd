@@ -5,10 +5,12 @@ using DataAccessLayer.ProdEntities;
 using DataAccessLayer.Recources;
 using DataAccessLayer.Repository;
 using DataAccessLayer.Repository.Impl;
+using KuaiexDashboard.DTO.Beneficiary;
 using KuaiexDashboard.Repository;
 using KuaiexDashboard.Repository.Impl;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace KuaiexDashboard.Services.CityServices.Impl
 {
@@ -157,20 +159,38 @@ namespace KuaiexDashboard.Services.CityServices.Impl
             try
             {
                 List<City_Mst> prodCities = _cityProdRepository.GetAll();
+                List<Country> countries = _countryRepository.GetAll(null, x => x.Id, x => x.Prod_Country_Id);
 
                 foreach (var item in prodCities)
                 {
                     string CityName = Strings.EscapeSingleQuotes(item.English_Name);
                     int CountryId = item.Country_Id;
-                    int id = _countryRepository.FindBy(x => x.Prod_Country_Id == CountryId).Id;
+                    Country country = countries.Find(x => x.Prod_Country_Id == CountryId);
+                    if (country == null) {
+                        foreach (var pendingCountry in countries.Where(x=> x.Prod_Country_Ids != null))
+                        {
+                            int[] countryIdsInt = pendingCountry.Prod_Country_Ids?.Split(',').Select(int.Parse).ToArray();
 
-                    if (!_cityRepository.Any(x => x.Name == CityName && x.Country_Id == id))
+                            if (countryIdsInt.Contains(CountryId))
+                            {
+                                item.Country_Id = countryIdsInt[0];
+                                break;
+                            }
+                        }
+                    }
+                    int countryId = item.Country_Id;
+                    if (!_cityRepository.Any(x => x.Name == CityName && x.Country_Id == countryId))
                     {
                         City city = new City();
+                        var pendingCities = prodCities.Where(x => x.English_Name == item.English_Name && x.Country_Id == item.Country_Id).ToList();
+                        if (pendingCities.Count > 1)
+                        {
+                            city.Prod_City_Ids =   string.Join(",", pendingCities.Select(x => x.City_Id.ToString()));
+                        }
                         city.Name = item.English_Name;
                         city.Status = item.Record_Status == "A" ? 1 : 0;
                         city.Prod_City_Id = item.City_Id;
-                        city.Country_Id = id;
+                        city.Country_Id = countryId;
                         city.UID = Guid.NewGuid();
                         city.CreatedOn = DateTime.Now;
                         if (_cityRepository.Insert(city) > 0)
@@ -182,6 +202,8 @@ namespace KuaiexDashboard.Services.CityServices.Impl
                             throw new Exception(MsgKeys.SomethingWentWrong);
                         }
                     }
+
+
 
                 }
             }

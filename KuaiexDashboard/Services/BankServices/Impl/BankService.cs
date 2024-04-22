@@ -15,6 +15,7 @@ using DataAccessLayer.ProcedureResults;
 using DataAccessLayer.Repository.Impl;
 using Newtonsoft.Json.Linq;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
 
 namespace KuaiexDashboard.Services.BankServices.Impl
 {
@@ -75,6 +76,20 @@ namespace KuaiexDashboard.Services.BankServices.Impl
             }
         }
 
+        public List<Bank_Mst> GetBanksByCountryId(int countryId)
+        {
+            try
+            {
+                List<Bank_Mst> bank_Msts = _bank_MstRepository.GetAll(x => x.Country_Id == countryId, x => x.Bank_Id, x => x.English_Name);
+                return bank_Msts;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
+        }
+
         public GetBankDetailsById_Result GetByUID(Guid uid)
         {
             try
@@ -109,7 +124,7 @@ namespace KuaiexDashboard.Services.BankServices.Impl
             int count = 0;
             try
             {
-                List<Bank_Mst_Prod> prodBanks = _bank_MstProdRepository.GetAll().Where(x => x.Currency_Id > 0 && x.Country_Id > 0).ToList();
+                List<Bank_Mst_Prod> prodBanks = _bank_MstProdRepository.GetAll().Where(x => x.Country_Id > 0).ToList();
                 List<Country> countries = _countryRepository.GetAll(null, x => x.Prod_Country_Id, x => x.Id);
                 List<Currency> currencies = _currencyRepository.GetAll(null, x => x.Prod_Currency_Id, x => x.Id);
 
@@ -121,7 +136,14 @@ namespace KuaiexDashboard.Services.BankServices.Impl
                    if (matchingCountry != null && matchingCurrencies != null)
                    {
                        prodCountryCurrency.Country_Id = matchingCountry.Id;
+                   }
+                   if (matchingCurrencies != null)
+                   {
                        prodCountryCurrency.Currency_Id = matchingCurrencies.Id;
+                   }
+                   else
+                   {
+                       prodCountryCurrency.Currency_Id = 0;
                    }
                    return prodCountryCurrency;
                })
@@ -246,5 +268,6 @@ namespace KuaiexDashboard.Services.BankServices.Impl
                 throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
         }
+
     }
 }

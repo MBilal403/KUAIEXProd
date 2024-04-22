@@ -188,7 +188,7 @@ var LoadGridData = function () {
                 "searchable": true,
                 "render": function (data, type, row) {
                     if (row.IsBaseCurrency === 1) {
-                        return data + '    <span  class="label label-info label-sm">Is Based</span>';
+                        return data + '    <span  class="label label-info label-sm">Base Currency</span>';
                     } else {
                         return data;
                     }

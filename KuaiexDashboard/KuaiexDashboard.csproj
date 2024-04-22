@@ -884,6 +884,8 @@
     <Compile Include="Services\BankServices\Impl\BankService.cs" />
     <Compile Include="Services\BeneficiaryServices\IBeneficiaryService.cs" />
     <Compile Include="Services\BeneficiaryServices\Impl\BeneficiaryService.cs" />
+    <Compile Include="Services\BranchServices\IBranchService.cs" />
+    <Compile Include="Services\BranchServices\Impl\BranchService.cs" />
     <Compile Include="Services\CityServices\ICityService.cs" />
     <Compile Include="Services\CityServices\Impl\CityService.cs" />
     <Compile Include="Services\CountryCurrencyServices\ICountryCurrencyService.cs" />

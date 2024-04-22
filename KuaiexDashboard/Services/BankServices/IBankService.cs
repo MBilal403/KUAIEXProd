@@ -15,6 +15,7 @@ namespace KuaiexDashboard.Services.BankServices
         GetBankDetailsById_Result GetByUID(Guid uid);
         Bank_Mst GetLimitDetailByUId(Guid uid);
         string UpdateLimits(Guid? UID, decimal AmountLimit, int NumberOfTransaction);
+        List<Bank_Mst> GetBanksByCountryId(int countryId);
         int SynchronizeRecords();
         string ChangeState(Guid UID);
 

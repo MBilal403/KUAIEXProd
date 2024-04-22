@@ -73,7 +73,6 @@
     <Compile Include="DomainEntities\API_GetBank_MstByCountry_Id_Result.cs" />
     <Compile Include="DomainEntities\API_GetRoutingBank_Branch_Result.cs" />
     <Compile Include="DomainEntities\Bank_Account_Type.cs" />
-    <Compile Include="DomainEntities\Bank_Branch_Mst.cs" />
     <Compile Include="DomainEntities\BaseEntity.cs" />
     <Compile Include="DomainEntities\BeneficiaryValidation.cs" />
     <Compile Include="DomainEntities\BranchesInfo.cs" />

@@ -392,7 +392,7 @@ $('#Remittance_Type_Id').on('change', function () {
         $('.dvBranch_Number').hide();
         $('.dvBank_Account_No').hide();
     }
-    else if ($('#Remittance_Type_Id').val() == 5) { // Deposit To Account
+    else if ($('#Remittance_Type_Id').val() == 5 || $('#Remittance_Type_Id').val() == 1 || $('#Remittance_Type_Id').val() == 4 ) { // Deposit To Account
         $('.dvBank_Code').show();
         $('.dvBranch_Id').show();
         $('.dvBranch_Number').show();
@@ -825,40 +825,6 @@ function resetForm() {
 
     }
 }
-
-$(".DigitOnly").keypress(function (e) {
-    e = e || window.event;
-    var charCode = (typeof e.which === "number") ? e.which : e.keyCode;
-    // Allow non-printable keys
-    if (!charCode || charCode === 8 /* Backspace */) {
-        return;
-    }
-
-    var typedChar = String.fromCharCode(charCode);
-
-    // Allow the minus sign () if the user enters it first
-    if (typedChar !== "2" && this.value === "9") {
-        return false;
-    }
-    // Allow the minus sign (9) if the user enters it first
-    if (typedChar !== "9" && this.value === "") {
-        return false;
-    }
-    // Allow numeric characters
-    if (/\d/.test(typedChar)) {
-        return;
-    }
-
-    // Allow the minus sign (-) if the user enters it first
-    if (typedChar === "-" && this.value === "") {
-        return;
-    }
-
-
-
-    // In all other cases, suppress the event
-    return false;
-});
 
 var LoadRoutingBanksDefault = function () {
 

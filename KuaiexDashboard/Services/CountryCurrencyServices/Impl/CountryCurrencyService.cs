@@ -149,9 +149,6 @@ namespace KuaiexDashboard.Services.CountryCurrencyServices.Impl
                  })
                  .ToList();
 
-                List<CountryCurrency> countryCurrency = new List<CountryCurrency>();
-
-
                 var missingCountryCurrencies = prodCountryCurrencies
                               .Where(ccp => !countryCurrencies.Any(cc => cc.Country_Id == ccp.Country_Id && cc.Currency_Id == ccp.Currency_Id))
                             .ToList();

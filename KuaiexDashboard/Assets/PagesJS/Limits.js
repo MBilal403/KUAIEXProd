@@ -50,35 +50,37 @@ $(document).on('click', '.btn-delete', function () {
     var data = new FormData();
     data.append("UID", UID);
 
-    $.ajax({
-        type: "POST",
-        cache: false,
-        url: "../Currency/Delete",
-        data: data,
-        processData: false,
-        contentType: false,
-        success: function (Rdata) {
-            if (Rdata == 'delete_success') {
-                $('#tblCurrencyLimits').DataTable().clear().draw;
-                var urlParams = new URLSearchParams(window.location.search);
-                var uid = urlParams.get('UID');
-                $('#UID').val(uid);
-                LoadGridData(uid);
-                swal(
-                    'Success',
-                    'Limit Deleted Successfully!',
-                    'success'
-                );
-         
-                $(window).scrollTop(0);
-            } else {
-                ShowErrorAlert("Error", "Some Error Occurred!");
+    // Show confirmation dialog
+    var confirmation = confirm("Are you sure you want to delete this Limit?");
+
+    if (confirmation) {
+        // User confirmed deletion, proceed with AJAX request
+        $.ajax({
+            type: "POST",
+            cache: false,
+            url: "../Currency/Delete",
+            data: data,
+            processData: false,
+            contentType: false,
+            success: function (Rdata) {
+                if (Rdata == 'delete_success') {
+                    $('#tblCurrencyLimits').DataTable().clear().draw;
+                    var urlParams = new URLSearchParams(window.location.search);
+                    var uid = urlParams.get('UID');
+                    $('#UID').val(uid);
+                    LoadGridData(uid);
+                    $(window).scrollTop(0);
+                } else {
+                    ShowErrorAlert("Error", "Some Error Occurred!");
+                }
+            },
+            error: function (e) {
+                // Handle error
             }
-        },
-        error: function (e) {
-            // Handle error
-        }
-    });
+        });
+    } else {
+        // User canceled deletion
+    }
 });
 
 // Handle stuff

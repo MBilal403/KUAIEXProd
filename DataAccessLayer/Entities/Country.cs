@@ -32,5 +32,6 @@ namespace DataAccessLayer.Entities
         public string UpdatedIp { get; set; }
         public Guid UID { get; set; }
         public Nullable<int> Prod_Country_Id { get; set; }
+        public string Prod_Country_Ids { get; set; }
     }
 }

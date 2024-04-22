@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Entities
 {
-    class Bank_Branch_Mst
+    public class Bank_Branch_Mst
     {
         [Key]
         public int Bank_Branch_Id { get; set; }
@@ -37,5 +37,6 @@ namespace DataAccessLayer.Entities
         public Nullable<int> Updated_User { get; set; }
         public Nullable<DateTime> Updated_Date { get; set; }
         public Nullable<int> Bank_SubAgent_Id { get; set; }
+        public int Prod_Bank_Branch_Id { get; set; }
     }
 }

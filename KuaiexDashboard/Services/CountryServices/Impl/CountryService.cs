@@ -10,6 +10,7 @@ using KuaiexDashboard.Repository.Impl;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
+using System.Linq;
 using System.Security.Cryptography;
 
 namespace KuaiexDashboard.Services.CountryServices.Impl
@@ -163,17 +164,21 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
             int count = 0;
             try
             {
-                List<Country_Mst> prodContries = _countryProdRepository.GetAll();
+                List<Country_Mst> prodCountries = _countryProdRepository.GetAll();
 
-                foreach (var item in prodContries)
+                foreach (var item in prodCountries)
                 {
                     string CountryName = Strings.EscapeSingleQuotes(item.English_Name);
                     string NationalityName = item.English_Nationality;
                   
                     if (!_countryRepository.Any(x => x.Name == CountryName && x.Nationality == NationalityName))
                     {
-
                         Country country = new Country();
+                        var pendingCountries = prodCountries.Where(x=> x.English_Name == item.English_Name && x.English_Nationality == item.English_Nationality).ToList();
+                        if (pendingCountries.Count > 1)
+                        {
+                            country.Prod_Country_Ids = string.Join(",", pendingCountries.Select(x => x.Country_Id.ToString()));
+                        }
                         country.Name = item.English_Name;
                         country.Nationality = item.English_Nationality; 
                         country.Status = item.Record_Status;
