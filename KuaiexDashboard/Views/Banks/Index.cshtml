@@ -140,10 +140,34 @@
                                 <div id="AmountInWords"></div>
                             </div>
                             <div class="form-group">
-                                <label>Number of Transaction<span style="color:red;">*</span></label>
-                                <small><span class="text-danger required-text" id="ValNumberofTransaction"></span></small>
-                                <input type="Number" id="NumberofTransaction" placeholder="Enter Number of Transaction" class="form-control" name="NumberofTransaction" max="1000">
+                                <label>Number of Transaction Daily<span style="color:red;">*</span></label>
+                                <small><span class="text-danger required-text" id="ValNumberOfTransaction"></span></small>
+                                <input type="Number" id="NumberOfTransaction" placeholder="Enter Number of Transaction Daily" class="form-control" name="NumberofTransaction" max="1000">
                             </div>
+                            <div class="form-group">
+                                <label>Number of Transaction Monthly<span style="color:red;">*</span></label>
+                                <small><span class="text-danger required-text" id="ValNumberOfTransactionMonthly"></span></small>
+                                <input type="Number" id="NumberOfTransactionMonthly" placeholder="Enter Number of Transaction Monthly" class="form-control" name="NumberofTransaction" max="1000">
+                            </div>
+                            <div class="form-group">
+                                <label>Transaction Amount in KWD<span style="color:red;">*</span></label>
+                                <small><span class="text-danger required-text" id="ValTransactionAmountKWD"></span></small>
+                                <input type="Number" id="TransactionAmountKWD" placeholder="Enter Number of Transaction" class="form-control" name="TransactionAmountKWD" max="1000">
+                            </div>
+                            <div class="form-group">
+                                <label>Transaction Amount KWD in Words:</label>
+                                <div id="TransactionAmountKWDInWords"></div>
+                            </div>
+                            <div class="form-group">
+                                <label>Transaction Amount in FC<span style="color:red;">*</span></label>
+                                <small><span class="text-danger required-text" id="ValTransactionAmountFC"></span></small>
+                                <input type="Number" id="TransactionAmountFC" placeholder="Enter Number of Transaction" class="form-control" name="TransactionAmountFC" max="1000">
+                            </div>
+                            <div class="form-group">
+                                <label>Transaction Amount FC in Words:</label>
+                                <div id="TransactionAmountFCInWords"></div>
+                            </div>    
+                           
                         </div>
                     </div>
                 </div>
@@ -179,10 +203,14 @@
 <div class="row">
     <div class="col-lg-12 col-md-12 col-sm-12">
         <div class="ibox ">
-            <div class="ibox-title">
+            <div class="ibox-title" style="display: flex; justify-content: space-between;">
                 <h2 style="display: inline-block;"><i class="fa fa-users"></i>&nbsp;Bank's List </h2>
-                <button id="setLimitAllBanks" class="btn btn-primary" style="float: right; margin-top:5px;">Set Limit</button>
+                <div>
+                    <button id="setLimitAllBanks" class="btn btn-primary" style="margin-left: 10px; margin-top: 5px;">Set Limit</button>
+                    <button id="setPriority" class="btn btn-success" style="margin-left: 10px; margin-top: 5px;">Set Priority</button>
+                </div>
             </div>
+
 
 
             <div class="ibox ibox-content">

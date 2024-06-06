@@ -33,6 +33,34 @@ namespace KuaiexDashboard.Services.BankServices.Impl
             _bank_MstProdRepository = new GenericRepository<Bank_Mst_Prod>(DatabasesName.KUAIEXProdEntities);
         }
 
+        public string ChangeDirectTransaction(int id)
+        {
+            try
+            {
+                Bank_Mst existingLimits = _bank_MstRepository.FindBy(x => x.Bank_Id == id);
+                if (existingLimits != null)
+                {
+                    existingLimits.Updated_Date = DateTime.Now;
+                    existingLimits.DirectTransaction = !existingLimits.DirectTransaction;
+                    if (_bank_MstRepository.Update(existingLimits, $" UID = '{existingLimits.UID}' "))
+                    {
+                        return MsgKeys.UpdatedSuccessfully;
+                    }
+                    else
+                    {
+                        throw new Exception(MsgKeys.UpdationFailed);
+                    }
+                }
+
+                return MsgKeys.Error;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
+        }
+
         public string ChangeState(Guid UID)
         {
             try
@@ -80,8 +108,8 @@ namespace KuaiexDashboard.Services.BankServices.Impl
         {
             try
             {
-                List<Bank_Mst> bank_Msts = _bank_MstRepository.GetAll(x => x.Country_Id == countryId, x => x.Bank_Id, x => x.English_Name);
-                return bank_Msts;
+                List<Bank_Mst> bank_Msts = _bank_MstRepository.GetAll(x => x.Country_Id == countryId, x => x.Bank_Id, x => x.English_Name, x => x.Record_Status, x => x.PriorityValue, x => x.DirectTransaction);
+                return bank_Msts.OrderBy(x => x.PriorityValue).ToList();
             }
             catch (Exception ex)
             {
@@ -111,6 +139,34 @@ namespace KuaiexDashboard.Services.BankServices.Impl
             {
                 Bank_Mst bank_Mst = _bank_MstRepository.FindBy(x => x.UID == uid);
                 return bank_Mst;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
+        }
+
+        public string SetBankPriority(Bank_Mst[] bank_MstList)
+        {
+            try
+            {
+                foreach (Bank_Mst bank_Mst in bank_MstList)
+                {
+                    int bankId = bank_Mst.Bank_Id;
+                    Bank_Mst existingbank_Mst = _bank_MstRepository.FindBy(x => x.Bank_Id == bankId);
+                    if (existingbank_Mst != null)
+                    {
+                        existingbank_Mst.PriorityValue = bank_Mst.PriorityValue;
+                        existingbank_Mst.Updated_Date = DateTime.Now;
+
+                        if (!_bank_MstRepository.Update(existingbank_Mst, $" UID = '{existingbank_Mst.UID}' "))
+                        {
+                            throw new Exception(MsgKeys.UpdationFailed);
+                        }
+                    }
+                }
+                return MsgKeys.UpdatedSuccessfully;
             }
             catch (Exception ex)
             {
@@ -195,6 +251,10 @@ namespace KuaiexDashboard.Services.BankServices.Impl
                         bank_Mst.Prod_Bank_Id = item.Bank_Id;
                         bank_Mst.AmountLimit = 0;
                         bank_Mst.NumberOfTransaction = 0;
+                        bank_Mst.NumberOfTransactionMonthly = 0;
+                        bank_Mst.TransactionAmountFC = 0;
+                        bank_Mst.TransactionAmountKWD = 0;
+                        bank_Mst.DirectTransaction = false;
                         if (_bank_MstRepository.Insert(bank_Mst) > 0)
                         {
                             count++;
@@ -215,7 +275,7 @@ namespace KuaiexDashboard.Services.BankServices.Impl
             return count;
         }
 
-        public string UpdateLimits(Guid? UID, decimal AmountLimit, int NumberOfTransaction)
+        public string UpdateLimits(Guid? UID, decimal AmountLimit, int NumberOfTransaction, int NumberOfTransactionMonthly, decimal TxnAmountKWD, decimal TxnAmountFC)
         {
             try
             {
@@ -226,6 +286,9 @@ namespace KuaiexDashboard.Services.BankServices.Impl
                     {
                         existingLimits.AmountLimit = AmountLimit;
                         existingLimits.NumberOfTransaction = NumberOfTransaction;
+                        existingLimits.NumberOfTransactionMonthly = NumberOfTransactionMonthly;
+                        existingLimits.TransactionAmountKWD = TxnAmountKWD;
+                        existingLimits.TransactionAmountFC = TxnAmountFC;
                         existingLimits.Updated_Date = DateTime.Now;
                         if (_bank_MstRepository.Update(existingLimits, $" UID = '{existingLimits.UID}' "))
                         {

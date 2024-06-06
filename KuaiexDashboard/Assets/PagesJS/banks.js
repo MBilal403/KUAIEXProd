@@ -16,7 +16,7 @@ $(document).ready(function () {
         var amountLimit = $('#AmountLimit').val();
         if (amountLimit !== '' && amountLimit <= MAX_LIMIT) {
             var amountInWords = convertToWords(amountLimit);
-            $('#AmountInWords').text(amountInWords);
+            $('#AmountInWords').text(amountInWords.toUpperCase());
         } else if (amountLimit === '') {
             $('#AmountInWords').text('empty');
         } else {
@@ -24,6 +24,40 @@ $(document).ready(function () {
         }
 
     }
+    function TxnKWDToWords() {
+        var amountLimit = $('#TransactionAmountFC').val();
+        if (amountLimit !== '' && amountLimit <= MAX_LIMIT) {
+            var amountInWords = convertToWords(amountLimit);
+            $('#TransactionAmountFCInWords').text(amountInWords.toUpperCase());
+        } else if (amountLimit === '') {
+            $('#TransactionAmountFCInWords').text('empty');
+        } else {
+            $('#TransactionAmountFCInWords').text('Value exceeds maximum limit (' + MAX_LIMIT + ')');
+        }
+    }
+
+
+    $('#TransactionAmountFC').on('input', function () {
+        TxnKWDToWords();
+    });
+
+    function TxnFCToWords() {
+        var amountLimit = $('#TransactionAmountKWD').val();
+        if (amountLimit !== '' && amountLimit <= MAX_LIMIT) {
+            var amountInWords = convertToWords(amountLimit);
+            $('#TransactionAmountKWDInWords').text(amountInWords.toUpperCase());
+        } else if (amountLimit === '') {
+            $('#TransactionAmountKWDInWords').text('empty');
+        } else {
+            $('#TransactionAmountKWDInWords').text('Value exceeds maximum limit (' + MAX_LIMIT + ')');
+        }
+    }
+    $('#TransactionAmountKWD').on('input', function () {
+        TxnFCToWords();
+    });
+
+
+
 
     function convertToWords(number) {
         var data = numberToWords.toWords(number);
@@ -33,6 +67,11 @@ $(document).ready(function () {
         $('#modalTitle').text('');
         $('#AmountLimit').val('');
         $('#NumberofTransaction').val('');
+        $('#TransactionAmountFC').val('');
+        $('#TransactionAmountKWD').val('');
+        $('#NumberOfTransactionMonthly').val('');
+        $('#TransactionAmountKWDInWords').text('');
+        $('#TransactionAmountFCInWords').text('');
         $('#UID').val('');
     });
 
@@ -89,9 +128,14 @@ $(document).ready(function () {
                 var data = JSON.parse(response);
                 $('#modalTitle').text(data.English_Name);
                 $('#AmountLimit').val(data.AmountLimit);
-                $('#NumberofTransaction').val(data.NumberOfTransaction);
+                $('#NumberOfTransaction').val(data.NumberOfTransaction);
+                $('#NumberOfTransactionMonthly').val(data.NumberOfTransactionMonthly);
+                $('#TransactionAmountKWD').val(data.TransactionAmountKWD);
+                $('#TransactionAmountFC').val(data.TransactionAmountFC);
                 $('#UID').val(data.UID);
                 NumberToWords();
+                TxnFCToWords();
+                TxnKWDToWords();
                 $('#setBankLimitsModal').modal('show');
             },
             error: function (xhr, status, error) {
@@ -105,10 +149,19 @@ $(document).ready(function () {
     $(document).on('click', '#setLimitAllBanks', function () {
         $('#modalTitle').text("Set limit for all banks ");
         $('#AmountLimit').val(0);
-        $('#NumberofTransaction').val(0);
+        $('#NumberOfTransaction').val(0);
+        $('#NumberOfTransactionMonthly').val(0);
+        $('#TransactionAmountFC').val(0);
+        $('#TransactionAmountKWD').val(0);
 
         NumberToWords();
+        TxnFCToWords();
+        TxnKWDToWords();
         $('#setBankLimitsModal').modal('show');
+    });
+
+    $(document).on('click', '#setPriority', function () {
+        window.location = "../Banks/Priority";
     });
 
 
@@ -218,14 +271,17 @@ var handleStaff = function () {
             $.ajax({
                 type: "POST",
                 cache: false,
-                url: "../banks/UpdateLimits?UID=" + uid + "&AmountLimit=" + $('#AmountLimit').val() + "&NumberOfTransaction=" + $('#NumberofTransaction').val(),
+                url: "../banks/UpdateLimits?UID=" + uid + "&AmountLimit=" + $('#AmountLimit').val() + "&NumberOfTransaction=" + $('#NumberOfTransaction').val() + "&NumberOfTransactionMonthly=" + $('#NumberOfTransactionMonthly').val() + "&TxnAmountKWD=" + $('#TransactionAmountKWD').val() + "&TxnAmountFC=" + $('#TransactionAmountFC').val(),
                 processData: false,
                 contentType: false,
                 success: function (value) {
                     $('#setBankLimitsModal').modal('hide');
                     $('#modalTitle').text('');
                     $('#AmountLimit').val('');
-                    $('#NumberofTransaction').val('');
+                    $('#NumberOfTransaction').val('');
+                    $('#NumberOfTransactionMonthly').val('');
+                    $('#TransactionAmountKWD').val('');
+                    $('#TransactionAmountFC').val('');
                     $('#UID').val('');
                     LoadGridData();
                     if (value === 'update_success') {
@@ -256,16 +312,27 @@ var handleStaff = function () {
     function validateForm() {
         var isValid = true;
         $('.required-text').text('');
-        var fieldsToValidate = ['AmountLimit', 'NumberofTransaction'];
-        fieldsToValidate.forEach(function (fieldName) {
-            var fieldValue = $('#' + fieldName).val().trim();
-            if (fieldValue === '') {
-                isValid = false;
-                $('#Val' + fieldName).text(' required ');
-            }
-        });
+        var fieldsToValidate = ['AmountLimit', 'NumberOfTransaction', 'NumberOfTransactionMonthly', 'TransactionAmountFC', 'TransactionAmountKWD'];
+
+        var numberOfTransaction = parseFloat($('#NumberOfTransaction').val());
+        var numberOfTransactionMonthly = parseFloat($('#NumberOfTransactionMonthly').val());
+
+        if (numberOfTransaction > numberOfTransactionMonthly) {
+            isValid = false;
+            $('#ValNumberOfTransaction').text('Number of transactions cannot be greater than monthly limit');
+        } else {
+            fieldsToValidate.forEach(function (fieldName) {
+                var fieldValue = $('#' + fieldName).val();
+                if (fieldValue === '') {
+                    isValid = false;
+                    $('#Val' + fieldName).text('Required');
+                }
+            });
+        }
+
         return isValid;
     }
+
 }
 
 
@@ -314,6 +381,9 @@ $('#btn-sync').on('click', function () {
                 data + ' Records Synchronized Successfully.',
                 'success'
             );
+        },
+        error: function (xhr, status, error) {
+            swal("Error", "Records Synchronized Failed !!", "error");
         }
     });
 });

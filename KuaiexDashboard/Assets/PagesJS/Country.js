@@ -284,6 +284,9 @@ var handleStaff = function () {
                     data + ' Records Synchronized Successfully.',
                     'success'
                 );
+            },
+            error: function (xhr, status, error) {
+                swal("Error", "Records Synchronized Failed !!", "error");
             }
         });
     });

@@ -12,6 +12,7 @@ using KuaiexDashboard.Repository.Impl;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 
 namespace KuaiexDashboard.Services.RemitterServices.Impl
@@ -102,10 +103,8 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.Compliance_Limit_Expiry = customerDto.Compliance_Limit_Expiry;
                     customer.Compliance_Comments = customerDto.Compliance_Comments;
                     customer.IsReviwed = customerDto.IsReviwed == null ? false : true;
-                    // customer.Prod_Remitter_Id = 100;
                     customer.Is_Profile_Completed = 1;
 
-                    //customer.Prod_Remitter_Id = objKuaiex_Prod.GetRemittanceIdByIdentificationNumber(customerDto.Identification_Number);
                     customerDto.Customer_Id = _customerRepository.Insert(customer);
 
                     securityQuestions = new List<Customer_Security_Questions>
@@ -201,15 +200,10 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                     customer.Compliance_Trans_Count = customerDto.Compliance_Trans_Count;
                     customer.Compliance_Limit_Expiry = customerDto.Compliance_Limit_Expiry;
                     customer.Compliance_Comments = customerDto.Compliance_Comments;
-                    customer.Civil_Id_Front = customerDto.Civil_Id_Front;
-                    customer.Civil_Id_Back = customerDto.Civil_Id_Back;
+                    customer.Civil_Id_Front = customerDto.Civil_Id_Front ?? customer.Civil_Id_Front;
+                    customer.Civil_Id_Back = customerDto.Civil_Id_Back ?? customer.Civil_Id_Back;
                     customer.UpdatedOn = DateTime.Now;
-                    /////////////////////////////
-
                 }
-
-                // customer.Prod_Remitter_Id = objKuaiex_Prod.GetRemittanceIdByIdentificationNumber(customerDto.Identification_Number);
-                // Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
 
                 _customerRepository.Update(customer, $"  Customer_Id = {customer.Customer_Id} ");
 
@@ -231,23 +225,23 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
 
                 individual_KYCs = new List<Individual_KYC>()
                     {
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 1, Answer = customerDto.checkbox1 == check, CreatedOn = DateTime.Now },
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 2, Answer = customerDto.checkbox2 == check, CreatedOn = DateTime.Now },
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 3, Answer = customerDto.checkbox3 == check ,CreatedOn = DateTime.Now},
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 4, Answer = customerDto.checkbox4 == check ,CreatedOn = DateTime.Now},
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 5, Answer = customerDto.checkbox5 == check ,CreatedOn = DateTime.Now},
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 6, Answer = customerDto.checkbox6 == check ,CreatedOn = DateTime.Now},
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 7, Answer = customerDto.checkbox7 == check ,CreatedOn = DateTime.Now},
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 8, Answer = customerDto.checkbox8 == check ,CreatedOn = DateTime.Now},
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 9, Answer = customerDto.checkbox9 == check ,CreatedOn = DateTime.Now},
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 10, Answer = customerDto.checkbox10 == check ,CreatedOn = DateTime.Now},
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 11, Answer = customerDto.checkbox11 == check ,CreatedOn = DateTime.Now},
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 12, Answer = customerDto.checkbox12 == check ,CreatedOn = DateTime.Now},
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 13, Answer = customerDto.checkbox13 == check ,CreatedOn = DateTime.Now},
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 14, Answer = customerDto.checkbox14 == check ,CreatedOn = DateTime.Now , Details = customerDto.other_Detail},
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 15, Answer = customerDto.pepcheckbox15 == check ,CreatedOn = DateTime.Now},
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 16, Answer = customerDto.pepcheckbox16 == check ,CreatedOn = DateTime.Now},
-                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 17, Answer = customerDto.pepcheckbox17 == check ,CreatedOn = DateTime.Now}
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 1, Answer = customerDto.checkbox1 == check, UpdatedOn = DateTime.Now },
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 2, Answer = customerDto.checkbox2 == check, UpdatedOn = DateTime.Now },
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 3, Answer = customerDto.checkbox3 == check ,UpdatedOn = DateTime.Now},
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 4, Answer = customerDto.checkbox4 == check ,UpdatedOn = DateTime.Now},
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 5, Answer = customerDto.checkbox5 == check ,UpdatedOn = DateTime.Now},
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 6, Answer = customerDto.checkbox6 == check ,UpdatedOn = DateTime.Now},
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 7, Answer = customerDto.checkbox7 == check ,UpdatedOn = DateTime.Now},
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 8, Answer = customerDto.checkbox8 == check ,UpdatedOn = DateTime.Now},
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 9, Answer = customerDto.checkbox9 == check ,UpdatedOn = DateTime.Now},
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 10, Answer = customerDto.checkbox10 == check ,UpdatedOn = DateTime.Now},
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 11, Answer = customerDto.checkbox11 == check ,UpdatedOn = DateTime.Now},
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 12, Answer = customerDto.checkbox12 == check ,UpdatedOn = DateTime.Now},
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 13, Answer = customerDto.checkbox13 == check ,UpdatedOn = DateTime.Now},
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 14, Answer = customerDto.checkbox14 == check ,UpdatedOn = DateTime.Now , Details = customerDto.other_Detail},
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 15, Answer = customerDto.pepcheckbox15 == check ,UpdatedOn = DateTime.Now},
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 16, Answer = customerDto.pepcheckbox16 == check ,UpdatedOn = DateTime.Now},
+                        new Individual_KYC {Customer_Id = customerDto.Customer_Id, Question_Id = 17, Answer = customerDto.pepcheckbox17 == check ,UpdatedOn = DateTime.Now}
                     };
 
                 foreach (var individual_KYC in individual_KYCs)
@@ -304,8 +298,9 @@ namespace KuaiexDashboard.Services.RemitterServices.Impl
                 Customer obj = objRemitterDal.GetCustomerByUID(customerId);
                 customerDTO = AutoMapper.Mapper.Map<EditCustomerDTO>(obj);
 
-                customerDTO.Civil_Id_Front = customerDTO.Civil_Id_Front ?? string.Concat(LocalStoragePath, customerDTO.Civil_Id_Front);
-                customerDTO.Civil_Id_Back = customerDTO.Civil_Id_Back ?? string.Concat(LocalStoragePath, customerDTO.Civil_Id_Back);
+                customerDTO.Civil_Id_Front = customerDTO.Civil_Id_Front != null ? Path.Combine(LocalStoragePath, customerDTO.Civil_Id_Front) : null;
+                customerDTO.Civil_Id_Back = customerDTO.Civil_Id_Back != null ? Path.Combine(LocalStoragePath, customerDTO.Civil_Id_Back) : null;
+
                 return customerDTO;
             }
             catch (Exception ex)

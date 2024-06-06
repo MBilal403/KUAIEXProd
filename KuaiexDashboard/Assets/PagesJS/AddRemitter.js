@@ -670,6 +670,12 @@ function LoadKYCIndividuals(Customer_Id) {
             else {
                 $("#checkbox6").iCheck('uncheck');
             }
+            if (obj[6].Answer) {
+                $("#checkbox7").iCheck('check');
+            }
+            else {
+                $("#checkbox7").iCheck('uncheck');
+            }
             if (obj[7].Answer) {
                 $("#checkbox8").iCheck('check');
             }

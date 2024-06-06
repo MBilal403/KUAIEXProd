@@ -14,6 +14,7 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Web;
 using System.Web.Mvc;
 
@@ -32,6 +33,10 @@ namespace KuaiexDashboard.Controllers
 
         // GET: Banks
         public ActionResult Index()
+        {
+            return View();
+        }
+        public ActionResult Priority()
         {
             return View();
         }
@@ -54,7 +59,7 @@ namespace KuaiexDashboard.Controllers
 
             return Content(status);
         }
-        
+
         [HttpGet]
         public ActionResult LoadGrid(JqueryDatatableParam param, int countryId)
         {
@@ -86,7 +91,7 @@ namespace KuaiexDashboard.Controllers
             try
             {
 
-              
+
             }
             catch (Exception ex)
             {
@@ -94,7 +99,7 @@ namespace KuaiexDashboard.Controllers
                 status = "error";
             }
             return Content(status);
-        } 
+        }
         public ActionResult Detail(Guid UID)
         {
             string status = "error";
@@ -126,18 +131,36 @@ namespace KuaiexDashboard.Controllers
             return Content(status);
         }
 
-        public ActionResult UpdateLimits(Guid? UID,decimal AmountLimit, int NumberOfTransaction)
+        public ActionResult UpdateLimits(Guid? UID, decimal AmountLimit, int NumberOfTransaction, int NumberOfTransactionMonthly, decimal TxnAmountKWD, decimal TxnAmountFC)
         {
             string status = "error";
             try
             {
-              status = _bankService.UpdateLimits(UID, AmountLimit, NumberOfTransaction);
+                status = _bankService.UpdateLimits(UID, AmountLimit, NumberOfTransaction, NumberOfTransactionMonthly, TxnAmountKWD, TxnAmountFC);
             }
             catch (Exception ex)
             {
                 Log.Error(@"{Message}: {e}", ex.Message, ex);
                 status = "error";
             }
+
+            return Content(status);
+        }
+        public ActionResult LoadBanks(int countryId)
+        {
+            string status = "0:{choose}";
+
+            try
+            {
+                List<Bank_Mst> banks = _bankService.GetBanksByCountryId(countryId);
+                status = JsonConvert.SerializeObject(banks);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
+
 
             return Content(status);
         }
@@ -148,6 +171,37 @@ namespace KuaiexDashboard.Controllers
             try
             {
                 status = _bankService.ChangeState(UID);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
+
+            return Content(status);
+        }  
+        public ActionResult ChangeDirectTransaction(int id)
+        {
+            string status = "error";
+            try
+            {
+                status = _bankService.ChangeDirectTransaction(id);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
+
+            return Content(status);
+        }
+
+        public ActionResult SetBankPriority(Bank_Mst[] bank_MstList)
+        {
+            string status = "error";
+            try
+            {
+                status = _bankService.SetBankPriority(bank_MstList);
             }
             catch (Exception ex)
             {

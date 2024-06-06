@@ -31,6 +31,10 @@
       "provider": "unpkg",
       "library": "number-to-words@1.2.4",
       "destination": "lib/number-to-words/"
+    },
+    {
+      "library": "jqueryui@1.13.3",
+      "destination": "lib/jqueryui/"
     }
   ]
 }

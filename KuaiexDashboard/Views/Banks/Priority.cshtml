@@ -1,0 +1,172 @@
+﻿
+@{
+    ViewBag.Title = "Priority";
+}
+
+
+<!-- CSS for label style -->
+<style>
+    .label-style {
+        color: #263949;
+        font-weight: bold;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 60%;
+        counter-reset: rowNumber;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        cursor: pointer;
+    }
+
+    tr {
+        position: relative;
+    }
+
+        tr.selected {
+            background-color: #263949;
+        }
+
+        tr.ui-draggable-dragging {
+            background-color: #263949;
+        }
+
+    .label {
+        display: inline-block;
+        padding: 2px 4px;
+        font-size: 90%;
+        font-weight: 600;
+        line-height: 1;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: baseline;
+        border-radius: .25em;
+    }
+
+    .label-success {
+        color: #fff;
+        background-color: #28a745;
+    }
+
+    .label-danger {
+        color: #fff;
+        background-color: #dc3545;
+    }
+
+    #postButton {
+        padding: 10px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .toggle {
+        position: relative;
+        display: inline-block;
+        width: 40px; /* Reduced width */
+        height: 20px; /* Reduced height */
+    }
+
+    .toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 20px; /* Adjusted border-radius */
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px; /* Reduced height */
+            width: 16px; /* Reduced width */
+            left: 2px; /* Adjusted position */
+            bottom: 2px; /* Adjusted position */
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(20px); /* Adjusted translation */
+    }
+
+
+</style>
+
+<div class="row">
+    <div class="col-lg-4 col-md-4 col-sm-4">
+        <div class="form-group">
+            <label>Country<span style="color:red">*</span></label>
+            <select class="form-control chzn" id="Country_Id" required="required" name="Country_Id"></select>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="ibox ">
+            <div class="ibox-title" style="display: flex; justify-content: space-between;">
+                <h2 style="display: inline-block;"><i class="fa fa-users"></i>&nbsp;Set Priority </h2>
+            </div>
+            <div class="ibox ibox-content">
+                <table id="sortable-table"  style="width:100%">
+                    <thead>
+                        <tr>
+                            <th class="hidden" data-column="Bank_Id">ID</th>
+
+                            <th>Priority</th>
+                            <th data-column="English_Name">Name</th>
+                            <th data-column="status">Status</th>
+                            <th data-column="DirectTransaction">Direct Transaction</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <a id="btn-Priority" name="btn-Priority" class="btn btn-primary pull-right">Save Priority</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Assets/PagesJS/Priority.js"></script>

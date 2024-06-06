@@ -264,6 +264,9 @@ $('#btn-sync').on('click', function () {
                 'success'
             );
 
+        },
+        error: function (xhr, status, error) {
+            swal("Error", "Records Synchronized Failed !!", "error");
         }
     });
 });
