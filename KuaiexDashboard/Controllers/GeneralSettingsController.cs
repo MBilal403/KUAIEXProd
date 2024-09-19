@@ -1,10 +1,12 @@
 ﻿
-using DataAccessLayer;
+using DataAccessLayer.DomainEntities;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Helpers;
 using DataAccessLayer.Recources;
 using DataAccessLayer.Repository.Impl;
 using KuaiexDashboard.Filters;
+using KuaiexDashboard.Services.GeneralSettingsServices;
+using KuaiexDashboard.Services.GeneralSettingsServices.Impl;
 using KuaiexDashboard.Services.RelationshipServices;
 using KuaiexDashboard.Services.RelationshipServices.Impl;
 using Newtonsoft.Json;
@@ -20,11 +22,12 @@ namespace KuaiexDashboard.Controllers
     [AuthorizeFilter]
     public class GeneralSettingsController : Controller
     {
-        GeneralSettingsDAL objGeneralSettingsDal = new GeneralSettingsDAL();
+        private readonly IGeneralSettingsService _generalSettingsService;
         private readonly IRelationshipService _relationshipService;
         public GeneralSettingsController()
         {
             _relationshipService = new RelationshipService();
+            _generalSettingsService = new GeneralSettingsService();
         }
 
         // GET: GeneralSettings
@@ -43,7 +46,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                List<GetTermsConditions_Result> result = objGeneralSettingsDal.GetTermsConditions();
+                List<GetTermsConditions_Result> result = _generalSettingsService.GetTermsConditions();
                 status = JsonConvert.SerializeObject(result);
             }
             catch (Exception ex)
@@ -58,13 +61,13 @@ namespace KuaiexDashboard.Controllers
             string status = "";
             try
             {
-                Terms_and_Privacy obj = objGeneralSettingsDal.GetTermsAndPrivacyById(objterms.Id);
+                Terms_and_Privacy obj = _generalSettingsService.GetTermsAndPrivacyById(objterms.Id);
                 if (obj != null)
                 {
                     obj.Title = objterms.Title;
                     obj.Description = objterms.Description;
                     obj.Content_Type = 2;
-                    objGeneralSettingsDal.UpdateTermsAndPrivacy(obj);
+                    _generalSettingsService.UpdateTermsAndPrivacy(obj);
                 }
             }
             catch (Exception ex)
@@ -83,7 +86,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                List<GetPrivacyPolicy_Result> obj = objGeneralSettingsDal.GetPrivacyPolicy();
+                List<GetPrivacyPolicy_Result> obj = _generalSettingsService.GetPrivacyPolicy();
                 status = JsonConvert.SerializeObject(obj);
             }
             catch (Exception ex)
@@ -99,12 +102,12 @@ namespace KuaiexDashboard.Controllers
             string status = "";
             try
             {
-                Terms_and_Privacy obj = objGeneralSettingsDal.GetTermsAndPrivacyById(objterms.Id);
+                Terms_and_Privacy obj = _generalSettingsService.GetTermsAndPrivacyById(objterms.Id);
                 if (obj != null)
                 {
                     obj.Title = objterms.Title;
                     obj.Description = objterms.Description;
-                    objGeneralSettingsDal.UpdatePrivacyPolicy(objterms);
+                    _generalSettingsService.UpdatePrivacyPolicy(objterms);
 
                 }
             }
@@ -125,7 +128,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                List<GetContactUs_Result> obj = objGeneralSettingsDal.GetContactUs();
+                List<GetContactUs_Result> obj = _generalSettingsService.GetContactUs();
                 status = JsonConvert.SerializeObject(obj);
             }
             catch (Exception ex)
@@ -140,14 +143,14 @@ namespace KuaiexDashboard.Controllers
             string status = "";
             try
             {
-                ContactUs obj = objGeneralSettingsDal.GetContactUsById(objContactUs.Id);
+                ContactUs obj = _generalSettingsService.GetContactUsById(objContactUs.Id);
                 if (obj != null)
                 {
                     obj.ContactNo = objContactUs.ContactNo;
                     obj.Email = objContactUs.Email;
                     obj.Address = objContactUs.Address;
                     obj.CustomerService = objContactUs.CustomerService;
-                    objGeneralSettingsDal.UpdateContactUs(objContactUs);
+                    _generalSettingsService.UpdateContactUs(objContactUs);
 
                 }
             }
@@ -170,7 +173,7 @@ namespace KuaiexDashboard.Controllers
             //{
             try
             {
-                FAQs obj = objGeneralSettingsDal.GetFAQsByQuestion(objFAQS.Question);
+                FAQs obj = _generalSettingsService.GetFAQsByQuestion(objFAQS.Question);
 
                 if (obj != null)
                 {
@@ -182,7 +185,7 @@ namespace KuaiexDashboard.Controllers
                         objFAQS.Status = "Y";
                     else
                         objFAQS.Status = "N";
-                    objGeneralSettingsDal.AddFAQs(objFAQS);
+                    _generalSettingsService.AddFAQs(objFAQS);
                     status = "success";
                 }
             }
@@ -200,7 +203,7 @@ namespace KuaiexDashboard.Controllers
             {
                 //if (IsAdminUser)
                 //{
-                List<GetFAQSList_Result> result = objGeneralSettingsDal.GetFAQSList();
+                List<GetFAQSList_Result> result = _generalSettingsService.GetFAQSList();
                 status = Newtonsoft.Json.JsonConvert.SerializeObject(result);
                 //}
             }
@@ -217,7 +220,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                FAQs obj = objGeneralSettingsDal.GetFAQById(Id);
+                FAQs obj = _generalSettingsService.GetFAQById(Id);
                 status = JsonConvert.SerializeObject(obj);
             }
             catch (Exception ex)
@@ -233,7 +236,7 @@ namespace KuaiexDashboard.Controllers
             string status = "";
             try
             {
-                FAQs obj = objGeneralSettingsDal.GetFAQById(objFaQs.Id);
+                FAQs obj = _generalSettingsService.GetFAQById(objFaQs.Id);
                 obj.Question = objFaQs.Question;
                 obj.Answer = objFaQs.Answer;
                 if (objFaQs.Status != null)
@@ -245,7 +248,7 @@ namespace KuaiexDashboard.Controllers
                     objFaQs.Status = "N";
                 }
                 obj.Status = objFaQs.Status;
-                objGeneralSettingsDal.UpdateFAQ(objFaQs);
+                _generalSettingsService.UpdateFAQ(objFaQs);
             }
             catch (Exception ex)
             {
@@ -263,7 +266,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                List<GetCustomerQueries_Result> result = objGeneralSettingsDal.GetCustomerQueries();
+                List<GetCustomerQueries_Result> result = _generalSettingsService.GetCustomerQueries();
                 status = Newtonsoft.Json.JsonConvert.SerializeObject(result);
             }
             catch (Exception ex)
@@ -283,9 +286,9 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-               
-                    status = _relationshipService.AddRelationship(relationship_Lookup);
-             
+
+                status = _relationshipService.AddRelationship(relationship_Lookup);
+
             }
             catch (Exception ex)
             {
@@ -349,8 +352,6 @@ namespace KuaiexDashboard.Controllers
             }
             return Content(status);
         }
-
-
 
     }
 }

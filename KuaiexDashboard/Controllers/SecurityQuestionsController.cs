@@ -5,7 +5,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using DataAccessLayer;
-using KuaiexDashboard.DAL;
 using KuaiexDashboard.Filters;
 using Serilog;
 using DataAccessLayer.Entities;

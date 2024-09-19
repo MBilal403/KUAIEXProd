@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SqlClient;
 using KuaiexDashboard;
 using System.Configuration;
-using BusinessLogicLayer.DomainEntities;
+using DataAccessLayer.DomainEntities;
 using DataAccessLayer.Entities;
 using DataAccessLayer.ProcedureResults;
 
@@ -402,6 +402,5 @@ namespace DataAccessLayer
 
             return securityQuestions;
         }
-
     }
 }

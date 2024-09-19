@@ -20,7 +20,7 @@ namespace KuaiexDashboard.Repository.Impl
         private readonly ConditionToWhereClauseConverter<T> Converter;
         private string ConnectionString;
 
-
+        
         public GenericRepository(string DbName)
         {
             connectionHandler = new SqlConnectionHandler();

@@ -1,4 +1,4 @@
-﻿using BusinessLogicLayer.DomainEntities;
+﻿using DataAccessLayer.DomainEntities;
 using DataAccessLayer;
 using DataAccessLayer.Entities;
 using DataAccessLayer.ProcedureResults;
@@ -42,7 +42,7 @@ namespace KuaiexDashboard.Controllers
             var user = _remitterService.GetCustomerByUID(UID);
             if (user != null)
             {
-                ViewBag.UserName = $" {user.Identification_Number} -  {user.Name} ";
+                ViewBag.UserName = $" {user.Identification_Number} - {user.Name} ";
                 return View();
             }
             else

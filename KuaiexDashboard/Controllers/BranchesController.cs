@@ -3,7 +3,6 @@ using DataAccessLayer.Entities;
 using DataAccessLayer.Helpers;
 using DataAccessLayer.ProcedureResults;
 using DataAccessLayer.Repository.Impl;
-using KuaiexDashboard.DAL;
 using KuaiexDashboard.Filters;
 using KuaiexDashboard.Services.BankServices;
 using KuaiexDashboard.Services.BankServices.Impl;

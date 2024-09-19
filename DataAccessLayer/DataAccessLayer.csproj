@@ -94,12 +94,35 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgencyBranchesDAL.cs" />
     <Compile Include="BeneficiaryDAL.cs" />
-    <Compile Include="BeneficiaryValidationDAL.cs" />
-    <Compile Include="BranchesDAL.cs" />
     <Compile Include="ChatDAL.cs" />
-    <Compile Include="DashboardDAL.cs" />
+    <Compile Include="DomainEntities\API_GetBank_MstByCountry_Id_Result.cs" />
+    <Compile Include="DomainEntities\API_GetRoutingBank_Branch_Result.cs" />
+    <Compile Include="DomainEntities\Bank_Account_Type.cs" />
+    <Compile Include="DomainEntities\BaseEntity.cs" />
+    <Compile Include="DomainEntities\BranchesInfo.cs" />
+    <Compile Include="DomainEntities\ContactUs.cs" />
+    <Compile Include="DomainEntities\CustomerChatDetail_Result.cs" />
+    <Compile Include="DomainEntities\CustomerChatMain_Result.cs" />
+    <Compile Include="DomainEntities\CustomerChatTitle_Result.cs" />
+    <Compile Include="DomainEntities\Customer_Chat.cs" />
+    <Compile Include="DomainEntities\FAQs.cs" />
+    <Compile Include="DomainEntities\GetBanksListByCountry_Result.cs" />
+    <Compile Include="DomainEntities\GetBrancheskInfoList_Result.cs" />
+    <Compile Include="DomainEntities\GetBranchesListbyCountryBank_Result.cs" />
+    <Compile Include="DomainEntities\GetBranchesList_Result.cs" />
+    <Compile Include="DomainEntities\GetContactUs_Result.cs" />
+    <Compile Include="DomainEntities\GetCurrencyRate_Result.cs" />
+    <Compile Include="DomainEntities\GetCustomerQueries_Result.cs" />
+    <Compile Include="DomainEntities\GetFAQSList_Result.cs" />
+    <Compile Include="DomainEntities\GetPrivacyPolicy_Result.cs" />
+    <Compile Include="DomainEntities\GetTermsConditions_Result.cs" />
+    <Compile Include="DomainEntities\GetUsersList_Result.cs" />
+    <Compile Include="DomainEntities\Remittance_Purpose_Lookup.cs" />
+    <Compile Include="DomainEntities\Remittance_SubType_Mst.cs" />
+    <Compile Include="DomainEntities\Remittance_Type_Mst.cs" />
+    <Compile Include="DomainEntities\Users.cs" />
+    <Compile Include="DomainEntities\UserType_Lookup.cs" />
     <Compile Include="Entities\Bank_Branch_Mst.cs" />
     <Compile Include="Entities\Bank_Mst.cs" />
     <Compile Include="Entities\Beneficiary.cs" />
@@ -122,7 +145,6 @@
     <Compile Include="Entities\Source_Of_Income_Lookup.cs" />
     <Compile Include="Entities\Terms_and_Privacy.cs" />
     <Compile Include="Entities\Transaction_Count_Lookup.cs" />
-    <Compile Include="GeneralSettingsDAL.cs" />
     <Compile Include="Helpers\ConditionToWhereClauseConverter.cs" />
     <Compile Include="Helpers\CustomHtmlHelpers.cs" />
     <Compile Include="Helpers\JqueryDatatableParam.cs" />
@@ -154,17 +176,10 @@
     <Compile Include="Repository\ObjectInspector.cs" />
     <Compile Include="Repository\SqlConnectionHandler.cs" />
     <Compile Include="SequrityQuesDAL.cs" />
-    <Compile Include="UsersDAL.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BusinessLogicLayer\BusinessLogicLayer.csproj">
-      <Project>{b1179111-af55-4518-a4f2-22385139f8dc}</Project>
-      <Name>BusinessLogicLayer</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

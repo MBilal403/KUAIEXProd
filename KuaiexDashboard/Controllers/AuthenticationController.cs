@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using DataAccessLayer.DomainEntities;
 using System.Web;
 using System.Web.Http.Results;
 using System.Web.Mvc;
-using KuaiexDashboard.DAL;
+using KuaiexDashboard.Services.UserServices;
+using KuaiexDashboard.Services.UserServices.Impl;
 using Serilog;
 
 namespace KuaiexDashboard.Controllers
 {
     public class AuthenticationController : Controller
     {
-        private UsersDAL objUsersDAL;
+        private readonly IUserService userService;
 
         public AuthenticationController()
         {
-            objUsersDAL = new UsersDAL();
+            userService = new UserService();
         }
 
         public ActionResult Index()
@@ -40,7 +41,7 @@ namespace KuaiexDashboard.Controllers
         {
             if (ModelState.IsValid)
             {
-                Users authenticatedUser = objUsersDAL.AuthenticateUser(objUser);
+                Users authenticatedUser = userService.AuthenticateUser(objUser);
 
                 if (authenticatedUser != null)
                 {
@@ -59,7 +60,7 @@ namespace KuaiexDashboard.Controllers
         {
             if (ModelState.IsValid)
             {                
-                bool registrationSuccess = objUsersDAL.RegisterUser(newUser);
+                bool registrationSuccess = userService.RegisterUser(newUser);
                 if (registrationSuccess)
                 {
                     Log.Information("User Sign up in: {UserEmail}", newUser.Email);

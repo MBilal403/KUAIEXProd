@@ -1,4 +1,4 @@
-﻿using BusinessLogicLayer.DomainEntities;
+﻿using DataAccessLayer.DomainEntities;
 using DataAccessLayer;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Helpers;

@@ -4,19 +4,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using DataAccessLayer;
-using KuaiexDashboard.DAL;
+using DataAccessLayer.DomainEntities;
 using Serilog;
+using KuaiexDashboard.Services.AgencyBranchesServices;
+using KuaiexDashboard.Services.AgencyBranchesServices.Impl;
 
 namespace KuaiexDashboard.Controllers
 {
     public class AgencyBranchesController : Controller
     {
-        AgencyBranchesDAL objAgencyBranchDal = new AgencyBranchesDAL();
-        // GET: AgencyBranches
+        private readonly IAgencyBranchesService _agencyBranchesService;
+
+        public AgencyBranchesController()
+        {
+            _agencyBranchesService = new AgencyBranchesService();
+        }
         public ActionResult Index()
         {
-            return View();
+            return View();  
         }
 
         public ActionResult AddAgencyBarnches(BranchesInfo objBranchesinfo)
@@ -26,7 +31,7 @@ namespace KuaiexDashboard.Controllers
             //{
             try
             {
-                BranchesInfo obj = objAgencyBranchDal.GetBranchesInfoByName(objBranchesinfo.Name);
+                BranchesInfo obj = _agencyBranchesService.GetBranchesInfoByName(objBranchesinfo.Name);
                 if (obj != null)
                 {
                     status = "exist";
@@ -37,7 +42,7 @@ namespace KuaiexDashboard.Controllers
                         objBranchesinfo.Status = 1;
                     else
                         objBranchesinfo.Status = 0;
-                   objAgencyBranchDal.AddBranchesInfo(objBranchesinfo);
+                    _agencyBranchesService.AddBranchesInfo(objBranchesinfo);
 
                         status = "success";
                    
@@ -54,11 +59,9 @@ namespace KuaiexDashboard.Controllers
         public ActionResult LoadGrid()
         {
             string status = "error";
-            //if (IsAdminUser)
-            //{
-            
-            List<BranchesInfo> lstbranches = objAgencyBranchDal.GetBrancheskInfoList();
-            status = Newtonsoft.Json.JsonConvert.SerializeObject(lstbranches);
+
+            List<BranchesInfo> lstbranches = _agencyBranchesService.GetBrancheskInfoList();
+            status = JsonConvert.SerializeObject(lstbranches);
             //}
             return Content(status);
         }
@@ -68,7 +71,7 @@ namespace KuaiexDashboard.Controllers
             try
             {
                 
-                BranchesInfo obj = objAgencyBranchDal.GetBranchesInfoById(Id);
+                BranchesInfo obj = _agencyBranchesService.GetBranchesInfoById(Id);
                 status = JsonConvert.SerializeObject(obj);
             }
             catch (Exception ex)
@@ -84,7 +87,7 @@ namespace KuaiexDashboard.Controllers
             try
             {
                
-                BranchesInfo obj = objAgencyBranchDal.GetBranchesInfoById(objbranchesInfo.Id);
+                BranchesInfo obj = _agencyBranchesService.GetBranchesInfoById(objbranchesInfo.Id);
                 obj.Name = objbranchesInfo.Name;
                 obj.ContactNo = objbranchesInfo.ContactNo;
                 obj.Address = objbranchesInfo.Address;
@@ -100,7 +103,7 @@ namespace KuaiexDashboard.Controllers
                     objbranchesInfo.Status = 0;
                 }
                 obj.Status = objbranchesInfo.Status;
-                objAgencyBranchDal.EditBranchesInfo(objbranchesInfo);
+                _agencyBranchesService.EditBranchesInfo(objbranchesInfo);
             }
             catch (Exception ex)
             {

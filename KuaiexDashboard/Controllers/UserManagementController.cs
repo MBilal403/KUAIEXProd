@@ -1,17 +1,25 @@
-﻿using KuaiexDashboard.DAL;
-using KuaiexDashboard.Filters;
+﻿using KuaiexDashboard.Filters;
+using KuaiexDashboard.Services.UserServices;
+using KuaiexDashboard.Services.UserServices.Impl;
 using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using DataAccessLayer.DomainEntities;
+
 
 namespace KuaiexDashboard.Controllers
 {
     [AuthorizeFilter]
     public class UserManagementController : Controller
     {
-        private UsersDAL usersDAL = new UsersDAL(); 
+        private readonly IUserService userService;
+
+        public UserManagementController()
+        {
+            userService = new UserService();
+        }
 
         // GET: UserManagement
         public ActionResult Index()
@@ -26,7 +34,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                Users existingUser = usersDAL.GetUserByUserName(objUser.UserName);
+                Users existingUser = userService.GetUserByUserName(objUser.UserName);
 
                 if (existingUser != null)
                 {
@@ -34,7 +42,7 @@ namespace KuaiexDashboard.Controllers
                 }
                 else
                 {
-                    if(objUser.Status!= null)
+                    if (objUser.Status != null)
                     {
                         objUser.Status = 0;
                     }
@@ -43,9 +51,9 @@ namespace KuaiexDashboard.Controllers
                         objUser.Status = 1;
                     }
                     objUser.UID = Guid.NewGuid();
-                    
 
-                    bool success = usersDAL.RegisterUser(objUser);
+
+                    bool success = userService.RegisterUser(objUser);
 
                     if (success)
                     {
@@ -70,7 +78,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                List<UserType_Lookup> lstUserType = usersDAL.GetUserTypes();
+                List<UserType_Lookup> lstUserType = userService.GetUserTypes();
                 status = JsonConvert.SerializeObject(lstUserType);
             }
             catch (Exception ex)
@@ -89,7 +97,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                List<GetUsersList_Result> userList = usersDAL.GetUsersList();
+                List<GetUsersList_Result> userList = userService.GetUsersList();
                 status = JsonConvert.SerializeObject(userList);
             }
             catch (Exception ex)
@@ -101,15 +109,13 @@ namespace KuaiexDashboard.Controllers
             return Content(status);
         }
 
-      
-
         public ActionResult Edit(Guid UID)
         {
             string status = "error";
 
             try
             {
-                Users obj = usersDAL.GetUserByUID(UID);
+                Users obj = userService.GetUserByUID(UID);
                 status = JsonConvert.SerializeObject(obj);
             }
             catch (Exception ex)
@@ -129,7 +135,7 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                Users existingUser = usersDAL.GetUserByUID(objUser.UID);
+                Users existingUser = userService.GetUserByUID(objUser.UID);
 
                 if (existingUser != null)
                 {
@@ -137,7 +143,7 @@ namespace KuaiexDashboard.Controllers
                     existingUser.Password = objUser.Password;
                     existingUser.ContactNo = objUser.ContactNo;
                     existingUser.Email = objUser.Email;
-                    if(existingUser.Status == 1)
+                    if (existingUser.Status == 1)
                     {
                         objUser.Status = 0;
                     }
@@ -146,7 +152,7 @@ namespace KuaiexDashboard.Controllers
                         objUser.Status = existingUser.Status;
                     }
 
-                    bool success = usersDAL.UpdateUser(existingUser);
+                    bool success = userService.UpdateUser(existingUser);
 
                     if (success)
                     {

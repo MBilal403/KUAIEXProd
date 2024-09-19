@@ -1,4 +1,4 @@
-﻿using BusinessLogicLayer.DomainEntities;
+﻿using DataAccessLayer.DomainEntities;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;

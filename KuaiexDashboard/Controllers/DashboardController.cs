@@ -1,11 +1,13 @@
 ﻿using DataAccessLayer;
 using DataAccessLayer.Recources;
 using KuaiexDashboard.Filters;
+using KuaiexDashboard.Services.DashboardServices;
+using KuaiexDashboard.Services.DashboardServices.Impl;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
+using DataAccessLayer.DomainEntities;
 using System.Web.Mvc;
 
 namespace KuaiexDashboard.Controllers
@@ -13,9 +15,12 @@ namespace KuaiexDashboard.Controllers
     [AuthorizeFilter]
     public class DashboardController : Controller
     {
-        DashboardDAL objDashDal = new DashboardDAL();
+        private readonly IDashboardService _dashboardService;
+        public DashboardController()
+        {
+            _dashboardService = new DashboardService();
+        }
 
-        // GET: Dashboard
         public ActionResult Index()
         {
             return View();
@@ -25,7 +30,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                List<GetCurrencyRate_Result> result = objDashDal.GetCurrencyRates();
+                List<GetCurrencyRate_Result> result = _dashboardService.GetCurrencyRates();
                 status = Newtonsoft.Json.JsonConvert.SerializeObject(result.Take(10));
             }
             catch (Exception ex)
@@ -40,7 +45,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                var result = objDashDal.GetTotalCustomerCount();
+                var result = _dashboardService.GetTotalCustomerCount();
                 status = result.ToString();
             }
             catch (Exception ex)
@@ -56,7 +61,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                var result = objDashDal.GetTodayCustomerCount();
+                var result = _dashboardService.GetTodayCustomerCount();
                 status = result.ToString();
             }
             catch (Exception ex)
@@ -71,7 +76,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                var result = objDashDal.GetTotalCustomerReviewedCount();
+                var result = _dashboardService.GetTotalCustomerReviewedCount();
                 status = result.ToString();
             }
             catch (Exception ex)
@@ -86,7 +91,7 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                var result = objDashDal.GetTodayCustomerReviewedCount();
+                var result = _dashboardService.GetTodayCustomerReviewedCount();
                 status = result.ToString();
             }
             catch (Exception ex)
