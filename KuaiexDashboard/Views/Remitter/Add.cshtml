@@ -38,7 +38,7 @@
         <div class="ibox">
             <div class="ibox-heading">
                 <div class="ibox-title">
-                    <h2><i class="fa fa-users"></i>&nbsp; Add/Edit Remitter</h2>
+                    <h2><i class="fa fa-users"></i>&nbsp; Edit Remitter</h2>
                 </div>
             </div>
             <div class="ibox ibox-content">
@@ -75,7 +75,17 @@
                                     <small><span class="text-danger required-text" id="ValName"></span></small>
                                     <input type="text" id="Name" placeholder="Enter Name" class="form-control validate" name="Name" data-validation-target=".text-danger">
                                 </div>
-                            </div><div class="col-lg-6 col-md-6 col-sm-6">
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label for="Email_Address">
+                                        Email <span style="color:red;">*</span>
+                                        <span style="color:green; font-weight:bold; font-size:0.8em;">(Verified)</span>
+                                    </label>                                    <small><span class="text-danger required-text" id="ValEmail_Address"></span></small>
+                                    <input type="text" id="Email_Address" placeholder="Enter Email" class="form-control validate" name="Email_Address" data-validation-target=".text-danger">
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="form-group">
                                     <label>Occupation</label>
                                     <input type="text" id="Occupation" placeholder="Enter Occupation" class="form-control validate" name="Occupation" data-validation-target=".text-danger">
@@ -83,14 +93,21 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="form-group">
-                                    <label>Employer<span style="color:red;">*</span></label>
+                                    <label>Employer</label>
                                     <small><span class="text-danger required-text" id="ValEmployer"></span></small>
                                     <input type="text" id="Employer" placeholder="Enter Empoyer" class="form-control validate" name="Employer" data-validation-target=".text-danger">
                                 </div>
                             </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <label>Gender<span style="color:red;">*</span></label>
+                                    <small><span class="text-danger required-text" id="ValGender"></span></small>
+                                    <select class="form-control chzn" id="Gender" name="Gender"></select>
+                                </div>
+                            </div>
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <div class="form-group">
-                                    <label style="margin-top:5px">Is Profile Completed</label>
+                                    <label style="margin-top:5px">Profile Completed</label>
                                     <div class="i-checks">
                                         <label>
                                             <input type="checkbox" class="icheckbox_square-green" id="Is_Profile_Completed" name="Is_Profile_Completed" disabled />
@@ -102,7 +119,7 @@
                             </div>
                             <div class="col-lg-3 col-md-3 col-sm-3">
                                 <div class="form-group">
-                                    <label style="margin-top:5px">Is Reviewed</label>
+                                    <label style="margin-top:5px">Reviewed</label>
                                     <div class="i-checks">
                                         <label>
                                             <input type="checkbox" class="icheckbox_square-green" id="IsReviwed" name="IsReviwed" />
@@ -112,6 +129,7 @@
                                     </div>
                                 </div>
                             </div>
+
                         </div>
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="col-lg-6 col-md-6 col-sm-6">
@@ -133,22 +151,22 @@
                                     <input type="text" id="Street" placeholder="Enter  Street" class="form-control" name="Street">
                                 </div>
                             </div>
+                            @*       <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Building</label>
+                                        <input type="text" id="Building" placeholder="Enter Building" class="form-control" name="Building">
+                                    </div>
+                                </div>*@
+                            @* <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Floor</label>
+                                        <input type="text" id="Floor" placeholder="Enter  Floor" class="form-control" name="Floor">
+                                    </div>
+                                </div>*@
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="form-group">
-                                    <label>Building</label>
-                                    <input type="text" id="Building" placeholder="Enter Building" class="form-control" name="Building">
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="form-group">
-                                    <label>Floor</label>
-                                    <input type="text" id="Floor" placeholder="Enter  Floor" class="form-control" name="Floor">
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="form-group">
-                                    <label>Flat</label>
-                                    <input type="text" id="Flat" placeholder="Enter Flat" class="form-control" name="Flat">
+                                    <label>House Number</label>
+                                    <input type="text" id="Flat" placeholder="Enter House Number" class="form-control" name="Flat">
                                 </div>
                             </div>
                         </div>
@@ -206,7 +224,8 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="form-group">
-                                    <label>Kuwait Residence Type</label>
+                                    <label>Kuwait Residence Type<span style="color:red;">*</span></label>
+                                    <small><span class="text-danger required-text" id="ValResidence_Type"></span></small>
                                     <select class="form-control chzn" id="Residence_Type" name="Residence_Type"></select>
                                 </div>
                             </div>
@@ -215,7 +234,7 @@
                         <div class="col-lg-6 col-md-6 col-sm-6">
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="form-group">
-                                    <label>Mobile No<span style="color:red;">*</span></label>
+                                    <label>Mobile No<span style="color:red;">*</span><span style="color:green; font-weight:bold; font-size:0.8em;">(Verified)</span></label>
                                     <small><span class="text-danger required-text" id="ValMobile_No"></span></small>
                                     <input type="text" id="Mobile_No" placeholder="Enter Mobile No" class="form-control" name="Mobile_No">
                                 </div>
@@ -223,7 +242,7 @@
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="form-group">
                                     <label>Telephone No</label>
-                                    <input type="text" id="Telephone_No" placeholder="Enter  Telephone No" class="form-control" name="Telephone_No">
+                                    <input type="text" id="Telephone_No" placeholder="Enter Telephone No" class="form-control" name="Telephone_No">
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
@@ -244,17 +263,18 @@
                             </div>
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="form-group">
-                                    <label>Birth Place</label>
-                                    <input type="text" id="Birth_Place" placeholder="Enter Birth Place" class="form-control" name="Birth_Place">
-                                </div>
-                            </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="form-group">
-                                    <label>Birth Country</label>
-                                    <select class="form-control chzn" id="Birth_Country" name="Birth_Country"></select>
+                                    <label>Place Of Birth</label>
+                                    <select class="form-control chzn" id="Birth_Place" name="Birth_Place"></select>
 
                                 </div>
                             </div>
+                            @*<div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Birth Country</label>
+                                        <select class="form-control chzn" id="Birth_Country" name="Birth_Country"></select>
+
+                                    </div>
+                                </div>*@
 
                         </div>
 
@@ -266,10 +286,17 @@
                                     </div>
                                 </div>
                             </div>
+                            @* <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="ibox-heading">
+                                        <div class="ibox-title-section">
+                                            <h3>Transaction Limits</h3>
+                                        </div>
+                                    </div>
+                                </div>*@
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="ibox-heading">
                                     <div class="ibox-title-section">
-                                        <h3>Transaction Limits</h3>
+                                        <h3>Documents</h3>
                                     </div>
                                 </div>
                             </div>
@@ -278,14 +305,31 @@
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
-                                        <label>Expected Monthly Trans Count</label>
+                                        <label>Expected Monthly Trans Count<span style="color:red;">*</span></label>
+                                        <small><span class="text-danger required-text" id="ValExpected_Monthly_Trans_Count"></span></small>
                                         <select class="form-control chzn" id="Expected_Monthly_Trans_Count" name="Expected_Monthly_Trans_Count"></select>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
-                                        <label>Monthly Salary/Income</label>
+                                        <label>Expected Monthly Trans Amount<span style="color:red;">*</span></label>
+                                        <small><span class="text-danger required-text" id="ValMonthly_Trans_Limit"></span></small>
+                                        <select class="form-control chzn" id="Monthly_Trans_Limit" name="Monthly_Trans_Limit"></select>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Monthly Salary/Income<span style="color:red;">*</span></label>
+                                        <small><span class="text-danger required-text" id="ValMonthly_Income"></span></small>
                                         <input type="text" id="Monthly_Income" placeholder="Enter Salary/Income" class="form-control" name="Monthly_Income">
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Source Of Income<span style="color:red;">*</span></label>
+                                        <small><span class="text-danger required-text" id="ValSource_Of_Income"></span></small>
+                                        <input type="text" id="Source_Of_Income" placeholder="Enter Source Of Income" class="form-control" name="Source_Of_Income">
                                     </div>
                                 </div>
 
@@ -305,47 +349,76 @@
                             <div class="col-lg-6 col-md-6 col-sm-6">
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
-                                        <label>Monthly  Trans Limit</label>
-                                        <input type="text" id="Monthly_Trans_Limit" placeholder="Enter Monthly Trans Limit" class="form-control" name="Monthly_Trans_Limit">
+                                        <label>Civil Id Front</label>
+                                        <input type="file" name="Civil_Id_Front" id="Civil_Id_Front" onchange="imgvalid()" class="form-control-file">
+                                        <span id="Successimg"></span>
+                                    </div>
+                                </div>
 
+                                <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="form-group">
+                                        <label>Civil Id Back</label>
+                                        <input type="file" name="Civil_Id_Back" id="Civil_Id_Back" onchange="imgvalid()" class="form-control-file">
+                                        <span id="Successimg"></span>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
-                                        <label>Yearly Trans Limit</label>
-                                        <input type="text" id="Yearly_Trans_Limit" placeholder="Enter Yearly Trans Limit" class="form-control" name="Yearly_Trans_Limit">
-
+                                        <div id="imagePreviewCivil_Id_Front"></div>
+                                        <button type="button" id="removeCivil_Id_Front" class="btn btn-danger"
+                                                style="display:none; margin-top: 10px; font-size: 12px; padding: 5px 10px;">
+                                            Remove
+                                        </button>
                                     </div>
                                 </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6">
                                     <div class="form-group">
-                                        <label>Compliance Limit</label>
-                                        <input type="text" id="Compliance_Limit" placeholder="Enter Compliance Limit" class="form-control" name="Compliance_Limit">
-
+                                        <div id="imagePreviewCivil_Id_Back"></div>
+                                        <button type="button" id="removeCivil_Id_Back" class="btn btn-danger"
+                                                style="display:none; margin-top: 10px; font-size: 12px; padding: 5px 10px;">
+                                            Remove
+                                        </button>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Compliance Trans  Count</label>
-                                        <input type="text" id="Compliance_Trans_Count" placeholder="Enter Compliance  Trans  Count" class="form-control" name="Compliance_Trans_Count">
+                                <input type="hidden" id="existingImage" name="existingImage" value="" />
 
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="form-group" id="data_2">
-                                        <label class="font-normal">Compliance Limit Expiry</label>
-                                        <div class="input-group date">
-                                            <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" id="Compliance_Limit_Expiry" name="Compliance_Limit_Expiry">
+                                @*
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            <label>Yearly Trans Limit</label>
+                                            <input type="text" id="Yearly_Trans_Limit" placeholder="Enter Yearly Trans Limit" class="form-control" name="Yearly_Trans_Limit">
+
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Compliance  Comments</label>
-                                        <input type="text" id="Compliance_Comments" placeholder="Enter Compliance Comments" class="form-control" name="Compliance_Comments">
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            <label>Compliance Limit</label>
+                                            <input type="text" id="Compliance_Limit" placeholder="Enter Compliance Limit" class="form-control" name="Compliance_Limit">
 
+                                        </div>
                                     </div>
-                                </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            <label>Compliance Trans  Count</label>
+                                            <input type="text" id="Compliance_Trans_Count" placeholder="Enter Compliance  Trans  Count" class="form-control" name="Compliance_Trans_Count">
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="form-group" id="data_2">
+                                            <label class="font-normal">Compliance Limit Expiry</label>
+                                            <div class="input-group date">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input type="text" class="form-control" id="Compliance_Limit_Expiry" name="Compliance_Limit_Expiry">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            <label>Compliance  Comments</label>
+                                            <input type="text" id="Compliance_Comments" placeholder="Enter Compliance Comments" class="form-control" name="Compliance_Comments">
+
+                                        </div>
+                                    </div>*@
                             </div>
                         </div>
 
@@ -381,13 +454,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="ibox-heading">
-                                    <div class="ibox-title-section">
-                                        <h3>Security Question</h3>
-                                    </div>
-                                </div>
-                            </div>
+
                         </div>
                         <div class="row">
                             <div class="col-lg-6 col-md-6 col-sm-6">
@@ -492,88 +559,81 @@
 
 
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6">
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Security Question 1<span style="color:red;">*</span></label>
-                                        <small><span class="text-danger required-text" id="ValSecurity_Question_Id_1"></span></small>
-                                        <select class="form-control chzn" id="Security_Question_Id_1" name="Security_Question_Id_1"></select>
+                            @*                            <div class="col-lg-6 col-md-6 col-sm-6">
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            <label>Security Question 1<span style="color:red;">*</span></label>
+                                            <small><span class="text-danger required-text" id="ValSecurity_Question_Id_1"></span></small>
+                                            <select class="form-control chzn" id="Security_Question_Id_1" name="Security_Question_Id_1"></select>
 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Security Answer 1<span style="color:red;">*</span></label>
-                                        <small><span class="text-danger required-text" id="ValSecurity_Answer_1"></span></small>
-                                        <input type="text" id="Security_Answer_1" placeholder="Enter Security Answer 1" class="form-control" name="Security_Answer_1">
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            <label>Security Answer 1<span style="color:red;">*</span></label>
+                                            <small><span class="text-danger required-text" id="ValSecurity_Answer_1"></span></small>
+                                            <input type="text" id="Security_Answer_1" placeholder="Enter Security Answer 1" class="form-control" name="Security_Answer_1">
 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Security Question 2<span style="color:red;">*</span></label>
-                                        <small><span class="text-danger required-text" id="ValSecurity_Question_Id_2"></span></small>
-                                        <select class="form-control chzn" id="Security_Question_Id_2" name="Security_Question_Id_2"></select>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            <label>Security Question 2<span style="color:red;">*</span></label>
+                                            <small><span class="text-danger required-text" id="ValSecurity_Question_Id_2"></span></small>
+                                            <select class="form-control chzn" id="Security_Question_Id_2" name="Security_Question_Id_2"></select>
 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Security Answer 2<span style="color:red;">*</span></label>
-                                        <small><span class="text-danger required-text" id="ValSecurity_Answer_2"></span></small>
-                                        <input type="text" id="Security_Answer_2" placeholder="Enter Security Answer 2" class="form-control" name="Security_Answer_2">
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            <label>Security Answer 2<span style="color:red;">*</span></label>
+                                            <small><span class="text-danger required-text" id="ValSecurity_Answer_2"></span></small>
+                                            <input type="text" id="Security_Answer_2" placeholder="Enter Security Answer 2" class="form-control" name="Security_Answer_2">
 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Security_Question  3<span style="color:red;">*</span></label>
-                                        <small><span class="text-danger required-text" id="ValSecurity_Question_Id_3"></span></small>
-                                        <select class="form-control chzn" id="Security_Question_Id_3" name="Security_Question_Id_3"></select>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            <label>Security_Question  3<span style="color:red;">*</span></label>
+                                            <small><span class="text-danger required-text" id="ValSecurity_Question_Id_3"></span></small>
+                                            <select class="form-control chzn" id="Security_Question_Id_3" name="Security_Question_Id_3"></select>
 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Security Answer 3<span style="color:red;">*</span></label>
-                                        <small><span class="text-danger required-text" id="ValSecurity_Answer_3"></span></small>
-                                        <input type="text" id="Security_Answer_3" placeholder="Enter Security Answer 3" class="form-control" name="Security_Answer_3">
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            <label>Security Answer 3<span style="color:red;">*</span></label>
+                                            <small><span class="text-danger required-text" id="ValSecurity_Answer_3"></span></small>
+                                            <input type="text" id="Security_Answer_3" placeholder="Enter Security Answer 3" class="form-control" name="Security_Answer_3">
 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Civil Id Front</label>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            <label>Civil Id Front</label>
 
-                                        <input type="file" name="Civil_Id_Front" id="Civil_Id_Front" onchange="imgvalid()" class="form-control-file">
-                                        <span id="Successimg"></span>
+                                            <input type="file" name="Civil_Id_Front" id="Civil_Id_Front" onchange="imgvalid()" class="form-control-file">
+                                            <span id="Successimg"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="form-group">
-                                        <label>Civil Id Back</label>
-                                        <input type="file" name="Civil_Id_Back" id="Civil_Id_Back" onchange="imgvalid()" class="form-control-file">
-                                        <span id="Successimg"></span>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            <label>Civil Id Back</label>
+                                            <input type="file" name="Civil_Id_Back" id="Civil_Id_Back" onchange="imgvalid()" class="form-control-file">
+                                            <span id="Successimg"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="form-group">
-                                        <div id="imagePreviewCivil_Id_Front"></div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-6 col-md-6 col-sm-6">
-                                    <div class="form-group">
-                                        <div id="imagePreviewCivil_Id_Back"></div>
-                                    </div>
-                                </div>
-                            </div>
+
+                                </div>*@
 
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-12 col-md-12 col-sm-12">
                             <a id="btn-save" name="btn-save" class="btn btn-primary pull-right"><i class="fa fa-save"></i>&nbsp; Save</a>
-                            <a id="btn-refresh" name="btn-refresh" class="btn btn-info pull-right" style="margin-right:5px;"><i class="fa fa-refresh"></i>&nbsp; Reset</a>
+                            <a id="btn-back" name="btn-back" class="btn btn-info pull-right" style="margin-right:5px;">
+                                <i class="fa fa-arrow-left"></i>&nbsp; Back
+                            </a>
                         </div>
                     </div>
                 </form>

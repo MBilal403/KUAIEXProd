@@ -296,9 +296,9 @@ namespace KuaiexDashboard.Controllers
             string status = "error";
             try
             {
-                var customer = _remitterService.GetCustomerByUID(CUID);
-                var lstbeneficiary = _beneficiaryService.GetBeneficiariesByCustomerID(customer.Customer_Id);
-                status = Newtonsoft.Json.JsonConvert.SerializeObject(lstbeneficiary);
+                int customerId = _remitterService.GetCustomerIdByUID(CUID);
+                var lstbeneficiary = _beneficiaryService.GetBeneficiariesByCustomerID(customerId);
+                status = JsonConvert.SerializeObject(lstbeneficiary);
             }
             catch (Exception ex)
             {
@@ -377,10 +377,10 @@ namespace KuaiexDashboard.Controllers
 
             try
             {
-                var customer = _remitterService.GetCustomerByUID(objBeneficiary.UID);
-                if (customer != null)
+                int customerId = _remitterService.GetCustomerIdByUID(objBeneficiary.UID);
+                if (customerId != 0)
                 {
-                    objBeneficiary.Customer_Id = customer.Customer_Id;
+                    objBeneficiary.Customer_Id = customerId;
                     status = _beneficiaryService.AddBeneficiary(objBeneficiary);
                 }
             }
@@ -424,38 +424,38 @@ namespace KuaiexDashboard.Controllers
 
             return Content(status);
         }
-       /* public ActionResult SynchronizeRecords()
-        {
-            int status = 0;
-            int Counter = 0;
-            try
-            {
-                BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL();
+        /* public ActionResult SynchronizeRecords()
+         {
+             int status = 0;
+             int Counter = 0;
+             try
+             {
+                 BeneficiaryDAL objBeneficiaryDal = new BeneficiaryDAL();
 
-                List<Beneficiary> lst = objBeneficiaryDal.GetAllBeneficiary();
+                 List<Beneficiary> lst = objBeneficiaryDal.GetAllBeneficiary();
 
-                foreach (var item in lst)
-                {
-                    Beneficiary obj = objBeneficiaryDal.GetBeneficiaryByUID(item.UID);
-                    if (obj.Prod_Beneficiary_Id == null || obj.Prod_Beneficiary_Id <= 0)
-                    {
-                        Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
-                        obj.Prod_Beneficiary_Id = objKuaiex_Prod.GetRemittanceIdByIdentificationNumber(obj.Identification_No);
+                 foreach (var item in lst)
+                 {
+                     Beneficiary obj = objBeneficiaryDal.GetBeneficiaryByUID(item.UID);
+                     if (obj.Prod_Beneficiary_Id == null || obj.Prod_Beneficiary_Id <= 0)
+                     {
+                         Kuaiex_Prod objKuaiex_Prod = new Kuaiex_Prod();
+                         obj.Prod_Beneficiary_Id = objKuaiex_Prod.GetRemittanceIdByIdentificationNumber(obj.Identification_No);
 
-                        if (obj.Prod_Beneficiary_Id > 0)
-                        {
-                            Counter++;
-                            objBeneficiaryDal.EditBeneficiary(obj);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Log.Error(@"{Message}: {e}", ex.Message, ex);
-            }
+                         if (obj.Prod_Beneficiary_Id > 0)
+                         {
+                             Counter++;
+                             objBeneficiaryDal.EditBeneficiary(obj);
+                         }
+                     }
+                 }
+             }
+             catch (Exception ex)
+             {
+                 Log.Error(@"{Message}: {e}", ex.Message, ex);
+             }
 
-            return Content(status.ToString());
-        }*/
+             return Content(status.ToString());
+         }*/
     }
 }

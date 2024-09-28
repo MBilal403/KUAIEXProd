@@ -1,4 +1,4 @@
-﻿
+﻿var jsonString;
 $(document).ready(function () {
 
     LoadGridData();
@@ -9,10 +9,42 @@ $(document).ready(function () {
     $(document).ajaxComplete(function () {
         $("#wait").css("display", "none");
     });
+    $('#btnsearch').on('click', function (event) {
+        event.preventDefault();
+
+        var name = $('#Name').val().trim();
+        var identificationNumber = $('#Identification_Number').val().trim();
+
+        var searchCriteria = {
+            Name: name !== "" ? name : null,
+            Identification_Number: identificationNumber !== "" ? identificationNumber : null
+        };
+        if (searchCriteria.Name === null && searchCriteria.Identification_Number === null) {
+            alert("Both fields are empty. Please enter at least one search criterion.");
+            jsonString = null;
+            return;
+        }
+
+        jsonString = JSON.stringify(searchCriteria);
+
+        console.log(jsonString);
+        $('#tblUsers').DataTable().draw();
+
+    });
+
+    $('#btnclear').on('click', function () {
+        // Clear the input fields
+        $('#Name').val('');
+        $('#Identification_Number').val('');
+
+        // Set jsonString to null
+        jsonString = null;
+
+        $('#tblUsers').DataTable().draw();
+    });
+
 });
 
-
-//edit method
 $(document).on('click', '.btn-bene', function () {
     var uid = $(this).attr('id');
     window.location = "../Beneficiary/Index?UID=" + uid;
@@ -22,43 +54,66 @@ $(document).on('click', '.btn-edit', function () {
     window.location = "../Remitter/Add?UID=" + uid;
 });
 
+var fetchGridData = function (callback, settings) {
+    //console.log(settings)
+    var requestData = {
+        start: settings._iDisplayStart,
+        length: settings._iDisplayLength,
+        //search: settings.oPreviousSearch.sSearch,
+        search: jsonString,
+        order: settings.aaSorting,
+        columns: settings.aoColumns.map(function (col) {
+            return {
+                data: col.data,
+                searchable: col.bSearchable,
+                orderable: col.bSortable,
+                search: col.sSearch
+            };
+        })
+    };
+    console.log(requestData)
 
+    $.ajax({
+        url: "../Remitter/LoadGrid",
+        type: "POST",
+        data: requestData,
+        success: function (response) {
+            callback({
+                draw: settings.iDraw,
+                recordsTotal: response.recordsTotal,
+                recordsFiltered: response.recordsFiltered,
+                data: response.data
+            });
+        },
+        error: function (xhr, status, error) {
+            console.log("Error fetching data: ", error);
+        }
+    });
+};
 var LoadGridData = function () {
     $('#tblUsers').DataTable({
         "destroy": true,
         "lengthMenu": [10, 25, 50, 100],
-        "sAjaxSource": "../Remitter/LoadGrid",
-        "bServerSide": true,
-        "bProcessing": true,
+        "processing": true,
+        "serverSide": true,
+        "responsive": true,
+        "dom": '<"row"<"col-sm-6"l><"col-sm-6 text-right">>rtip',
         "paging": true,
         "order": [[1, 'asc']],
         "language": {
             "emptyTable": "No record found."
         },
+        "ajax": function (data, callback, settings) {
+            fetchGridData(callback, settings);
+        },
         "columns": [
-            {
-                "data": "Name",
-                "autoWidth": true,
-                "searchable": true
-            },
-            {
-                "data": "Description",
-                "autoWidth": true,
-                "searchable": true
-            },
-            {
-                "data": "Identification_Number",
-                "autoWidth": true,
-                "searchable": true
-            },
-            {
-                "data": "Email_Address",
-                "autoWidth": true,
-                "searchable": true
-            },
+            { "data": "Name", "autoWidth": true, "searchable": true },
+            { "data": "Description", "autoWidth": true, "searchable": true },
+            { "data": "Identification_Number", "autoWidth": true, "searchable": true },
+            { "data": "Email_Address", "autoWidth": true, "searchable": true },
             {
                 "data": "Identification_Expiry_Date",
-                "render": function (data, type, row) {
+                "render": function (data) {
                     var timestamp = parseInt(data.match(/\d+/)[0]);
                     var date = new Date(timestamp);
                     return date.toLocaleDateString();
@@ -68,41 +123,32 @@ var LoadGridData = function () {
             },
             {
                 "data": "IsReviwed",
-                "render": function (data, type, row) {
-                    var statusLabel = data == 1 ? '<span class="label label-success label-xs" style="display: inline-block; text-align: center; ">Active</span>' : '<span class="label label-danger label-xs" style="display: inline-block; text-align: center; width: 100px;">In Active</span>';
-
-                    return statusLabel;
+                "render": function (data) {
+                    return data == 1 ?
+                        '<span class="label label-success label-xs">Active</span>' :
+                        '<span class="label label-danger label-xs">Inactive</span>';
                 },
                 "autoWidth": true,
                 "searchable": true
             },
             {
                 "data": "UID",
-                "render": function (data, type, row) {
-                    return '<div class="btn-group">' +
-                        '<button id=' + data + ' class="btn btn-warning btn-xs btn-edit">' +
-                        '<i class="fa fa-edit"></i> Edit' +
-                        '</button>';
+                "render": function (data) {
+                    return '<button id=' + data + ' class="btn btn-warning btn-xs btn-edit"><i class="fa fa-edit"></i> Edit</button>';
                 },
-                "autoWidth": true
+                "autoWidth": true, "orderable": false 
             },
             {
                 "data": "UID",
-                "render": function (data, type, row) {
-                    return '<button id=' + data + ' class="btn btn-warning btn-xs btn-bene">' +
-                        '<i class="fa fa-edit"></i> Beneficiaries' +
-                        '</button>' +
-                        '</div>';
+                "render": function (data) {
+                    return '<button id=' + data + ' class="btn btn-warning btn-xs btn-bene"><i class="fa fa-edit"></i> Beneficiaries</button>';
                 },
-                "autoWidth": true
+                "autoWidth": true, "orderable": false 
             }
-
-
         ]
     });
+
 };
-
-
 
 $(document).on('click', '.btn-unblock', function () {
     //alert("Testing");

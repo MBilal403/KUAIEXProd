@@ -37,6 +37,9 @@
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
       <HintPath>..\packages\Serilog.3.1.1\lib\netstandard2.0\Serilog.dll</HintPath>
     </Reference>
@@ -133,6 +136,7 @@
     <Compile Include="Entities\Currency.cs" />
     <Compile Include="Entities\Customer.cs" />
     <Compile Include="Entities\Customer_Security_Questions.cs" />
+    <Compile Include="Entities\Gender_Lookup.cs" />
     <Compile Include="Entities\IdentificationTypeLookup.cs" />
     <Compile Include="Entities\Individual_KYC.cs" />
     <Compile Include="Entities\Relationship_Lookup.cs" />
@@ -144,9 +148,12 @@
     <Compile Include="Entities\SecurityQuestions.cs" />
     <Compile Include="Entities\Source_Of_Income_Lookup.cs" />
     <Compile Include="Entities\Terms_and_Privacy.cs" />
+    <Compile Include="Entities\Transaction_Amount_Lookup.cs" />
     <Compile Include="Entities\Transaction_Count_Lookup.cs" />
     <Compile Include="Helpers\ConditionToWhereClauseConverter.cs" />
     <Compile Include="Helpers\CustomHtmlHelpers.cs" />
+    <Compile Include="Helpers\DataTableParams.cs" />
+    <Compile Include="Helpers\ImageUploadUtility.cs" />
     <Compile Include="Helpers\JqueryDatatableParam.cs" />
     <Compile Include="Helpers\Strings.cs" />
     <Compile Include="Kuaiex_Prod.cs" />

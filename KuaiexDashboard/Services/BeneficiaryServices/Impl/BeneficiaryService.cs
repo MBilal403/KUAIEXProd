@@ -39,7 +39,7 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             {
                 Beneficiary beneficiary = new Beneficiary();
                 BeneficiaryDAL objBeneficiaryDAL = new BeneficiaryDAL();
-                int existenceStatus = objBeneficiaryDAL.CheckBeneficiaryExistence(beneficiaryDto.FullName);
+                int existenceStatus = objBeneficiaryDAL.CheckBeneficiaryExistence(beneficiaryDto.FirstName);
 
                 if (existenceStatus == 1)
                 {
@@ -73,12 +73,11 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
                     {
                         return MsgKeys.CreatedSuccessfully;
                     }
-                    return "error";
+                    return MsgKeys.Error;
                 }
             }
             catch (Exception ex)
             {
-                // throw the exception to propagate it up the call stack
                 throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
 
@@ -92,7 +91,6 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             }
             catch (Exception ex)
             {
-                // throw the exception to propagate it up the call stack
                 throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
 
@@ -105,7 +103,6 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             }
             catch (Exception ex)
             {
-                // throw the exception to propagate it up the call stack
                 throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
         }
@@ -119,7 +116,6 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             }
             catch (Exception ex)
             {
-                // throw the exception to propagate it up the call stack
                 throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
         }
@@ -131,7 +127,6 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             }
             catch (Exception ex)
             {
-                // throw the exception to propagate it up the call stack
                 throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
         }
@@ -143,7 +138,6 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             }
             catch (Exception ex)
             {
-                // throw the exception to propagate it up the call stack
                 throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
         }
@@ -157,7 +151,6 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             }
             catch (Exception ex)
             {
-                // throw the exception to propagate it up the call stack
                 throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
         }
@@ -188,7 +181,6 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             }
             catch (Exception ex)
             {
-                // throw the exception to propagate it up the call stack
                 throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
         }
@@ -202,7 +194,7 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
 
                 if (existingBeneficiary != null)
                 {
-                    existingBeneficiary.FullName = beneficiary.FullName;
+                    existingBeneficiary.FirstName = beneficiary.FirstName;
                     existingBeneficiary.Country_Id = beneficiary.Country_Id;
                     existingBeneficiary.Currency_Id = beneficiary.Currency_Id;
                     existingBeneficiary.Nationality_Id = beneficiary.Nationality_Id;
@@ -247,7 +239,6 @@ namespace KuaiexDashboard.Services.BeneficiaryServices.Impl
             }
             catch (Exception ex)
             {
-                // throw the exception to propagate it up the call stack
                 throw;
             }
         }

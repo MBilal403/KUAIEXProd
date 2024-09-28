@@ -94,6 +94,20 @@ namespace KuaiexDashboard.Services.CityServices.Impl
                 throw new Exception(MsgKeys.SomethingWentWrong, ex);
             }
         }
+
+        public List<City> GetKuwaitActiveCities(int countryId)
+        {
+            try
+            {
+                List<City> listCities = _cityRepository.GetAll(x => x.Status == 1 && x.Country_Id == countryId, x => x.Id, x => x.Name);
+                return listCities;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw new Exception(MsgKeys.SomethingWentWrong, ex);
+            }
+        }
         public PagedResult<GetCityList_Result> GetActiveCities(JqueryDatatableParam param, int countryId)
         {
             try
@@ -166,8 +180,9 @@ namespace KuaiexDashboard.Services.CityServices.Impl
                     string CityName = Strings.EscapeSingleQuotes(item.English_Name);
                     int CountryId = item.Country_Id;
                     Country country = countries.Find(x => x.Prod_Country_Id == CountryId);
-                    if (country == null) {
-                        foreach (var pendingCountry in countries.Where(x=> x.Prod_Country_Ids != null))
+                    if (country == null)
+                    {
+                        foreach (var pendingCountry in countries.Where(x => x.Prod_Country_Ids != null))
                         {
                             int[] countryIdsInt = pendingCountry.Prod_Country_Ids?.Split(',').Select(int.Parse).ToArray();
 
@@ -185,7 +200,7 @@ namespace KuaiexDashboard.Services.CityServices.Impl
                         var pendingCities = prodCities.Where(x => x.English_Name == item.English_Name && x.Country_Id == item.Country_Id).ToList();
                         if (pendingCities.Count > 1)
                         {
-                            city.Prod_City_Ids =   string.Join(",", pendingCities.Select(x => x.City_Id.ToString()));
+                            city.Prod_City_Ids = string.Join(",", pendingCities.Select(x => x.City_Id.ToString()));
                         }
                         city.Name = item.English_Name;
                         city.Status = item.Record_Status == "A" ? 1 : 0;

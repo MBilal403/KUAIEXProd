@@ -1,15 +1,93 @@
 ﻿var IsEditMode = false;
 
+var apiUrls = {
+    identificationType: '../Remitter/LoadIdentificationType',
+    residencyType: '../Remitter/LoadResidencyType',
+    country: '../Remitter/LoadCountry',
+    nationality: '../Remitter/LoadCountry',
+    area: '../Remitter/GetKuwaitActiveCities',
+    expectedMonthlyTransCount: '../Remitter/LoadExpectTrancationsCount',
+    expectTrancationsAmount: '../Remitter/LoadExpectTrancationsAmount',
+    genderTypes: '../Remitter/LoadGenderTypes',
+};
+
+var utilities = {
+    // Generalized function to load dropdown data
+    loadDropdownData: function (url, fieldSelector, optionText, valueField, textField) {
+        $.ajax({
+            type: "POST",
+            cache: false,
+            async: false,
+            url: url,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                var items = JSON.parse(data);
+                var $dropdown = $(fieldSelector);
+
+                // Clear current options
+                $dropdown.empty();
+
+                // Add new options if data exists
+                if (items.length > 0) {
+                    $dropdown.append('<option value="">' + optionText + '</option>');
+                    $.each(items, function (idx, obj) {
+                        $dropdown.append('<option value="' + obj[valueField] + '">' + obj[textField] + '</option>');
+                    });
+                } else {
+                    $dropdown.append('<option value="">' + optionText + '</option>');
+                }
+
+                // Update UI elements (for Chosen, Select2, etc.)
+                $dropdown.trigger("liszt:updated");
+                $dropdown.chosen();
+            },
+            error: function (xhr, status, error) {
+                console.error("Error loading data from: " + url, error);
+            }
+        });
+    },
+    // Generalized function to ajaxRequest
+    ajaxRequest: function (url, method = 'GET', data = null, onSuccess = null, onError = null, retries = 3, isFormData = false) {
+        $.ajax({
+            url: url,
+            type: method,
+            contentType: isFormData ? false : "application/json; charset=utf-8",
+            processData: !isFormData,
+            dataType: "json",
+            data: isFormData ? data : method === 'GET' ? data : JSON.stringify(data),
+            success: function (response) {
+                if (onSuccess && typeof onSuccess === 'function') {
+                    onSuccess(response);
+                }
+            },
+            error: function (xhr, status, error) {
+                if (retries > 0) {
+                    console.warn(`Retrying... Attempts left: ${retries}`);
+                    ajaxRequest(url, method, data, onSuccess, onError, retries - 1, isFormData);
+                } else {
+                    console.error("Error occurred at " + url + ": ", {
+                        status: status,
+                        error: error,
+                        xhr: xhr.responseText
+                    });
+                    if (onError && typeof onError === 'function') {
+                        onError(xhr, status, error);
+                    } else {
+                        swal("Error", "AJAX Error", "error");
+                    }
+                }
+            }
+        });
+    }
+
+};
 $(document).ready(function () {
+
+    initDropdowns();
     handleStaff();
     KYCCheckBoxes();
-    LoadIdentificationType();
-    LoadResidencyType();
-    LoadCountry();
-    LoadNationality();
-    LoadQuestions();
-    LoadCity();
-    LoadExpectTrancationsCount();
+
 
     var urlParams = new URLSearchParams(window.location.search);
     var uidParam = urlParams.get('UID');
@@ -19,8 +97,9 @@ $(document).ready(function () {
         editUserById(uidParam);
 
     }
-
-
+    $('#btn-back').on('click', function () {
+        window.history.back();  // Go back to the previous page
+    });
 
     $('#data_2 .input-group.date').datepicker({
         startView: 1,
@@ -38,51 +117,88 @@ $(document).ready(function () {
             $("#other_Detail").prop('disabled', true).val('');
         }
     });
+
+    // Civil Id Front
     $('#Civil_Id_Front').change(function () {
         imagePreviewCivil_Id_Front(this);
     });
+
+    $('#removeCivil_Id_Front').click(function () {
+        removeCivilIdFront();
+    });
+
+    function imagePreviewCivil_Id_Front(input) {
+        const imagePreviewCivil_Id_Front = $('#imagePreviewCivil_Id_Front');
+        const removeButton = $('#removeCivil_Id_Front');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                imagePreviewCivil_Id_Front.html(`<img src="${e.target.result}" alt="Selected Image" width="200">`);
+                removeButton.show();
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            imagePreviewCivil_Id_Front.html('');
+
+            removeButton.hide(); // Hide the remove button if no image is selected
+        }
+    }
+
+    function removeCivilIdFront() {
+        const inputFile = $('#Civil_Id_Front');
+        const imagePreviewCivil_Id_Front = $('#imagePreviewCivil_Id_Front');
+        const removeButton = $('#removeCivil_Id_Front');
+
+        inputFile.val(''); // Clear the file input value
+        imagePreviewCivil_Id_Front.html('<p>No image</p>'); // Show "No image"
+        removeButton.hide(); // Hide the remove button
+    }
+
+    // Civil Id Back
     $('#Civil_Id_Back').change(function () {
         imagePreviewCivil_Id_Back(this);
     });
-    function imagePreviewCivil_Id_Front(input) {
-        const imagePreviewCivil_Id_Front = $('#imagePreviewCivil_Id_Front');
 
-
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-
-            reader.onload = function (e) {
-
-                imagePreviewCivil_Id_Front.html(`<img src="${e.target.result}" alt="Selected Image">`);
-            };
-
-
-            reader.readAsDataURL(input.files[0]);
-        } else {
-
-            imagePreviewCivil_Id_Front.html('');
-        }
-    }
+    $('#removeCivil_Id_Back').click(function () {
+        removeCivilIdBack();
+    });
 
     function imagePreviewCivil_Id_Back(input) {
         const imagePreviewCivil_Id_Back = $('#imagePreviewCivil_Id_Back');
+        const removeButton = $('#removeCivil_Id_Back');
 
-        // Ensure that a file is selected
         if (input.files && input.files[0]) {
             const reader = new FileReader();
 
             reader.onload = function (e) {
-                // Display the selected image in the preview div
-                imagePreviewCivil_Id_Back.html(`<img src="${e.target.result}" alt="Selected Image">`);
+
+                imagePreviewCivil_Id_Back.html(`<img src="${e.target.result}" alt="Selected Image" width="200">`);
+
+                console.log(e.target.result);
+                removeButton.show(); // Show the remove button when an image is selected
             };
 
-            // Read the selected file as a data URL
             reader.readAsDataURL(input.files[0]);
         } else {
-            // Clear the preview if no file is selected
             imagePreviewCivil_Id_Back.html('');
+            removeButton.hide(); // Hide the remove button if no image is selected
         }
     }
+
+    function removeCivilIdBack() {
+        const inputFile = $('#Civil_Id_Back');
+        const imagePreviewCivil_Id_Back = $('#imagePreviewCivil_Id_Back');
+        const removeButton = $('#removeCivil_Id_Back');
+
+        inputFile.val(''); // Clear the file input value
+        imagePreviewCivil_Id_Back.html('<p>No image</p>'); // Show "No image"
+        removeButton.hide(); // Hide the remove button
+    }
+
+
 
     $(document).ajaxStart(function () {
         $(window).scrollTop(0);
@@ -92,7 +208,6 @@ $(document).ready(function () {
         $("#wait").css("display", "none");
     });
 });
-
 function KYCCheckBoxes() {
     // Hide additional checkboxes initially
     $("#additionalCheckboxes").hide();
@@ -107,105 +222,102 @@ function KYCCheckBoxes() {
         }
     });
 }
+function formatDate(dateString) {
+    // Extract the date part by splitting from 'T' (ISO format)
+    const parts = dateString.split('T')[0].split('-'); // Extract [yyyy, MM, dd]
 
-
-
-$(".DigitOnly").keypress(function (e) {
-    e = e || window.event;
-    var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
-    // Allow non-printable keys
-    if (!charCode || charCode == 8 /* Backspace */) {
-        return;
-    }
-
-    var typedChar = String.fromCharCode(charCode);
-
-    // Allow the minus sign () if the user enters it first
-    if (typedChar != "2" && this.value == "9") {
-        return false;
-    }
-    // Allow the minus sign (9) if the user enters it first
-    if (typedChar != "9" && this.value == "") {
-        return false;
-    }
-    // Allow numeric characters
-    if (/\d/.test(typedChar)) {
-        return;
-    }
-
-    // Allow the minus sign (-) if the user enters it first
-    if (typedChar == "-" && this.value == "") {
-        return;
-    }
-
-    // In all other cases, suppress the event
-    return false;
-});
-
-//edit method
+    // Create a formatted date in MM/dd/yyyy format
+    return `${parts[1]}/${parts[2]}/${parts[0]}`; // MM/dd/yyyy
+}
 function editUserById(uid) {
     var data = new FormData();
     data.append("UID", uid);
-    $.ajax({
-        type: "POST",
-        cache: false,
-        async: false,
-        url: "../Remitter/Edit",
-        data: data,
-        processData: false,
-        contentType: false,
-        success: function (Rdata) {
-            if (Rdata != 'error') {
-                var obj = JSON.parse(Rdata);
-                console.log(obj);
+
+    utilities.ajaxRequest(
+        "../Remitter/Edit",
+        "POST",
+        data = data,
+        onSuccess = function (obj) {
+            if (obj != 'error') {
                 $('#UID').val(obj.UID);
                 $('#Name').val(obj.Name);
                 $('#Employer').val(obj.Employer);
                 $('#Identification_Type').val(obj.Identification_Type).prop('Enable', 'true').trigger("chosen:updated");
+                $('#Identification_Type').prop('disabled', true).trigger('chosen:updated');
                 $('#Identification_Number').val(obj.Identification_Number);
-                $('#Nationality').val(obj.Nationality).prop('Enable', 'true').trigger("chosen:updated");
+                $('#Identification_Number').prop('disabled', true);
+                /*  var nationalityValue = $('#Nationality option').filter(function () {
+                      console.log($(this).text());
+                      return $(this).text().toLowerCase() === obj.Nationality.toLowerCase();
+                  }).val();*/
+
+                $('#Nationality').val(obj.Nationality).prop('disabled', false).trigger("chosen:updated");
+
                 if (obj.Date_Of_Birth !== null) {
-                    $('#Date_Of_Birth').val(obj.Date_Of_Birth.split('T')[0]);
+                    $('#Date_Of_Birth').val(
+                        formatDate(obj.Date_Of_Birth)
+                    );
                 }
+
                 if (obj.Identification_Expiry_Date !== null) {
-                    $('#Identification_Expiry_Date').val(obj.Identification_Expiry_Date.split('T')[0]);
+                    $('#Identification_Expiry_Date').val(
+                        formatDate(obj.Identification_Expiry_Date)
+                    );
                 }
                 $('#Occupation').val(obj.Occupation);
                 $('#Email_Address').val(obj.Email_Address);
+                $('#Email_Address').prop('disabled', true);
                 $('#Mobile_No').val(obj.Mobile_No);
+                $('#Mobile_No').prop('disabled', true);
                 $('#Gender').val(obj.Gender).prop('Enable', 'true').trigger("chosen:updated");
+
                 $('#Area').val(obj.Area).prop('Enable', 'true').trigger("chosen:updated");
+
                 $('#Block').val(obj.Block);
                 $('#Street').val(obj.Street);
-                $('#Building').val(obj.Building);
-                $('#Floor').val(obj.Floor);
+                //$('#Building').val(obj.Building);
+                $('#Source_Of_Income').val(obj.Source_Of_Income);
+                //$('#Floor').val(obj.Floor);
                 $('#Flat').val(obj.Flat);
                 $('#Identification_Additional_Detail').val(obj.Identification_Additional_Detail);
                 $('#Residence_Type').val(obj.Residence_Type).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Telephone_No').val(obj.Telephone_No);
-                $('#Birth_Place').val(obj.Birth_Place);
-                $('#Birth_Country').val(obj.Birth_Country).prop('Enable', 'true').trigger("chosen:updated");
+
+                $('#Birth_Place').val(obj.Birth_Place).prop('disabled', false).trigger("chosen:updated");
+                //$('#Birth_Country').val(obj.Birth_Country).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Expected_Monthly_Trans_Count').val(obj.Expected_Monthly_Trans_Count).prop('Enable', 'true').trigger("chosen:updated");
+                $('#Monthly_Trans_Limit').val(obj.Monthly_Trans_Limit).prop('Enable', 'true').trigger("chosen:updated");
                 $('#Other_Income').val(obj.Other_Income);
                 $('#Other_Income_Detail').val(obj.Other_Income_Detail);
-                $('#Pep_Description').val(obj.Pep_Description);
+                //$('#Pep_Description').val(obj.Pep_Description);
                 $('#Monthly_Income').val(obj.Monthly_Income);
-                $('#Monthly_Trans_Limit').val(obj.Monthly_Trans_Limit);
-                $('#Yearly_Trans_Limit').val(obj.Yearly_Trans_Limit);
-                $('#Compliance_Limit').val(obj.Compliance_Limit);
-                $('#Compliance_Trans_Count').val(obj.Compliance_Trans_Count);
-                $('#Compliance_Comments').val(obj.Compliance_Comments);
-                if (obj.Compliance_Limit_Expiry !== null) {
-                    $('#Compliance_Limit_Expiry').val(obj.Compliance_Limit_Expiry.split('T')[0]);
-                }
+                //$('#Yearly_Trans_Limit').val(obj.Yearly_Trans_Limit);
+                //$('#Compliance_Limit').val(obj.Compliance_Limit);
+                //$('#Compliance_Trans_Count').val(obj.Compliance_Trans_Count);
+                //$('#Compliance_Comments').val(obj.Compliance_Comments);
+                //if (obj.Compliance_Limit_Expiry !== null) {
+                //    $('#Compliance_Limit_Expiry').val(obj.Compliance_Limit_Expiry.split('T')[0]);
+                //}
 
                 if (obj.Civil_Id_Front !== null && obj.Civil_Id_Front !== "") {
                     $('#imagePreviewCivil_Id_Front').html(`<img src="${obj.Civil_Id_Front}" alt="Image">`);
+                    $('#removeCivil_Id_Front').show();
+                    $('#existingImage').val(obj.Civil_Id_Front);
+                }
+                else {
+                    $('#imagePreviewCivil_Id_Front').html('<p>No image</p>');
+                    $('#removeCivil_Id_Front').hide();
+
                 }
                 if (obj.Civil_Id_Back !== null && obj.Civil_Id_Back !== "") {
                     $('#imagePreviewCivil_Id_Back').html(`<img src="${obj.Civil_Id_Back}" alt="Image" >`);
+                    $('#removeCivil_Id_Back').show();
+                } else {
+                    $('#imagePreviewCivil_Id_Back').html('<p>No image</p>');
+                    $('#removeCivil_Id_Back').hide();
                 }
 
+                //  $("#btn-refresh").removeClass("disabled").removeAttr("disabled");
                 $('#btn-save').html("<i class='fa fa-save'></i> Update");
                 IsEditMode = true;
                 if (obj.IsReviwed) {
@@ -229,8 +341,8 @@ function editUserById(uid) {
 
                 $(window).scrollTop(0);
 
-                LoadSecurityQuestions(obj.Customer_Id);
-                LoadKYCIndividuals(obj.Customer_Id);
+                //  LoadSecurityQuestions(obj.Customer_Id);
+                //LoadKYCIndividuals(obj.Customer_Id);
 
             }
             else {
@@ -238,78 +350,94 @@ function editUserById(uid) {
                 $('#btn-validate').removeAttr('disabled');
             }
         },
-        error: function (e) {
-        }
-    });
+        null,
+        3,
+        true
+    );
+
 }
-
-//edit method
-
 $("#IsReviwed").on('ifChecked', function (event) {
     $(this).closest("input").attr('value', true);
 });
 $("#IsReviwed").on('ifUnchecked', function (event) {
     $(this).closest("input").attr('value', false);
 });
-
-
 $("#IsVerified").on('ifChecked', function (event) {
     $(this).closest("input").attr('value', 1);
 });
 $("#IsVerified").on('ifUnchecked', function (event) {
     $(this).closest("input").attr('value', 0);
 });
-
-//handle stuff
 var handleStaff = function () {
 
     $(".frmAddUsers").submit(function (event) {
         event.preventDefault();
+        let formData = new FormData();
 
         if (validateForm()) {
-
             var file1 = $('#Civil_Id_Front')[0].files[0];
             var file2 = $('#Civil_Id_Back')[0].files[0];
-            var civilid = $('#Identification_Number').val().trim();
 
-            var formData = new FormData();
-            if (file1 !== undefined) {
-                formData.append('Civil_Id_Front', file1);
+            if (file1 === undefined) {
+                file1 = null;
             }
-            if (file2 !== undefined) {
-                formData.append('Civil_Id_Back', file2);
+            if (file2 === undefined) {
+                file2 = null;
             }
-            formData.append('Civil_Id', civilid);
+
+            let civilIdFrontExists = $('#imagePreviewCivil_Id_Front').find('img').length > 0;
+            let civilIdBackExists = $('#imagePreviewCivil_Id_Back').find('img').length > 0;
+
+            let RequestOBj = {
+                UID: $('#UID').val(),
+                Name: $('#Name').val(),
+                Email_Address: $('#Email_Address').val(),
+                Occupation: $('#Occupation').val(),
+                Employer: $('#Employer').val(),
+                Gender: $('#Gender').val(),
+                Is_Profile_Completed: $('#Is_Profile_Completed').prop('checked'),
+                IsReviwed: $('#IsReviwed').prop('checked'),
+                Area: $('#Area').val(),
+                Block: $('#Block').val(),
+                Street: $('#Street').val(),
+                Flat: $('#Flat').val(),
+                Identification_Type: $('#Identification_Type').val(),
+                Identification_Number: $('#Identification_Number').val(),
+                Identification_Expiry_Date: $('#Identification_Expiry_Date').val(),
+                Identification_Additional_Detail: $('#Identification_Additional_Detail').val(),
+                Residence_Type: $('#Residence_Type').val(),
+                Mobile_No: $('#Mobile_No').val(),
+                Telephone_No: $('#Telephone_No').val(),
+                Nationality: $('#Nationality').val(),
+                Date_Of_Birth: $('#Date_Of_Birth').val(),
+                Birth_Place: $('#Birth_Place').val(),
+                Expected_Monthly_Trans_Count: $('#Expected_Monthly_Trans_Count').val(),
+                Monthly_Trans_Limit: $('#Monthly_Trans_Limit').val(),
+                Monthly_Income: $('#Monthly_Income').val(),
+                Source_Of_Income: $('#Source_Of_Income').val(),
+                Other_Income: $('#Other_Income').val(),
+                Other_Income_Detail: $('#Other_Income_Detail').val(),
+                CivilIdFrontImage: file1,
+                CivilIdBackImage: file2,
+                Civil_Id_Front: civilIdFrontExists ? "Present" : "",
+                Civil_Id_Back: civilIdBackExists ? "Present" : ""
+            }
+            console.log(RequestOBj);
+
+            for (let key in RequestOBj) {
+
+                formData.append(key, RequestOBj[key]); 
+
+            }
 
             var url = 'https://stagingapi.creamerz.com/Remittance/UploadCivilid';
+            var urlLocal = 'http://localhost:31821/Remittance/UploadCivilId';
             var url1 = '../Remitter/AddCustomerFiles';
-
-            if (file1 !== undefined || file2 !== undefined) {
-
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: formData,
-                    async: false,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        var data = response.responseMessage;
-                        var data1 = response.responseData;
-                        console.log(data1[0].civil_Id_Back);
-                        return AddCustomer(data1[0].civil_Id_Back, data1[0].civil_Id_Front);
-                    },
-                    error: function (error) {
-                        console.error('Error uploading files:', error);
-                    }
-                });
-            } else {
-                return AddCustomer(null, null);
-            }
-
+            AddCustomer(formData);
+          
         }
 
-        function AddCustomer(Civil_Id_Back, Civil_Id_Front) {
+        function AddCustomer(formData) {
             $('#btn-save').attr('disabled', 'true');
             $(".frmAddUsers :disabled").removeAttr('disabled');
             if (!IsEditMode) {
@@ -351,36 +479,42 @@ var handleStaff = function () {
                 );
             }
             else {
-                $.post(
-                    "../Remitter/EditCustomer?Civil_Id_Back=" + Civil_Id_Back + "&Civil_Id_Front=" + Civil_Id_Front,
-                    $(".frmAddUsers").serialize(),
-                    function (value) {
-                        if (value == 'duplicate_value_exist') {
-                            swal(
-                                'Warning',
-                                'Customer Name Already Exist!',
-                                'warning'
-                            )
+
+                $.ajax({
+                    url: "../Remitter/EditCustomer",
+                    type: 'POST',
+                    data: formData,  
+                    contentType: false, 
+                    processData: false,  
+                    dataType: 'text',  
+                    success: function (value) {
+
+                        if (value === 'duplicate_value_exist') {
+                            swal('Warning', 'Customer Name Already Exist!', 'warning');
+                            $('#btn-save').removeAttr('disabled');
+                            return;
+                        }
+                        if (value === 'not_allowed') {
+                            swal('Warning', 'Valid Format ".jpeg", ".jpg", ".png" and Max Size is 10 MB ', 'warning');
+                            $('#btn-save').removeAttr('disabled');
                             return;
                         }
                         if (value === 'update_success') {
-                            swal(
-                                'Success',
-                                'Customer Updated Successfully!',
-                                'success'
-                            )
+                            swal('Success', 'Customer Updated Successfully!', 'success');
                             resetForm();
                             $('#btn-save').removeAttr('disabled');
                             window.location = "../Remitter/Index";
-
-                        }
-                        else {
-                            swal("Error", "Data not updated!!", "error")
+                        } else {
+                            swal('Error', 'Data not updated!!', 'error');
                             $('#btn-save').removeAttr('disabled');
                         }
                     },
-                    "text"
-                );
+                    error: function (xhr, status, error) {
+                        // Handle error scenario
+                        swal('Error', 'An error occurred while processing your request.', 'error');
+                        $('#btn-save').removeAttr('disabled');
+                    }
+                });
             }
             return false;
         }
@@ -392,29 +526,25 @@ var handleStaff = function () {
 
         var requiredFields = [
             { field: "Name" },
-            { field: "Employer" },
             { field: "Identification_Type" },
+            { field: "Gender" },
             { field: "Identification_Number" },
             { field: "Identification_Expiry_Date" },
             { field: "Mobile_No" },
-            { field: "Date_Of_Birth" },
+            { field: "Source_Of_Income" },
+            { field: "Monthly_Income" },
+            { field: "Residence_Type" },
             { field: "Nationality" },
-            { field: "Security_Question_Id_1" },
-            { field: "Security_Answer_1" },
-            { field: "Security_Question_Id_2" },
-            { field: "Security_Question_Id_3" },
-            { field: "Security_Answer_2" },
-            { field: "Security_Answer_3" },
+            { field: "Email_Address" },
+            { field: "Monthly_Trans_Limit" },
             { field: "Area" }
-            // Add more required fields as needed
         ];
         let IsValid = true;
-        // Loop through the required fields and check for validation
+
         for (var i = 0; i < requiredFields.length; i++) {
             var fieldId = requiredFields[i].field;
             var fieldValue = $("#" + fieldId).val().trim();
 
-            // Check if the field is empty
             if (fieldValue === "") {
                 $("#Val" + fieldId).text("required");
                 IsValid = false;
@@ -471,7 +601,6 @@ var handleStaff = function () {
     }
 
 }
-
 $('.frmAddUsers').keypress(function (e) {
     if (e.which == 13) {
 
@@ -482,8 +611,6 @@ $('.frmAddUsers').keypress(function (e) {
         return false;
     }
 });
-
-
 jQuery('#btn-save').click(function () {
 
 
@@ -491,20 +618,10 @@ jQuery('#btn-save').click(function () {
         $('.frmAddUsers').submit();
     }
 });
-
-
-
-
-
-//reset values
 function resetForm() {
     IsEditMode = false;
-    LoadIdentificationType();
-    LoadResidencyType();
-    LoadCountry();
+    initDropdowns();
     LoadQuestions();
-    LoadCity();
-    LoadExpectTrancationsCount();
 
     $('#Name').val('');
     $('#Employer').val('');
@@ -579,24 +696,9 @@ function resetForm() {
     $('#imagePreviewCivil_Id_Back').html('');
     $('#imagePreviewCivil_Id_Front').html('');
 }
-
 $('#btn-refresh').click(function () {
     resetForm();
 });
-
-
-// For number validation
-function CellNumberValidator(CellNo) {
-    var phoneno = /^[9]{1}[2]{1}[0-9]{10}$/;
-    if (CellNo.match(phoneno)) {
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-
-
 function LoadSecurityQuestions(Customer_Id) {
     $.ajax({
         type: "POST",
@@ -616,8 +718,8 @@ function LoadSecurityQuestions(Customer_Id) {
         }
     });
 }
-
 function LoadKYCIndividuals(Customer_Id) {
+
     $.ajax({
         type: "POST",
         cache: false,
@@ -744,148 +846,6 @@ function LoadKYCIndividuals(Customer_Id) {
         }
     });
 }
-
-// for loading User
-var LoadIdentificationType = function () {
-    $.ajax({
-        type: "POST",
-        cache: false,
-        async: false,
-        url: "../Remitter/LoadIdentificationType",
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            var sch = JSON.parse(data);
-
-            var $el = $('#Identification_Type');
-            $el.empty();
-            if (sch.length > 0) {
-                $el.append('<option value="">' + "Select Identification Type" + '</option>');
-                $.each(sch, function (idx, obj) {
-                    $el.append('<option value="' + obj.Id + '">' + obj.Description + '</option>');
-                });
-            }
-            else {
-                $el.append('<option value="">' + "Select  Identification Type" + '</option>');
-            }
-            $el.trigger("liszt:updated");
-            $el.chosen();
-        }
-    });
-}
-
-var LoadResidencyType = function () {
-    $.ajax({
-        type: "POST",
-        cache: false,
-        async: false,
-        url: "../Remitter/LoadResidencyType",
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            var sch = JSON.parse(data);
-
-            var $el = $('#Residence_Type');
-            $el.empty();
-            if (sch.length > 0) {
-                $el.append('<option value="">' + "Select Residency Type" + '</option>');
-                $.each(sch, function (idx, obj) {
-                    $el.append('<option value="' + obj.Id + '">' + obj.Name + '</option>');
-                });
-            }
-            else {
-                $el.append('<option value="">' + "Select  Residency Type" + '</option>');
-            }
-            $el.trigger("liszt:updated");
-            $el.chosen();
-        }
-    });
-}
-
-var LoadCountry = function () {
-    $.ajax({
-        type: "POST",
-        cache: false,
-        async: false,
-        url: "../Remitter/LoadCountry",
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            var sch = JSON.parse(data);
-
-            var $el = $('#Birth_Country');
-            $el.empty();
-            if (sch.length > 0) {
-                $el.append('<option value="">' + "Select Country" + '</option>');
-                $.each(sch, function (idx, obj) {
-                    $el.append('<option value="' + obj.Id + '">' + obj.Name + '</option>');
-                });
-            }
-            else {
-                $el.append('<option value="">' + "Select Country" + '</option>');
-            }
-            $el.trigger("liszt:updated");
-            $el.chosen();
-        }
-    });
-}
-
-var LoadNationality = function () {
-    $.ajax({
-        type: "POST",
-        cache: false,
-        async: false,
-        url: "../Remitter/LoadCountry",
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            var sch = JSON.parse(data);
-
-            var $el = $('#Nationality');
-            $el.empty();
-            if (sch.length > 0) {
-                $el.append('<option value="">' + "Select Nationality" + '</option>');
-                $.each(sch, function (idx, obj) {
-                    $el.append('<option value="' + obj.Nationality + '">' + obj.Nationality + '</option>');
-                });
-            }
-            else {
-                $el.append('<option value="">' + "Select Nationality" + '</option>');
-            }
-            $el.trigger("liszt:updated");
-            $el.chosen();
-        }
-    });
-}
-
-var LoadCity = function () {
-    $.ajax({
-        type: "POST",
-        cache: false,
-        async: false,
-        url: "../Remitter/LoadCity",
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            var sch = JSON.parse(data);
-
-            var $el = $('#Area');
-            $el.empty();
-            if (sch.length > 0) {
-                $el.append('<option value="">' + "Select Area" + '</option>');
-                $.each(sch, function (idx, obj) {
-                    $el.append('<option value="' + obj.Name + '">' + obj.Name + '</option>');
-                });
-            }
-            else {
-                $el.append('<option value="">' + "Select Area" + '</option>');
-            }
-            $el.trigger("liszt:updated");
-            $el.chosen();
-        }
-    });
-}
-
 var LoadQuestions = function () {
     $.ajax({
         type: "POST",
@@ -927,32 +887,76 @@ var LoadQuestions = function () {
         }
     });
 }
+function initDropdowns() {
 
-var LoadExpectTrancationsCount = function () {
-    $.ajax({
-        type: "POST",
-        cache: false,
-        async: false,
-        url: "../Remitter/LoadExpectTrancationsCount",
-        processData: false,
-        contentType: false,
-        success: function (data) {
-            var sch = JSON.parse(data);
+    // Load Identification Type dropdown
+    utilities.loadDropdownData(
+        apiUrls.identificationType,
+        '#Identification_Type',
+        'Select Identification Type',
+        'Id',
+        'Description'
+    );
+    // Load Residency Type dropdown
+    utilities.loadDropdownData(
+        apiUrls.residencyType,
+        '#Residence_Type',
+        'Select Residency Type',
+        'Id',
+        'Name'
+    );
+    // Load Country dropdown
+    utilities.loadDropdownData(
+        apiUrls.country,
+        '#Birth_Place',
+        'Select Country',
+        'Name',
+        'Name'
+    );
+    // Load Nationality dropdown
+    utilities.loadDropdownData(
+        apiUrls.nationality,
+        '#Nationality',
+        'Select Nationality',
+        'Nationality',
+        'Nationality'
+    );
+    // Load Area dropdown Used as a City
+    utilities.loadDropdownData(
+        apiUrls.area,
+        '#Area',
+        'Select Area',
+        'Name',
+        'Name'
+    );
+    // Load Expected Monthly Trans Count dropdown
+    utilities.loadDropdownData(
+        apiUrls.expectedMonthlyTransCount,
+        '#Expected_Monthly_Trans_Count',
+        'Select Expected Monthly Trans',
+        'Id',
+        'Name'
+    );
+    // Load Expected Monthly Trans Amount dropdown
+    utilities.loadDropdownData(
+        apiUrls.expectTrancationsAmount,
+        '#Monthly_Trans_Limit',
+        'Select Expected Monthly Trans',
+        'Id',
+        'Name'
+    );
+    // Load Gender types dropdown
+    utilities.loadDropdownData(
+        apiUrls.genderTypes,
+        '#Gender',
+        'Select Gender',
+        'Id',
+        'Value'
+    );
 
-            var $el = $('#Expected_Monthly_Trans_Count');
-            $el.empty();
-            if (sch.length > 0) {
-                $el.append('<option value="">' + "Select Expected Monthly Trans" + '</option>');
-                $.each(sch, function (idx, obj) {
-                    $el.append('<option value="' + obj.Id + '">' + obj.Name + '</option>');
-                });
-            }
-            else {
-                $el.append('<option value="">' + "Select  Expected Monthly Trans" + '</option>');
-            }
-            $el.trigger("liszt:updated");
-            $el.chosen();
-        }
-    });
+
+
+    //LoadQuestions();
 }
+
 

@@ -40,7 +40,6 @@ namespace KuaiexDashboard.Controllers
             return View();
         }
 
-
         public ActionResult LoadCountry()
         {
             string status = "0:{choose}";

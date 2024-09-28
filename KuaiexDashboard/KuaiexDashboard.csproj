@@ -35,6 +35,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -140,6 +142,7 @@
     <Content Include="Assets\PagesJS\AddBeneficiary.js" />
     <Content Include="Assets\PagesJS\AddRemitter.js" />
     <Content Include="Assets\PagesJS\AgencyBranches.js" />
+    <Content Include="Assets\PagesJS\ajaxUtility.js" />
     <Content Include="Assets\PagesJS\banks.js" />
     <Content Include="Assets\PagesJS\Beneficiary.js" />
     <Content Include="Assets\PagesJS\BeneficiaryValidation.js" />
@@ -1447,9 +1450,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Global\" />
-    <Folder Include="Views\KUAIEX_PROD_\" />
-    <Folder Include="Views\RoutingBankSettings\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />

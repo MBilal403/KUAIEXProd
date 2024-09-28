@@ -20,7 +20,7 @@ namespace KuaiexDashboard.Repository.Impl
         private readonly ConditionToWhereClauseConverter<T> Converter;
         private string ConnectionString;
 
-        
+
         public GenericRepository(string DbName)
         {
             connectionHandler = new SqlConnectionHandler();
@@ -332,7 +332,7 @@ namespace KuaiexDashboard.Repository.Impl
 
         public int Insert(T entity)
         {
-            using (var connection = connectionHandler.OpenConnection(ConnectionString))
+            using (SqlConnection connection = connectionHandler.OpenConnection(ConnectionString))
             {
                 try
                 {
@@ -499,7 +499,11 @@ namespace KuaiexDashboard.Repository.Impl
 
                         command.Parameters.AddWithValue("@StartRow", startRow);
                         command.Parameters.AddWithValue("@EndRow", endRow);
-                        command.Parameters.AddWithValue("@searchString", searchString ?? "" );
+
+                        if (searchString != null)
+                        {
+                            command.Parameters.AddWithValue("@searchString", searchString);
+                        }
 
                         // Add output parameter for total record count
                         var totalRecordsParameter = new SqlParameter

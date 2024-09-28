@@ -5,8 +5,6 @@ $(document).ready(function () {
     handleStaff();
     LoadGridData();
 
-   
-
     $(document).ajaxStart(function () {
         $(window).scrollTop(0);
         $("#wait").css("display", "block");
@@ -16,39 +14,6 @@ $(document).ready(function () {
     });
 });
 
-$(".DigitOnly").keypress(function (e) {
-    e = e || window.event;
-    var charCode = (typeof e.which == "number") ? e.which : e.keyCode;
-    // Allow non-printable keys
-    if (!charCode || charCode == 8 /* Backspace */) {
-        return;
-    }
-
-    var typedChar = String.fromCharCode(charCode);
-
-    // Allow the minus sign () if the user enters it first
-    if (typedChar != "2" && this.value == "9") {
-        return false;
-    }
-    // Allow the minus sign (9) if the user enters it first
-    if (typedChar != "9" && this.value == "") {
-        return false;
-    }
-    // Allow numeric characters
-    if (/\d/.test(typedChar)) {
-        return;
-    }
-
-    // Allow the minus sign (-) if the user enters it first
-    if (typedChar == "-" && this.value == "") {
-        return;
-    }
-
-
-
-    // In all other cases, suppress the event
-    return false;
-});
 
 //edit method
 $(document).on('click', '.btn-edit', function () {

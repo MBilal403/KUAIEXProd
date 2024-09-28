@@ -92,7 +92,16 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
 
         public Country GetCountryByName(string countryName)
         {
-            throw new NotImplementedException();
+            try
+            {
+                Country existingCountry = _countryRepository.FindBy(x => x.Name == countryName && x.Status == "A");
+                return existingCountry;
+            }
+            catch (Exception ex)
+            {
+                // throw the exception to propagate it up the call stack
+                throw;
+            }
         }
 
         public Country GetCountryByUID(Guid UID)
@@ -170,17 +179,17 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
                 {
                     string CountryName = Strings.EscapeSingleQuotes(item.English_Name);
                     string NationalityName = item.English_Nationality;
-                  
+
                     if (!_countryRepository.Any(x => x.Name == CountryName && x.Nationality == NationalityName))
                     {
                         Country country = new Country();
-                        var pendingCountries = prodCountries.Where(x=> x.English_Name == item.English_Name && x.English_Nationality == item.English_Nationality).ToList();
+                        var pendingCountries = prodCountries.Where(x => x.English_Name == item.English_Name && x.English_Nationality == item.English_Nationality).ToList();
                         if (pendingCountries.Count > 1)
                         {
                             country.Prod_Country_Ids = string.Join(",", pendingCountries.Select(x => x.Country_Id.ToString()));
                         }
                         country.Name = item.English_Name;
-                        country.Nationality = item.English_Nationality; 
+                        country.Nationality = item.English_Nationality;
                         country.Status = item.Record_Status;
                         country.Alpha_2_Code = item.Country_Code;
                         country.Remittance_Status = item.Remittance_Status;
@@ -226,7 +235,7 @@ namespace KuaiexDashboard.Services.CountryServices.Impl
                     existingCountry.Status = objCountry.Status != null ? "A" : "N";
                     existingCountry.Under_Review_Status = objCountry.Under_Review_Status != null ? "A" : "N";
                     existingCountry.High_Risk_Status = objCountry.High_Risk_Status != null ? "A" : "N";
-                    if (_countryRepository.Update(existingCountry, $" Id = {existingCountry.Id} ") )
+                    if (_countryRepository.Update(existingCountry, $" Id = {existingCountry.Id} "))
                     {
                         return MsgKeys.UpdatedSuccessfully;
                     }

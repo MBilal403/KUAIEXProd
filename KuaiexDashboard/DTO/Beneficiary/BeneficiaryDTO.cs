@@ -10,7 +10,9 @@ namespace KuaiexDashboard.DTO.Beneficiary
         public int Beneficiary_Id { get; set; }
         public Guid CUID { get; set; }
         public int Customer_Id { get; set; }
-        public string FullName { get; set; }
+        public string FirstName { get; set; }
+        public string MiddleName { get; set; }
+        public string LastName { get; set; }
         public string Customer_Name { get; set; }
         public string Country_Name { get; set; }
         public string Address_Line1 { get; set; }
@@ -68,7 +70,7 @@ namespace KuaiexDashboard.DTO.Beneficiary
         public Nullable<int> UpdatedBy { get; set; }
         public Nullable<System.DateTime> UpdatedOn { get; set; }
         public string UpdatedIp { get; set; }
-        public Nullable<int> Prod_Beneficiary_Id { get; set; }
+        public int? Prod_Beneficiary_Id { get; set; }
         public string Remittance_Purpose_Detail { get; set; }
         public Nullable<int>[] Remitter_Relation { get; set; }
         public string Remitter_Relation_Detail { get; set; }
@@ -76,5 +78,7 @@ namespace KuaiexDashboard.DTO.Beneficiary
         public string Source_Of_Income_Detail { get; set; }
         public Nullable<int> Nationality_Id { get; set; }
         public string Bank_Account_Title { get; set; }
+        public string SwiftCode { get; set; }
+
     }
 }

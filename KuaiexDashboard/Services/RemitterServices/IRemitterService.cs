@@ -16,11 +16,14 @@ namespace KuaiexDashboard.Services.RemitterServices
         string CreateRemitter(CustomerDTO customerDto);
         string EditRemitter(CustomerDTO customerDto);
         EditCustomerDTO GetCustomerByUID(Guid customerId);
-        PagedResult<GetRemitterList_Result> GetRemitterList(JqueryDatatableParam param);
+        int GetCustomerIdByUID(Guid customerUID);
+        PagedResult<GetRemitterList_Result> GetRemitterList(DataTableParams param);
         List<Customer_Security_Questions> GetCustomerSecurityQuestions(int id);
         List<Individual_KYC> GetCustomerLoadKYCIndividuals(int id);
         List<Residency_Type> GetResidencyTypes();
         List<IdentificationTypeLookup> GetAllIdentificationTypes();
         List<Transaction_Count_Lookup> GetAllTransactionCountLookup();
+        List<Transaction_Amount_Lookup> GetAllTransactionAmountLookup();
+        List<Gender_Lookup> GetAllGenderLookup();
     }
 }

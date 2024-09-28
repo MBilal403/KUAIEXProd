@@ -20,6 +20,7 @@ using System.Configuration;
 using System.IO;
 using System.Web;
 using System.Web.Mvc;
+using DataAccessLayer.Recources;
 
 namespace KuaiexDashboard.Controllers
 {
@@ -94,13 +95,14 @@ namespace KuaiexDashboard.Controllers
 
             return Content(status);
         }
-        public ActionResult LoadCity()
+        public ActionResult GetKuwaitActiveCities()
         {
             string status = "0:{choose}";
 
             try
             {
-                List<City> lstCities = _cityService.GetActiveCities();
+                Country country  = _countryService.GetCountryByName("KUWAIT");
+                List<City> lstCities = _cityService.GetKuwaitActiveCities(country.Id);
 
                 status = JsonConvert.SerializeObject(lstCities);
             }
@@ -151,7 +153,26 @@ namespace KuaiexDashboard.Controllers
 
             return Content(status);
         }
-        public ActionResult LoadGrid(JqueryDatatableParam param)
+        public ActionResult LoadExpectTrancationsAmount()
+        {
+            string status = "0:{choose}";
+
+            try
+            {
+
+                List<Transaction_Amount_Lookup> lstTransactionCounts = _remitterService.GetAllTransactionAmountLookup();
+
+                status = JsonConvert.SerializeObject(lstTransactionCounts);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
+
+            return Content(status);
+        }
+        public ActionResult LoadGrid(DataTableParams param)
         {
             try
             {
@@ -159,7 +180,7 @@ namespace KuaiexDashboard.Controllers
 
                 var result = new
                 {
-                    draw = param.sEcho,
+                    draw = param.Draw,
                     recordsTotal = list.TotalSize,
                     recordsFiltered = list.FilterRecored,
                     data = list.Data
@@ -210,6 +231,27 @@ namespace KuaiexDashboard.Controllers
 
             return Content(status);
         }
+
+        public ActionResult LoadGenderTypes()
+        {
+            string status = "error";
+
+            try
+            {
+                List<Gender_Lookup> gender_Lookups = _remitterService.GetAllGenderLookup();
+
+                status = JsonConvert.SerializeObject(gender_Lookups);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(@"{Message}: {e}", ex.Message, ex);
+                status = "error";
+            }
+
+            return Content(status);
+        }
+
+
         public ActionResult Add()
         {
             return View();
@@ -317,43 +359,12 @@ namespace KuaiexDashboard.Controllers
             }
             return Content(status);
         }
-        /*        public ActionResult UnBlockCustomer(Customer objcustomer)
-                {
-                    string status = "";
-                    try
-                    {
-                        RemitterDAL objRemitterDal = new RemitterDAL();
-
-                        EditCustomerDTO obj = _remitterService.GetCustomerByUID(objcustomer.UID);
-
-                        if (obj != null)
-                        {
-                            obj.IsBlocked = objcustomer.IsBlocked;
-                            obj.InvalidTryCount = objcustomer.InvalidTryCount;
-
-                            objRemitterDal.UnblockCustomer(obj.UID);
-
-                            status = "success";
-                        }
-                        else
-                        {
-                            status = "Customer not found";
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(@"{Message}: {e}", ex.Message, ex);
-                        status = "error";
-                    }
-                    return Content(status);
-                }*/
-        public ActionResult EditCustomer(string Civil_Id_Back, string Civil_Id_Front, CustomerDTO editCustomerDto)
+        [HttpPost]
+        public ActionResult EditCustomer(CustomerDTO editCustomerDto)
         {
-            string status = "";
+            string status = MsgKeys.Error;
             try
             {
-                editCustomerDto.Civil_Id_Front = Civil_Id_Front == "null" ? null : Civil_Id_Front;
-                editCustomerDto.Civil_Id_Back = Civil_Id_Back == "null" ? null : Civil_Id_Back;
                 status = _remitterService.EditRemitter(editCustomerDto);
 
             }
